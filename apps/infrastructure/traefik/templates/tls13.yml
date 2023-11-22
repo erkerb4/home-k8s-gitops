@@ -1,0 +1,11 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: TLSOption
+metadata:
+  name: tls13
+
+spec:
+  minVersion: VersionTLS13
+  curvePreferences:
+    - CurveP521
+    - CurveP384
+  sniStrict: true

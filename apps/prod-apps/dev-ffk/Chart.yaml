@@ -1,0 +1,19 @@
+---
+apiVersion: v2
+description: A simple, powerful publishing platform that allows you to share your stories with the world
+name: dev-ffk
+version: "5.72.0"
+keywords:
+  - ghost
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/bitnami/bitnami-docker-ghost
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "2.0.0"
+    alias: dev-ffk
+  - name: app-template
+    repository: "@bjws"
+    version: "2.0.0"
+    alias: devffk-db

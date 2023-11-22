@@ -1,0 +1,40 @@
+overseerr:
+  image:
+    tag: 1.29.1
+
+  env:
+    TZ: America/New_York
+
+  ingress:
+    # -- Enable and configure ingress settings for the chart under this key.
+    # @default -- See values.yaml
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.middlewares: traefik-security-headers@kubernetescrd
+        traefik.ingress.kubernetes.io/router.tls.options: traefik-tls13@kubernetescrd
+        traefik.ingress.kubernetes.io/router.tls: "true"
+      hosts:
+      - host: overseer.xtr.pub
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - overseer.xtr.pub
+        secretName: tls-secret
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 1250Mi
+    requests:
+      cpu: 250m
+      memory: 768Mi
+
+  persistence:
+    config:
+      enabled: true
+      type: pvc
+      storageClass: ceph-block-bronze

@@ -1,0 +1,111 @@
+{{- range $target, $targetSpec := $.Values.backupTargets }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: Target
+metadata:
+  name: {{ $target }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+{{- with $targetSpec }}
+{{ toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}
+
+{{- range $backupplan, $backupplanSpec := $.Values.backupPlan }}
+{{- range $policy, $policySpec := $backupplanSpec.policies }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: Policy
+metadata:
+  name: {{ $backupplan }}-{{ $policy }}
+  namespace: {{ $.Release.Namespace }}
+{{- with $policySpec.spec  }}
+spec:
+{{- toYaml . | nindent 2 }}
+{{- end }}
+  type: {{  $policySpec.type }}
+{{- end }}
+{{- end }}
+
+{{- range $backupplan, $backupplanSpec := $.Values.backupPlan }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: BackupPlan
+metadata:
+  name: {{ $backupplan }}
+spec:
+{{- with $backupplanSpec.encryption }}
+  encryption:
+{{- toYaml . | nindent 4 }}
+{{- end }}
+
+{{- with $backupplanSpec.backupPlanFlags }}
+  backupPlanFlags:
+{{- toYaml . | nindent 4 }}
+{{- end }}
+  backupConfig:
+    retentionPolicy:
+      apiVersion: triliovault.trilio.io/v1
+      kind: Policy
+      name: {{ $backupplan }}-retention-policy
+      namespace: {{ $.Release.Namespace }}
+    schedulePolicy:
+      fullBackupPolicy:
+        apiVersion: triliovault.trilio.io/v1
+        kind: Policy
+        name: {{ $backupplan }}-fullbackup-policy
+        namespace: {{ $.Release.Namespace }}
+      incrementalBackupPolicy:
+        apiVersion: triliovault.trilio.io/v1
+        kind: Policy
+        name: {{ $backupplan }}-incremental-policy
+        namespace: {{ $.Release.Namespace }}
+    target:
+      apiVersion: triliovault.trilio.io/v1
+      kind: Target
+      name: {{ $backupplanSpec.backupTarget }}
+      namespace: {{ $.Release.Namespace }}
+
+{{- with $backupplanSpec.hookConfig }}
+  hookConfig:
+{{- toYaml . | nindent 4 }}  
+{{- end }}
+
+{{- with $backupplanSpec.excludeResources }}
+  excludeResources:
+{{- toYaml . | nindent 4 }}
+{{- end }}
+{{- with $backupplanSpec.hookConfig }}
+  hookConfig:
+{{- toYaml . | nindent 4 }}
+{{- end }}
+  retainHelmApps: false
+
+{{- if eq $backupplanSpec.backupHook "mysql" }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: Hook
+metadata:
+  name: mysql-hook
+spec:
+  pre:
+    execAction:
+      command:
+        - "bash"
+        - "-c"
+        - "mysql --user=root --password=$MYSQL_ROOT_PASSWORD -Bse 'FLUSH TABLES WITH READ LOCK;system ${WAIT_CMD};'"
+    ignoreFailure: false
+    maxRetryCount: 1
+    timeoutSeconds: 10
+  post:
+    execAction:
+      command:
+        - "bash"
+        - "-c"
+        - "mysql --user=root --password=$MYSQL_ROOT_PASSWORD -Bse 'FLUSH LOGS; UNLOCK TABLES;'"
+    ignoreFailure: false
+    maxRetryCount: 1
+    timeoutSeconds: 10
+{{- end }}
+
+{{- end }}

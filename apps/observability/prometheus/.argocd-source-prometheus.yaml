@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: prometheus-adapter.image.repository
+    value: k8s.gcr.io/prometheus-adapter/prometheus-adapter
+    forcestring: true
+  - name: prometheus-adapter.image.tag
+    value: v0.10.0
+    forcestring: true

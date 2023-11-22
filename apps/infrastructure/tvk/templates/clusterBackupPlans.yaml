@@ -1,0 +1,52 @@
+{{- range $clusterplan, $clusterplanSpec := $.Values.clusterbackupplans }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: ClusterBackupPlan
+metadata:
+  name: {{ $clusterplan }}
+spec:
+{{- with $clusterplanSpec.encryption }}
+  encryption:
+{{- toYaml . | nindent 4 }}
+{{- end }}
+
+{{- with $clusterplanSpec.clusterBackupPlanFlags }}
+  clusterBackupPlanFlags:
+{{- toYaml . | nindent 4 }}
+{{- end }}
+  backupConfig:
+    retentionPolicy:
+      apiVersion: triliovault.trilio.io/v1
+      kind: Policy
+      name: {{ $clusterplan }}-retention-policy
+      namespace: {{ $.Release.Namespace }}
+    schedulePolicy:
+      fullBackupPolicy:
+        apiVersion: triliovault.trilio.io/v1
+        kind: Policy
+        name: {{ $clusterplan }}-fullbackup-policy
+        namespace: {{ $.Release.Namespace }}
+      incrementalBackupPolicy:
+        apiVersion: triliovault.trilio.io/v1
+        kind: Policy
+        name: {{ $clusterplan }}-incremental-policy
+        namespace: {{ $.Release.Namespace }}
+    target:
+      apiVersion: triliovault.trilio.io/v1
+      kind: Target
+      name: {{ $clusterplanSpec.backupTarget }}
+      namespace: {{ $.Release.Namespace }}
+
+{{- with $clusterplanSpec.excludeResources }}
+  excludeResources:
+{{- toYaml . | nindent 4 }}
+{{- end }}
+
+{{- with $clusterplanSpec.namespaceSelector }}
+  namespaceSelector:
+{{- toYaml . | nindent 2 }}
+{{- end }}
+
+    name: {{ $clusterplan }}-selector
+  retainHelmApps: false
+{{- end }}

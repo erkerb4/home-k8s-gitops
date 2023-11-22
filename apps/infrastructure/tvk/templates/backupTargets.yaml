@@ -1,0 +1,12 @@
+{{- range $target, $targetSpec := $.Values.backupTargets }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: Target
+metadata:
+  name: {{ $target }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+{{- with $targetSpec }}
+{{ toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}

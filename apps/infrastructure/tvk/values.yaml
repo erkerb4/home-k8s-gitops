@@ -1,0 +1,169 @@
+k8s-triliovault-operator:
+  deploy: true
+  replicaCount: 1
+  installTVK:
+    enabled: false
+  image:
+    pullPolicy: IfNotPresent
+
+tvkvaultmanager:
+  enabled: true
+  ingressConfig:
+    host: "tvk.xtr.pub"
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+      traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      traefik.ingress.kubernetes.io/router.tls: "true"
+  instanceName: conrad
+  license:
+    name: trilio-license
+    key: xYANDgwKD3jajVHLbsIwELz7Kyz1bDUOpjhIOUCI1AelSBB63jiLahWcyE5Q+fs65FCUINQ9WCuPd2Y98/CJBX0FQ6mgnE/HcioiGgbhiCQWodalWUCN9K/iFmQBZ4EgaaHbF7RX8RycVgRUrU9IB2htGyQHrdA43KF11wxxSN5BmxoNGIXpT6XtuVug1ZUXXUmS8liBOQ+YV48zyuhzecQl5L5L7TdaOvddt9GqOeZoP/aZ87JXc4yTDdoT2pdFn1IBCCykZLkcIRNRpJhU0h/jAsWET0IeANmkK3qjYn/Pgr3I/ZjwY2POOMeCRZALFiglJhDtCyGRLDs3+vLxdjfLltuOI1f3OS5mwSCPa9/WjVVf4PBOpBtVVnjjK+rQuNq71sIFeWtyzAZm/dOtBCpQuu7HF/OngCbrzP0CKbqhgDAsAhQEWrByJ3hSRz1TSS8fiNOagFBBhgIUeZN9KWR62yFqn+da2VOj8ywPg/E=X02fr
+  componentConfiguration:
+    admission-webhook:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "20m"
+        limits:
+          memory: "512Mi"
+          cpu: "200m"
+    control-plane:
+      resources:
+        requests:
+          memory: "80Mi"
+          cpu: "10m"
+        limits:
+          memory: "512Mi"
+          cpu: "200m"
+    exporter:
+      resources:
+        requests:
+          memory: "75Mi"
+          cpu: "25m"
+        limits:
+          memory: "512Mi"
+          cpu: "250m"
+    web:
+      resources:
+        requests:
+          memory: "24Mi"
+          cpu: "5m"
+        limits:
+          memory: "512Mi"
+          cpu: "250m"
+    web-backend:
+      resources:
+        requests:
+          memory: "850Mi"
+          cpu: "285m"
+        limits:
+          memory: "1500Mi"
+          cpu: "500m"
+
+# sealedSecrets:
+#   backblaze-palebluedot:
+#     annotations:
+#       sealedsecrets.bitnami.com/cluster-wide: "true"
+#     labels:
+#       triliovault.trilio.io/secret: "true"
+#       triliovault.trilio.io/target-secret: "true"
+#     encryptedData:
+#       accessKey: AgCLfDlTb1wzCeNWfeWckXKxUuxOfAXFDwjpfyHyXpnRTsco2FNBy3lH0q9i7IOSm6K/LQl7wwQUb+3WpF8KmRBXTyfcNMHSxcA+MrAhPWIKV9T4B8qIEpeYcEA6tL26VpSa2rCJqUflNPIGD7IzWZbDajNdR8/4bM7+tTwukKwuUc7a/2ziLqDVZ3DRFopSL2Ifot7XpBMTCtV8ovGrpsiGnjiI8k89JDo3+Xh2eHOXJp6OORkJ/hLw3cKDp/4523Wt/DAnBgt5Rll/aa0R4r5JAMqmBEHVaaxYbd/YmBOv6G/SQLeh31knX5PnIWJw2e3wGHuMkE/j0/XBgTWk57uyrRFSDxiMf7i9tX027fCgnyTlo65b+Mk/kT78IZS4ukM1aUbus5SvkBQ4iMAM58xbPp4JKBmiBo6epi1OWnfEGLZ935XrmzOcFr1NrT9QPN0qdqibYXOpZNYaTCRlQPb/6Cg9GImZ8QduYPc38G0RY0j5IwgZEGKyrkhqMyNPOqhwCX4L5E5JFLhTWR81Gr6gwL2NI6qrbKJfjeOy39O7O6ouxNuOAZcgqWeFgyRpOiys7arWxyifRssq8TjpnX9K51pUcCiGnpDaawF9YektYFkrLnzh1ikL7v5vQAxWjAXuU27Vd579PEIaFc3z1IjHmW9s6jgU5HlgEGNGlorrIDO39itxL90m8Zwn9lCZIITmAalyNnEIzJ7ACgTFSqEGAsxw6PNhqBXG
+#       secretKey: AgAYd3JM81x1i3FWEnCmkRriATyzJy0cHG3FCUmTGRMX1FwEkScfeusUO55OQcSB62NsWOsvc/Dhx/N7mVs3WVVjXW1wrDPYISYBrg/PTIXTIiex+CdFkwMaVgakP6u+0CUOMykQZiT2ellAV3gT81GUCOjXWbkPhkE39AwiLMvo8JmeL5KEft2Fg/KJ2EMJZZuT3otHj00ZW2t1on/8fTALTyL95YMSFQQxUSBIrlXbNGQ18pyQZJGh1hgr2jQD4K705KxV+aYpyaaltGVO4fW8J7SJVOrWluQqdNZw4lDpaHVI9ga0jFn7JM4UT0Ca7gJjbltZmvLFSy8NajTdaHiOv+1bKx/Q3wStzE/OzM1yytCZiPo6vilE4Lbd+41zjG7HMi/pXTMtr3p2QykLtjt2uTocY8JevEG52xpx67z2neHNusC/CY0oARiKaF7OCMJwbQDdsXXuQ7pWBBGyUrWDE45bOf2p1X1Q312GV9X1iIv/9gyCoipk3O88ye1mtR+hrbtISQAnKmSKq/WuMl0vsKLMBg+LDLH4LgaCwnAJxp6OaTkmIBj560tgV1OAHftMZrwJ8I61TagMhPwz2dpb5QUGhx+uJ4IEekG/ZpUVrYc/9t8iFE2CrfujbCZrogBF5k8iVEIzIR7QAp6BeGwcE7sODwwIPp5HIvxVah55a1j7z/PsdW1St9fZmTqiSUQIRJ0AccbbkDMCNlDmey2zykD8sdK1m+98feSuQoMR
+#     type: Opaque
+
+# backupTargets:
+#   backblaze-palebluedot:
+#     nfsCredentials:
+#       nfsExport: ""
+#     objectStoreCredentials:
+#       bucketName: palebluedot-tvk
+#       credentialSecret:
+#         apiVersion: v1
+#         kind: Secret
+#         name: backblaze-palebluedot
+#       url: https://s3.us-west-000.backblazeb2.com 
+#     thresholdCapacity: 100Gi
+#     type: ObjectStore
+#     vendor: Other
+
+# clusterbackupplans:
+#   default:
+#     backupTarget: backblaze-palebluedot
+#     clusterBackupPlanFlags:
+#       skipImageBackup: true
+#     namespaceSelector:
+#     - labelSelector:
+#       - matchLabels:
+#           tvk-backup: default
+#     policies:
+#       retention-policy:
+#         type: Retention
+#         spec:
+#           cleanupConfig:
+#             backupDays: 7
+#           default: false
+#           retentionConfig:
+#             dayOfWeek: Sunday
+#             latest: 15
+#             weekly: 2
+#       incremental-policy:
+#         type: Schedule
+#         spec:
+#           default: false
+#           scheduleConfig:
+#             schedule:
+#             - 5 4 * * *
+#       fullbackup-policy:
+#         type: Schedule
+#         spec:
+#           default: false
+#           scheduleConfig:
+#             schedule:
+#             - 0 4 * 1/3 *
+#     excludeResources:
+#       labelSelector:
+#       - matchExpressions:
+#         - key: tvk-skip-object
+#           operator: In
+#           values:
+#           - "true"
+#   low-priority:
+#     backupTarget: backblaze-palebluedot
+#     clusterBackupPlanFlags:
+#       skipImageBackup: true
+#     namespaceSelector:
+#     - labelSelector:
+#       - matchLabels:
+#           tvk-backup: low-pri
+#     policies:
+#       retention-policy:
+#         type: Retention
+#         spec:
+#           cleanupConfig:
+#             backupDays: 7
+#           default: false
+#           retentionConfig:
+#             dayOfWeek: Sunday
+#             latest: 15
+#       incremental-policy:
+#         type: Schedule
+#         spec:
+#           default: false
+#           scheduleConfig:
+#             schedule:
+#             - 15 4 * * *
+#       fullbackup-policy:
+#         type: Schedule
+#         spec:
+#           default: false
+#           scheduleConfig:
+#             schedule:
+#             - 10 4 * 1/3 *
+#     excludeResources:
+#       labelSelector:
+#       - matchExpressions:
+#         - key: tvk-skip-object
+#           operator: In
+#           values:
+#           - "true"

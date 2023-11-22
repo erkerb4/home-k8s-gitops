@@ -1,0 +1,43 @@
+infraBackup:
+  enabled: true
+  schedule:
+    controlPlane: "15 4 * * *"
+    node: "15 4 * * 0"
+  backoffLimit: 1
+  backupPruning:
+    enabled: true
+    schedule: "30 5 * * *"
+    keepDaily: 14
+    keepWeekly: 1
+    keepLast: 18
+  etcdImage:
+    registry: k8s.gcr.io
+    repository: etcd
+    tag: "3.5.3-0"
+  exportImage:
+    registry: docker.io
+    repository: bash
+    tag: "5.2"
+  backupImage:
+    registry: docker.io
+    repository: alpine
+    tag: "3.18"
+  kubectlImage:
+    registry: docker.io
+    repository: bitnami/kubectl
+    tag: "1.26"
+  s3:
+    url: s3.us-west-000.backblazeb2.com 
+    bucket: palebluedot-restic
+    secret: backblaze-restic-credentials
+  backupVol:
+    pvcName:
+    accessMode: ReadWriteMany
+    size: 500Mi
+    storageClass: ceph-filesystem-gold
+
+infisicalSecret:
+  backblaze-restic-credentials:
+    syncInterval: 86400
+  restic-encryption:
+    syncInterval: 86400

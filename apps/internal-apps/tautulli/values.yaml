@@ -1,0 +1,41 @@
+tautulli:
+  image:
+    repository: ghcr.io/linuxserver/tautulli
+    tag: 2.10.2
+
+  env:
+    TZ: America/New_York
+
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        cert-manager.io/cluster-issuer: le-prod
+      hosts:
+      - host: tau.xtr.pub
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - tau.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    config:
+      enabled: true
+      type: pvc
+      accessMode: ReadWriteOnce
+      size: 256Mi
+      mountPath: /config
+      storageClass: "ceph-block-bronze"
+
+  resources:
+    limits:
+      cpu: "1"
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi

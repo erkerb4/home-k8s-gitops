@@ -1,0 +1,40 @@
+changedetection-io:
+  image:
+    tag: "0.39.15"
+
+  env:
+    TZ: America/New_York
+
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        cert-manager.io/cluster-issuer: le-prod
+      hosts:
+      - host: changed.xtr.pub
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - changed.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    data:
+      enabled: true
+      type: pvc
+      accessMode: ReadWriteOnce
+      size: 128Mi
+      mountPath: /datastore
+      storageClass: "ceph-block-bronze"
+
+  resources:
+    limits:
+      cpu: "1"
+      memory: 256Mi
+    requests:
+      cpu: 125m
+      memory: 64Mi

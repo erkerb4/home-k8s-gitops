@@ -1,0 +1,122 @@
+cert-manager:
+  installCRDs: true
+  global:
+    logLevel: 4
+  podLabels:
+    application: cert-manager
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchFields:
+          - key: metadata.name
+            operator: In
+            values:
+            - ike
+    # podAntiAffinity:
+    #   preferredDuringSchedulingIgnoredDuringExecution:
+    #   - weight: 10
+    #     podAffinityTerm:
+    #       labelSelector:
+    #         matchExpressions:
+    #         - key: application
+    #           operator: In
+    #           values:
+    #           - cert-manager
+    #       topologyKey: kubernetes.io/hostname
+  tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/control-plane
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 128Mi
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+  webhook:
+    podLabels:
+      application: cert-manager
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: application
+                operator: In
+                values:
+                - cert-manager
+            topologyKey: kubernetes.io/hostname
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+    resources:
+      requests:
+        cpu: 25m
+        memory: 32Mi
+      limits:
+        cpu: 250m
+        memory: 96Mi
+  cainjector:
+    podLabels:
+      application: cert-manager
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: application
+                operator: In
+                values:
+                - cert-manager
+            topologyKey: kubernetes.io/hostname
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+    resources:
+      requests:
+        cpu: 150m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
+  startupapicheck:
+    podLabels:
+      application: cert-manager
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: application
+                operator: In
+                values:
+                - cert-manager
+            topologyKey: kubernetes.io/hostname
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        cpu: 75m
+        memory: 96Mi
+  # podDnsPolicy: "None"
+  # podDnsConfig:
+  #   nameservers:
+  #     - "1.0.0.1"
+  #     - "1.1.1.1"
+
+letsEncrypt:
+  email: erkerb@gmail.com
+#  server: https://acme-staging-v02.api.letsencrypt.org/directory
+  server: https://acme-v02.api.letsencrypt.org/directory
+
+infisicalSecret:
+  cloudflare-api-token:
+    syncInterval: 86400

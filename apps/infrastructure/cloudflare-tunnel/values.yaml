@@ -1,0 +1,60 @@
+cloudflare-tunnel:
+  controller:
+    enabled: true
+    type: deployment
+    replicas: 3
+
+  image:
+    repository: cloudflare/cloudflared
+    tag: latest
+
+  args:
+  - "tunnel"
+  - "--no-autoupdate"
+  - "run"
+
+  env:
+    TZ: America/New_York
+
+  envFrom:
+  - secretRef:
+      name: cloudflare-tunnel-token
+      
+  ingress:
+    main:
+      enabled: false
+
+  persistence:
+    config:
+      enabled: false
+
+  service:
+    main:
+      enabled: false
+      ports:
+        http:
+          enabled: false
+
+  probes:
+    liveness:
+      enabled: false
+    readiness:
+      enabled: false
+    startup:
+      enabled: false  
+
+  resources:
+    limits:
+      cpu: "100m"
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+  topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector: 
+      matchLabels:
+        app.kubernetes.io/name: cloudflare-tunnel

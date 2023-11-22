@@ -1,0 +1,13 @@
+apiVersion: v2
+description: Cloudflare Tunnel
+name: cloudflare-tunnel
+version: 1.0.0
+keywords:
+- cloudflare tunnel
+sources:
+- https://github.com/bjw-s/helm-charts
+dependencies:
+- name: app-template
+  repository: "@bjws"
+  version: "1.5.1"
+  alias: cloudflare-tunnel

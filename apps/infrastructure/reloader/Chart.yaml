@@ -1,0 +1,10 @@
+apiVersion: v2
+name: reloader
+description: A Kubernetes controller to watch changes in ConfigMap and Secrets and do rolling upgrades on Pods.
+home: https://www.stakater.com
+icon: https://raw.githubusercontent.com/stakater/Reloader/master/assets/web/reloader-round-100px.png
+version: v1.0.38
+dependencies:
+- name: reloader
+  version: "1.0.38"
+  repository: "@stakater"

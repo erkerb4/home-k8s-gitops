@@ -1,0 +1,15 @@
+{{- range $clusterplan, $clusterplanSpec := $.Values.clusterbackupplans }}
+{{- range $policy, $policySpec := $clusterplanSpec.policies }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: Policy
+metadata:
+  name: {{ $clusterplan }}-{{ $policy }}
+  namespace: {{ $.Release.Namespace }}
+{{- with $policySpec.spec  }}
+spec:
+{{- toYaml . | nindent 2 }}
+{{- end }}
+  type: {{  $policySpec.type }}
+{{- end }}
+{{- end }}

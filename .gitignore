@@ -1,0 +1,4 @@
+## Ignore any unsealed files -- primarily used for secrets
+unsealed-*
+Chart.lock
+charts/

@@ -1,0 +1,137 @@
+omada:
+  global:
+    fullnameOverride: omada-controller
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    hostNetwork: true
+    dnsPolicy: ClusterFirstWithHostNet
+
+  controllers:
+    main:
+      containers:
+        main:
+          type: deployment
+          image:
+            repository: mbentley/omada-controller
+            tag: "5.12"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: America/New_York
+          resources:
+            limits:
+              cpu: 1250m
+              memory: 1300Mi
+            requests:
+              cpu: 250m
+              memory: 768Mi
+          probes:
+            liveness:
+              enabled: false
+            readiness:
+              enabled: false
+            startup:
+              enabled: false
+
+  service:
+    main:
+      annotations:
+        metallb.universe.tf/address-pool: vl30
+        metallb.universe.tf/loadBalancerIPs: 192.168.30.52
+      type: LoadBalancer
+      externalTrafficPolicy: Cluster
+      ports:
+        http:
+          enabled: false
+        mgmt-http:
+          enabled: true
+          primary: true
+          port: 8088
+          protocol: TCP
+        mgmt-https:
+          enabled: true
+          port: 8043
+          protocol: TCP
+        portal-https:
+          enabled: true
+          port: 8843
+          protocol: TCP
+        port-app-discovery:
+          enabled: true
+          port: 27001
+          protocol: UDP
+        port-app-search:
+          enabled: true
+          port: 27002
+          protocol: TCP
+        eap-discovery:
+          enabled: true
+          port: 29810
+          protocol: UDP
+        eap-mgt-v1:
+          enabled: true
+          port: 29811
+          protocol: TCP
+        eap-adopt-v1:
+          enabled: true
+          port: 29812
+          protocol: TCP
+        eap-upgrd-v1:
+          enabled: true
+          port: 29813
+          protocol: TCP
+        eap-adopt:
+          enabled: true
+          port: 29814
+          protocol: TCP
+        eap-transfer-v2:
+          enabled: true
+          port: 29815
+          protocol: TCP
+        eap-rtty:
+          enabled: true
+          port: 29816
+          protocol: TCP
+
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        # traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        # traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        # traefik.ingress.kubernetes.io/router.tls: "true"
+      hosts:
+        - host: omada.xtr.pub
+          paths:
+            - path: /
+              service:
+                name: main
+                port: mgmt-http
+      tls:
+      - hosts:
+        - omada.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    config:
+      enabled: false
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ceph-block-gold
+      accessMode: ReadWriteOnce
+      size: "2Gi"
+      globalMounts:
+        - path: /opt/tplink/EAPController/data
+    logs:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ceph-block-bronze
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+      globalMounts:
+        - path: /opt/tplink/EAPController/logs
+    cert:
+      enabled: true
+      type: secret
+      name: tls-secret

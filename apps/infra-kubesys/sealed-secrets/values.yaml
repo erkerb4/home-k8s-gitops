@@ -1,0 +1,11 @@
+sealed-secrets:
+  fullnameOverride: sealed-secrets-controller
+  commandArgs: 
+  - '--update-status'
+  resources:
+    limits:
+      cpu: 50m
+      memory: 24Mi
+    requests:
+      cpu: 15m
+      memory: 8Mi

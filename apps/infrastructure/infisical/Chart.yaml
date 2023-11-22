@@ -1,0 +1,10 @@
+apiVersion: v2
+name: secrets-operator
+description: A Helm chart for Infisical secrets
+type: application
+version: 0.2.1
+appVersion: "0.3.0"
+dependencies:
+- name: secrets-operator
+  version: "0.2.1"
+  repository: "@infisical"

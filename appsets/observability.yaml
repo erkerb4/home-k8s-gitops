@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: observability-deployments
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: git@github.com:erkerb4/home-k8s-gitops.git
+      revision: HEAD
+      directories:
+      - path: apps/observability/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+      annotations:
+        notifications.argoproj.io/subscribe.app-outofsync.slack: argo
+        notifications.argoproj.io/subscribe.on-health-degraded.slack: argo
+        notifications.argoproj.io/subscribe.on-sync-failed.slack: argo
+        notifications.argoproj.io/subscribe.on-sync-succeeded.slack: argo
+
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
+        argocd-image-updater.argoproj.io/image-list: prom=quay.io/prometheus/alertmanager:v0.x, prom-adapter=k8s.gcr.io/prometheus-adapter/prometheus-adapter:v0.x
+
+        argocd-image-updater.argoproj.io/prom.helm.image-name: prometheus.image.repository
+        argocd-image-updater.argoproj.io/prom.helm.image-tag: prometheus.image.tag
+
+        argocd-image-updater.argoproj.io/prom-adapter.helm.image-name: prometheus-adapter.image.repository
+        argocd-image-updater.argoproj.io/prom-adapter.helm.image-tag: prometheus-adapter.image.tag
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: observability
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - PruneLast=true
+        - ApplyOutOfSyncOnly=true
+        - CreateNamespace=true
+      source:
+        repoURL: git@github.com:erkerb4/home-k8s-gitops.git
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'

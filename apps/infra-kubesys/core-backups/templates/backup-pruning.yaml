@@ -1,0 +1,76 @@
+{{- if (.Values.infraBackup | default dict).enabled }}
+{{- with .Values.infraBackup }}
+{{- if ( .backupPruning | default dict).enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: prune-backups
+spec:
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  schedule: {{ .backupPruning.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: infra-backups
+          initContainers:
+            - name: prune-backups
+              image: {{ .backupImage.registry }}/{{ .backupImage.repository }}:{{ .backupImage.tag }}
+              imagePullPolicy: Always
+              command:
+                - sh
+                - -c
+                - |
+                  apk add restic &&
+                  restic -r s3:{{ .s3.url }}/{{ .s3.bucket }} \
+                    forget \
+                    --keep-last={{ .backupPruning.keepLast }} \
+                    --keep-daily={{ .backupPruning.keepDaily }} \
+                    --keep-weekly={{ .backupPruning.keepWeekly }} \
+                    --prune
+                  restic -r s3:{{ .s3.url }}/{{ .s3.bucket }} snapshots --json > /snapshots/snapshots.json
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .s3.secret }}
+                      key: access_key_id
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .s3.secret }}
+                      key: secret_access_key
+                - name: RESTIC_PASSWORD_FILE
+                  value: /var/secret/key
+              volumeMounts:
+                - name: snapshots
+                  mountPath: /snapshots
+                - name: restic-encryption
+                  mountPath: /var/secret
+                  readOnly: true
+          containers:
+            - name: save-snapshot-history
+              image: {{ .kubectlImage.registry }}/{{ .kubectlImage.repository }}:{{ .kubectlImage.tag }}
+              imagePullPolicy: Always
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  cat /snapshots/snapshots.json | jq > /tmp/snapshots.json
+                  kubectl create configmap backups-snapshots --from-file=/tmp/snapshots.json --dry-run=client -o yaml | kubectl apply -f -
+              volumeMounts:
+                - name: snapshots
+                  mountPath: /snapshots
+          volumes:
+            - name: snapshots
+              emptyDir: {}
+            - name: restic-encryption
+              secret:
+                secretName: restic-encryption
+          restartPolicy: OnFailure
+{{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: core-backups
+description: Custom job to backup all kubernetes components
+type: application
+version: 1.0

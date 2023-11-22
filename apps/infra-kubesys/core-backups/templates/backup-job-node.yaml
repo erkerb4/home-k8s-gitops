@@ -1,0 +1,164 @@
+{{- if (.Values.infraBackup | default dict).enabled }}
+{{- with .Values.infraBackup }}
+{{- $ctx := dict "ConfigValues" . }}
+{{- $ctx = merge $ctx $ }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: infra-backup-node
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+{{- include "infra-backup-node" $ctx }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: infra-backup-node
+spec:
+  suspend: false
+  schedule: {{ .schedule.node }}
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Allow
+  jobTemplate:
+{{- include "infra-backup-node" $ctx | indent 4 }}
+{{- end }}
+{{- end }}
+
+{{- define "infra-backup-node" }}
+spec:
+  backoffLimit: {{ $.ConfigValues.backoffLimit }}
+  template:
+    metadata:
+      labels:
+        job: k8s-backup-worker
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            job: k8s-backup-worker
+      restartPolicy: Never
+      initContainers:
+      - name: init-backup-store
+        image: {{ $.ConfigValues.backupImage.registry }}/{{ $.ConfigValues.backupImage.repository }}:{{ $.ConfigValues.backupImage.tag }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - sh
+          - -c
+          - |
+            apk add restic && \
+            restic -r s3:{{ $.ConfigValues.s3.url }}/{{ $.ConfigValues.s3.bucket }} init || echo "skipped"
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.ConfigValues.s3.secret }}
+              key: access_key_id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.ConfigValues.s3.secret }}
+              key: secret_access_key
+        - name: RESTIC_PASSWORD_FILE
+          value: /var/secret/key
+        volumeMounts:
+        - name: restic-encryption
+          mountPath: /var/secret
+          readOnly: true
+      - name: node-exports
+        image: {{ $.ConfigValues.exportImage.registry }}/{{ $.ConfigValues.exportImage.repository }}:{{ $.ConfigValues.exportImage.tag }}
+        imagePullPolicy: IfNotPresent
+        command: ["bash"]
+        workingDir: /tmp
+        args:
+          - "-c"
+          - |
+            mkdir -p /export/${K8S_NODE_NAME}/kubelet
+            cp -R /etc/kubernetes /export/${K8S_NODE_NAME}/
+            cp -R /var/lib/kubelet/{config.yaml,kubeadm-flags.env,pki} /export/${K8S_NODE_NAME}/kubelet/
+            ls -lrt /export
+        env:
+        - name: K8S_NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        volumeMounts:
+        - name: export-dir
+          mountPath: /export
+        - name: kubernetes-dir
+          mountPath: /etc/kubernetes
+          readOnly: true
+        - name: kubelet-dir
+          mountPath: /var/lib/kubelet
+          readOnly: true
+      containers:
+      - name: backup-to-s3
+        image: {{ $.ConfigValues.backupImage.registry }}/{{ $.ConfigValues.backupImage.repository }}:{{ $.ConfigValues.backupImage.tag }}
+        imagePullPolicy: IfNotPresent
+        workingDir: /export
+        command:
+          - sh
+          - -c
+          - |
+            apk add restic && \
+            restic -r s3:{{ $.ConfigValues.s3.url }}/{{ $.ConfigValues.s3.bucket }} backup --host kubernetes \
+              --tag "backup=node" \
+              --tag "node=${K8S_NODE_NAME}" \
+              --tag "bucket={{ $.ConfigValues.s3.bucket }}" \
+              .
+            restic -r s3:{{ $.ConfigValues.s3.url }}/{{ $.ConfigValues.s3.bucket }} snapshots
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.ConfigValues.s3.secret }}
+              key: access_key_id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ $.ConfigValues.s3.secret }}
+              key: secret_access_key
+        - name: RESTIC_PASSWORD_FILE
+          value: /var/secret/key
+        - name: K8S_NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        volumeMounts:
+        - name: export-dir
+          mountPath: /export
+        - name: restic-encryption
+          mountPath: /var/secret
+          readOnly: true
+      volumes:
+        - name: restic-encryption
+          secret:
+            secretName: restic-encryption
+        - hostPath:
+            path: /etc/kubernetes/
+            type: Directory
+          name: kubernetes-dir
+        - hostPath:
+            path: /var/lib/kubelet
+            type: Directory
+          name: kubelet-dir
+        - hostPath:
+            path: /var/lib/rook
+            type: Directory
+          name: rook-dir
+        - name: export-dir
+          {{- if $.ConfigValues.backupVol.pvcName }}
+          persistentVolumeClaim:
+            claimName: {{ $.ConfigValues.backupVol.pvcName }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+  parallelism: 3
+{{- end }}

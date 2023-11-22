@@ -1,0 +1,733 @@
+argo-cd:
+  global:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+
+  dex:
+    enabled: false
+
+  redis:
+    enabled: true
+    env:
+    - name: TZ
+      value: America/New_York
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 32Mi
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - argocd
+            topologyKey: kubernetes.io/hostname
+
+  notifications:
+    enabled: true
+    argocdUrl: "https://argocd.xtr.pub"
+
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - argocd
+            topologyKey: kubernetes.io/hostname
+
+    secret:
+      create: false
+
+
+    notifiers:
+      service.slack: |
+        token: $slack-token
+    # subscriptions:
+    #   - recipients:
+    #     - slack:palebluedot
+    #     triggers:
+    #     - on-sync-status-unknown
+    templates: 
+      template.app-deployed: |
+        email:
+          subject: New version of an application {{.app.metadata.name}} is up and running.
+        message: |
+          {{if eq .serviceType "slack"}}:white_check_mark:{{end}} Application {{.app.metadata.name}} is now running new version of deployments manifests.
+        slack:
+          attachments: |
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#18be52",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              },
+              {
+                "title": "Revision",
+                "value": "{{.app.status.sync.revision}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-health-degraded: |
+        email:
+          subject: Application {{.app.metadata.name}} has degraded.
+        message: |
+          {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} has degraded.
+          Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#f4c030",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-failed: |
+        email:
+          subject: Failed to sync application {{.app.metadata.name}}.
+        message: |
+          {{if eq .serviceType "slack"}}:exclamation:{{end}}  The sync operation of application {{.app.metadata.name}} has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+          Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#E96D76",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-running: |
+        email:
+          subject: Start syncing application {{.app.metadata.name}}.
+        message: |
+          The sync operation of application {{.app.metadata.name}} has started at {{.app.status.operationState.startedAt}}.
+          Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#0DADEA",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-status-unknown: |
+        email:
+          subject: Application {{.app.metadata.name}} sync status is 'Unknown'
+        message: |
+          {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} sync is 'Unknown'.
+          Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+          {{if ne .serviceType "slack"}}
+          {{range $c := .app.status.conditions}}
+              * {{$c.message}}
+          {{end}}
+          {{end}}
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#E96D76",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-sync-succeeded: |
+        email:
+          subject: Application {{.app.metadata.name}} has been successfully synced.
+        message: |
+          {{if eq .serviceType "slack"}}:white_check_mark:{{end}} Application {{.app.metadata.name}} has been successfully synced at {{.app.status.operationState.finishedAt}}.
+          Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#18be52",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+      template.app-outofsync: |
+        email:
+          subject: Application {{.app.metadata.name}} is in OutOfSync state.
+        message: |
+          {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} is OutOfSync.
+          Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+        slack:
+          attachments: |-
+            [{
+              "title": "{{ .app.metadata.name}}",
+              "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+              "color": "#f4c030",
+              "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{.app.status.sync.status}}",
+                "short": true
+              },
+              {
+                "title": "Repository",
+                "value": "{{.app.spec.source.repoURL}}",
+                "short": true
+              }
+              {{range $index, $c := .app.status.conditions}}
+              {{if not $index}},{{end}}
+              {{if $index}},{{end}}
+              {
+                "title": "{{$c.type}}",
+                "value": "{{$c.message}}",
+                "short": true
+              }
+              {{end}}
+              ]
+            }]
+
+    triggers:
+      trigger.on-deployed: |
+        - description: Application is synced and healthy. Triggered once per commit.
+          oncePer: app.status.sync.revision
+          send:
+          - app-deployed
+          when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+      trigger.on-health-degraded: |
+        - description: Application has degraded
+          send:
+          - app-health-degraded
+          when: app.status.health.status == 'Degraded'
+      trigger.on-sync-failed: |
+        - description: Application syncing has failed
+          send:
+          - app-sync-failed
+          when: app.status.operationState.phase in ['Error', 'Failed']
+      trigger.on-sync-running: |
+        - description: Application is being synced
+          send:
+          - app-sync-running
+          when: app.status.operationState.phase in ['Running']
+      trigger.on-sync-status-unknown: |
+        - description: Application status is 'Unknown'
+          send:
+          - app-sync-status-unknown
+          when: app.status.sync.status == 'Unknown'
+      trigger.on-sync-succeeded: |
+        - description: Application syncing has succeeded
+          send:
+          - app-sync-succeeded
+          when: app.status.operationState.phase in ['Succeeded']
+      trigger.app-outofsync: |
+        - description: Application is OutOfSync state
+          send:
+          - app-outofsync
+          when: app.status.sync.status == 'OutOfSync'
+      defaultTriggers: |
+        - on-sync-status-unknown
+
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 256Mi
+      requests:
+        cpu: 125m
+        memory: 128Mi
+
+  server:
+    extraArgs:
+      - --insecure
+      - --disable-auth
+    env:
+    - name: TZ
+      value: America/New_York
+    resources:
+      limits:
+        cpu: "1"
+        memory: 128Mi
+      requests:
+        cpu: 125m
+        memory: 32Mi
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - argocd
+            topologyKey: kubernetes.io/hostname
+    ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: le-prod
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+          traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+          traefik.ingress.kubernetes.io/router.tls: "true"
+        ingressClassName: ""
+        hosts:
+          - argocd.xtr.pub
+        paths:
+          - /
+        pathType: Prefix
+        tls:
+        - hosts:
+          - argocd.xtr.pub
+          secretName: tls-secret
+        https: false
+
+    ingressGrpc:
+      enabled: false
+      annotations: {}
+      labels: {}
+      ingressClassName: ""
+
+    configEnabled: true
+    config:
+      url: https://argocd.xtr.pub
+      application.instanceLabelKey: argocd.argoproj.io/instance
+      admin.enabled: "false"
+      exec.enabled: "true"
+      resource.customizations.ignoreDifferences.admissionregistration.k8s.io_MutatingWebhookConfiguration: |
+        jqPathExpressions:
+        - '.webhooks[]?.clientConfig.caBundle'
+      resource.customizations.ignoreDifferences.admissionregistration.k8s.io_ValidatingWebhookConfiguration: |
+        jqPathExpressions:
+        - '.webhooks[]?.clientConfig.caBundle'
+      resource.customizations.ignoreDifferences.apiextensions.k8s.io_CustomResourceDefinition: |
+        jqPathExpressions:
+        - '.spec.conversion.webhook.clientConfig.caBundle'
+
+  repoServer:
+    env:
+    - name: TZ
+      value: America/New_York
+    resources:
+      limits:
+        cpu: "4"
+        memory: 3Gi
+      requests:
+        cpu: "1"
+        memory: 256Mi
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - argocd
+            topologyKey: kubernetes.io/hostname
+
+  configs:
+    repositories:
+      argo:
+        name: argo
+        url: https://argoproj.github.io/argo-helm 
+        type: helm
+      sealed-secrets:
+        name: sealed-secrets
+        url: https://bitnami-labs.github.io/sealed-secrets
+        type: helm
+      traefik:
+        name: traefik
+        url: https://helm.traefik.io/traefik
+        type: helm
+      cilium:
+        name: cilium
+        url: https://helm.cilium.io
+        type: helm
+      metallb:
+        name: metallb
+        url: https://metallb.github.io/metallb
+        type: helm
+      rook-release:
+        name: rook-release
+        url: https://charts.rook.io/release
+        type: helm
+      k8s-at-home:
+        name: k8s-at-home
+        url: https://k8s-at-home.com/charts/
+        type: helm
+      prometheus-community:
+        name: prometheus-community
+        url: https://prometheus-community.github.io/helm-charts
+        type: helm
+      bitnami:
+        name: bitnami
+        url: https://charts.bitnami.com/bitnami
+        type: helm
+      triliovault-operator:
+        name: triliovault-operator
+        url: http://charts.k8strilio.net/trilio-stable/k8s-triliovault-operator
+        type: helm
+      triliovault: 
+        name: triliovault
+        url: http://charts.k8strilio.net/trilio-stable/k8s-triliovault
+        type: helm
+      kubereboot:
+        name: kubereboot
+        url: https://kubereboot.github.io/charts
+        type: helm
+      jetstack:
+        name: jetstack
+        url: https://charts.jetstack.io
+        type: helm
+      bjws:
+        name: bjws
+        url: https://bjw-s.github.io/helm-charts
+        type: helm
+      stakater:
+        name: stakater
+        url: https://stakater.github.io/stakater-charts
+        type: helm
+      infisical:
+        name: infisical
+        url: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
+        type: helm
+  applicationSet:
+    args:
+      debug: false
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - argocd
+            topologyKey: kubernetes.io/hostname
+    extraArgs:
+      - --loglevel=warn
+
+    resources:
+      limits:
+        cpu: 250m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+argocd-apps:
+  projects:
+  - name: infrastructure
+    namespace: argocd
+    additionalLabels: {}
+    additionalAnnotations: {}
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    description: Deployments that support cluster functionality
+    sourceRepos:
+    - 'git@github.com:erkerb4/home-k8s-gitops.git'
+    - 'https://argoproj.github.io/argo-helm'
+    - 'https://helm.traefik.io/traefik'
+    - 'https://metallb.github.io/metallb'
+    - 'https://charts.rook.io/release'
+    - 'http://charts.k8strilio.net/trilio-stable/k8s-triliovault-operator'
+    - 'http://charts.k8strilio.net/trilio-stable/k8s-triliovault'
+    - 'https://weaveworks.github.io/kured'
+    - 'https://charts.jetstack.io'
+    - 'https://bjw-s.github.io/helm-charts'
+    - 'https://stakater.github.io/stakater-charts'
+    - 'https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts'
+    destinations:
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+    - namespace: traefik
+      server: https://kubernetes.default.svc
+    - namespace: metallb
+      server: https://kubernetes.default.svc
+    - namespace: rook-ceph
+      server: https://kubernetes.default.svc
+    - namespace: tvk
+      server: https://kubernetes.default.svc
+    - namespace: image-updater
+      server: https://kubernetes.default.svc
+    - namespace: kured
+      server: https://kubernetes.default.svc
+    - namespace: cert-manager
+      server: https://kubernetes.default.svc
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    - namespace: cloudflare-tunnel
+      server: https://kubernetes.default.svc
+    - namespace: reloader
+      server: https://kubernetes.default.svc
+    - namespace: infisical
+      server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+    namespaceResourceBlacklist: []
+    namespaceResourceWhitelist: []
+    orphanedResources: {}
+    
+  - name: infra-kubesys
+    namespace: argocd
+    additionalLabels: {}
+    additionalAnnotations: {}
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    description: Critical/Sensetive deployments that support cluster functionality
+    sourceRepos:
+    - 'git@github.com:erkerb4/home-k8s-gitops.git'
+    - 'https://bitnami-labs.github.io/sealed-secrets'
+    - 'https://helm.cilium.io'
+    destinations:
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+    namespaceResourceBlacklist: []
+    namespaceResourceWhitelist: []
+    orphanedResources: {}
+
+  - name: observability
+    namespace: argocd
+    additionalLabels: {}
+    additionalAnnotations: {}
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    description: Deployments that provide cluster observability
+    sourceRepos:
+    - 'git@github.com:erkerb4/home-k8s-gitops.git'
+    - 'https://prometheus-community.github.io/helm-charts'
+    destinations:
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    - namespace: prometheus
+      server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+    namespaceResourceBlacklist: []
+    namespaceResourceWhitelist: []
+    orphanedResources: {}
+
+  - name: prod-apps
+    namespace: argocd
+    additionalLabels: {}
+    additionalAnnotations: {}
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    description: Deployments that support production deployments
+    sourceRepos:
+    - 'git@github.com:erkerb4/home-k8s-gitops.git'
+    - 'https://k8s-at-home.com/charts/'
+    - 'https://charts.bitnami.com/bitnami'
+    - 'https://bjw-s.github.io/helm-charts'
+    - 'oci://registry-1.docker.io/bitnamicharts'
+    destinations:
+    - namespace: plex
+      server: https://kubernetes.default.svc
+    - namespace: ffk
+      server: https://kubernetes.default.svc
+    - namespace: dev-ffk
+      server: https://kubernetes.default.svc
+    - namespace: overseerr
+      server: https://kubernetes.default.svc
+    - namespace: vw
+      server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+    namespaceResourceBlacklist: []
+    namespaceResourceWhitelist: []
+    orphanedResources: {}
+
+  - name: internal-apps
+    namespace: argocd
+    additionalLabels: {}
+    additionalAnnotations: {}
+    finalizers:
+    - resources-finalizer.argocd.argoproj.io
+    description: Deployments that are used locally
+    sourceRepos:
+    - 'git@github.com:erkerb4/home-k8s-gitops.git'
+    - 'https://k8s-at-home.com/charts/'
+    - 'https://bjw-s.github.io/helm-charts'
+    destinations:
+    - namespace: tdarr
+      server: https://kubernetes.default.svc
+    - namespace: babybuddy
+      server: https://kubernetes.default.svc
+    - namespace: mediadepot
+      server: https://kubernetes.default.svc
+    - namespace: tautulli
+      server: https://kubernetes.default.svc
+    - namespace: heimdall
+      server: https://kubernetes.default.svc
+    - namespace: changedetection
+      server: https://kubernetes.default.svc
+    - namespace: omada
+      server: https://kubernetes.default.svc
+    - namespace: kuma
+      server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+    namespaceResourceBlacklist: []
+    namespaceResourceWhitelist: []
+    orphanedResources: {}
+
+argocd-image-updater:
+  extraEnv:
+  - name: TZ
+    value: "America/New_York"
+  config:
+    applicationsAPIKind: ""
+    # Described in detail here https://argocd-image-updater.readthedocs.io/en/stable/install/running/#flags
+    argocd:
+      # -- Use the gRPC-web protocol to connect to the Argo CD API
+      grpcWeb: true
+      # -- Connect to the Argo CD API server at server address
+      serverAddress: ""
+      # -- If specified, the certificate of the Argo CD API server is not verified.
+      insecure: true
+      # -- If specified, use an unencrypted HTTP connection to the ArgoCD API instead of TLS.
+      plaintext: true
+    gitCommitUser: "Argo Image Updater "
+    gitCommitMail: "erkerb+argoimage@gmail.com"
+    logLevel: "debug"
+
+infisicalSecret:
+  argocd-notifications-secret:
+    syncInterval: 1800

@@ -1,0 +1,21 @@
+---
+apiVersion: v2
+description: A simple, powerful publishing platform that allows you to share your stories with the world
+name: vaultwarden
+version: "5.72.0"
+keywords:
+  - Vaultwarden
+  - bitwardenrs
+home: "https://github.com/k8s-at-home/charts/tree/master/charts/stable/vaultwarden"
+icon: "https://sesoodan.sirv.com/bitwarden_rs.png"
+sources:
+- https://github.com/dani-garcia/vaultwarden
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "2.0.0"
+    alias: vw
+  - name: app-template
+    repository: "@bjws"
+    version: "2.0.0"
+    alias: vw-db

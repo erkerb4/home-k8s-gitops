@@ -1,0 +1,123 @@
+traefik:
+  fullnameOverride: traefik
+  logs:
+    general:
+      level: ERROR
+    access:
+      enabled: false
+      format: json
+  ingressClass:
+    # true is not unit-testable yet, pending https://github.com/rancher/helm-unittest/pull/12
+    enabled: false
+    isDefaultClass: true
+
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 3
+
+  providers:
+    kubernetesIngress:
+      enabled: true
+      publishedService:
+        enabled: true
+    kubernetesCRD:
+      enabled: true
+      allowCrossNamespace: true
+
+  globalArguments: []
+
+  additionalArguments:
+  - --serversTransport.insecureSkipVerify=true
+  - --serversTransport.maxIdleConnsPerHost=10
+  - --metrics=true
+  - --metrics.prometheus=true
+  - --metrics.prometheus.addEntryPointsLabels=true
+  - --metrics.prometheus.addServicesLabels=true
+  - --metrics.prometheus.entryPoint=metrics
+  - --providers.kubernetesingress.ingressendpoint.ip=192.168.30.50
+  - --entryPoints.websecure.forwardedHeaders.trustedIPs=172.30.0.0/20,172.30.16.0/23,192.168.30.0/26
+  service:
+    enabled: true
+    type: LoadBalancer
+    annotations:
+      metallb.universe.tf/address-pool: vl30
+      metallb.universe.tf/allow-shared-ip: traefik-svc
+    spec:
+      loadBalancerIP: "192.168.30.50"
+
+  ports:
+    traefik:
+      port: 9000
+      expose: false
+      exposedPort: 9000
+      protocol: TCP
+    web:
+      port: 8000
+      expose: true
+      exposedPort: 80
+      protocol: TCP
+    websecure:
+      port: 8443
+      expose: true
+      exposedPort: 443
+      protocol: TCP
+    metrics:
+      port: 8082
+      expose: true
+      exposedPort: 8082
+      protocol: TCP
+    plex:
+      port: 32400
+      expose: true
+      exposedPort: 32400
+      protocol: TCP
+
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 3
+    metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+
+  resources:
+    requests:
+      cpu: "125m"
+      memory: "96Mi"
+    limits:
+      cpu: "250m"
+      memory: "128Mi"
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+              app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+          topologyKey: kubernetes.io/hostname
+
+  experimental:
+    http3:
+      enabled: true

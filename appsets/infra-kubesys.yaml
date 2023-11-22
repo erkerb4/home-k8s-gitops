@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infra-kubesys-deployments
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: git@github.com:erkerb4/home-k8s-gitops.git
+      revision: HEAD
+      directories:
+      - path: apps/infra-kubesys/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+      annotations:
+        # notifications.argoproj.io/subscribe.app-outofsync.slack: argo
+        notifications.argoproj.io/subscribe.on-health-degraded.slack: argo
+        notifications.argoproj.io/subscribe.on-sync-failed.slack: argo
+        # notifications.argoproj.io/subscribe.on-sync-succeeded.slack: argo
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: infra-kubesys
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - PruneLast=true
+        - ApplyOutOfSyncOnly=true
+        - CreateNamespace=true
+      source:
+        repoURL: git@github.com:erkerb4/home-k8s-gitops.git
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: kube-system

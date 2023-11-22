@@ -1,0 +1,17 @@
+apiVersion: v2
+description: Plex Media Server
+name: plex
+version: 1.0.0
+keywords:
+- plex
+- plex-media-server
+home: https://github.com/k8s-at-home/charts/tree/master/charts/stable/plex
+icon: https://www.plex.tv/wp-content/uploads/2018/01/pmp-icon-1.png
+sources:
+- https://bjw-s.github.io/helm-charts
+- https://github.com/jefflessard/plex-vaapi-amdgpu-mod
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "2.0.0"
+    alias: plex

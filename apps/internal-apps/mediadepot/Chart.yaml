@@ -1,0 +1,19 @@
+apiVersion: v2
+description: The 
+name: mediadepot
+version: 1.0.0
+keywords:
+- sabnzbd
+- usenet
+sources:
+- https://sabnzbd.org/
+dependencies:
+- name: sabnzbd
+  repository: "@k8s-at-home"
+  version: "9.3.2"
+- name: sonarr
+  repository: "@k8s-at-home"
+  version: "16.2.3"
+- name: radarr
+  repository: "@k8s-at-home"
+  version: "16.2.3"

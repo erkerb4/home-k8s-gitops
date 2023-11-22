@@ -1,0 +1,214 @@
+plex:
+  global:
+    fullnameOverride: plex
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 35
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - sabnzbd
+            namespaces:
+            - mediadepot
+            topologyKey: kubernetes.io/hostname
+
+  controllers:
+    main:
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          type: deployment
+          image:
+            repository: plexinc/pms-docker
+            tag: "latest@sha256:b7534724f16ec3af7bb8d9da7be915cb335e37bd060a4a65b05d2dd863158e95"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: America/New_York
+            VERSION: docker
+          resources:
+            limits:
+              cpu: "6"
+              memory: 8Gi
+              amd.com/gpu: 1
+            requests:
+              cpu: "1"
+              memory: 512Mi
+              amd.com/gpu: 1
+          probes:
+            liveness:
+              custom: true
+              spec:
+                httpGet:
+                  path: /identity
+                  port: 32400
+                  scheme: HTTPS
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+            readiness:
+              custom: true
+              spec:
+                httpGet:
+                  path: /identity
+                  port: 32400
+                  scheme: HTTPS
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+            startup:
+              custom: true
+              spec:
+                httpGet:
+                  path: /identity
+                  port: 32400
+                  scheme: HTTPS
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+
+  service:
+    main:
+      ports:
+        http:
+          enabled: false
+        plex:
+          enabled: true
+          primary: true
+          port: 32400
+          protocol: TCP
+
+  ingress:
+    main:
+      enabled: false
+
+  persistence:
+    config:
+      enabled: true
+      size: 20Gi
+      accessMode: ReadWriteOnce
+      storageClass: ceph-block-gold
+    transcode:
+      enabled: true
+      size: 30Gi
+      accessMode: ReadWriteOnce
+      storageClass: ceph-block-gold
+    backup:
+      enabled: true
+      size: 50Gi
+      accessMode: ReadWriteOnce
+      storageClass: ceph-block-bronze
+    tv:
+      enabled: true
+      type: custom
+      volumeSpec:
+        nfs:
+          server: 192.168.30.20
+          path: /volume1/entertainment/tvshows
+      globalMounts:
+        - path: /media/tv
+    movies:
+      enabled: true
+      type: custom
+      volumeSpec:
+        nfs:
+          server: 192.168.30.20
+          path: /volume1/entertainment/movies
+      globalMounts:
+        - path: /media/movies
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: main
+      policyTypes:
+        - Egress
+      rules:
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+
+backupTargets:
+  &target backblaze-palebluedot:
+    type: ObjectStore
+    vendor: Other
+    objectStoreCredentials:
+      url: https://s3.us-west-000.backblazeb2.com
+      bucketName: palebluedot-tvk
+      region: us-west-000
+      credentialSecret:
+        name: *target
+    thresholdCapacity: 25Gi
+
+backupPlan:
+  plex:
+    backupTarget: *target
+    backupPlanFlags:
+      skipImageBackup: true
+    policies:
+      retention-policy:
+        type: Retention
+        spec:
+          cleanupConfig:
+            backupDays: 2
+          default: false
+          retentionConfig:
+            dayOfWeek: Sunday
+            weekly: 1
+            latest: 2
+      fullbackup-policy:
+        type: Schedule
+        spec:
+          default: false
+          scheduleConfig:
+            schedule:
+            - 10 4 * 1/3 *
+      incremental-policy:
+        type: Schedule
+        spec:
+          default: false
+          scheduleConfig:
+            schedule:
+            - 15 4 * * *
+    excludeResources:
+      gvkSelector:
+      - groupVersionKind:
+          kind: PersistentVolume
+          version: v1
+        objects:
+        - pvc-60082df2-ac85-4864-ac81-d43833b64685
+      - groupVersionKind:
+          kind: PersistentVolumeClaim
+          version: v1
+        objects:
+        - plex-transcode
+      - groupVersionKind:
+          group: secrets.infisical.com
+          kind: InfisicalSecret
+          version: v1alpha1
+      labelSelector:
+      - matchExpressions:
+        - key: tvk-skip-object
+          operator: In
+          values:
+          - "true"
+
+infisicalSecret:
+  *target:
+    syncInterval: 900
+    secretsPath: global

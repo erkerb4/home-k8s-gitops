@@ -1,0 +1,11 @@
+{{- if (index .Values "tvkvaultmanager").enabled }}
+{{- if or (index .Values "tvkvaultmanager").license.enabled ((hasKey (index .Values "tvkvaultmanager").license "key" )) }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: License
+metadata:
+    name: {{ .Values.tvkvaultmanager.license.name }}
+spec:
+    key: {{ .Values.tvkvaultmanager.license.key }}
+{{- end }}
+{{- end }}

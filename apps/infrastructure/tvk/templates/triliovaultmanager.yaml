@@ -1,0 +1,40 @@
+{{- if (index .Values "tvkvaultmanager").enabled }}
+---
+apiVersion: triliovault.trilio.io/v1
+kind: TrilioVaultManager
+metadata:
+  labels:
+    triliovault: k8s
+  name: tvk
+spec:
+  logLevel: {{ .Values.tvkvaultmanager.loglevel | default "Error" }}
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 10
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - k8s-triliovault
+          topologyKey: kubernetes.io/hostname
+  tvkInstanceName: {{ .Values.tvkvaultmanager.instanceName }}
+  trilioVaultAppVersion: {{ default .Chart.Version .Values.tvkvaultmanager.trilioVaultAppVersion "latest" }}
+  applicationScope: Cluster
+  ingressConfig:
+    host: {{ .Values.tvkvaultmanager.ingressConfig.host }}
+    annotations:
+    {{- with .Values.tvkvaultmanager.ingressConfig.annotations }}
+    {{- toYaml . | nindent 6 }}
+    {{- end }}
+  componentConfiguration:
+    {{- with .Values.tvkvaultmanager.componentConfiguration }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    ingress-controller:
+      enabled: false
+      service:
+        type: ClusterIP
+{{- end }}
