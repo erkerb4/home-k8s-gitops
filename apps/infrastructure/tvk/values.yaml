@@ -11,6 +11,7 @@ tvkvaultmanager:
   ingressConfig:
     host: "tvk.xtr.pub"
     annotations:
+      cert-manager.io/cluster-issuer: le-prod
       traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
       traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       traefik.ingress.kubernetes.io/router.tls: "true"
