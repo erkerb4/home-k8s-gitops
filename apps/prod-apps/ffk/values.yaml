@@ -366,6 +366,10 @@ ffk-db:
               - podSelector:
                   matchLabels:
                     application: ghost
+          - from:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: k8s-triliovault
         egress:
           - to:
               - namespaceSelector: {}
