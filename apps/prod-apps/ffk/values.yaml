@@ -332,7 +332,6 @@ ffk-db:
             requests:
               cpu: 125m
               memory: 256Mi
-
   persistence:
     config:
       enabled: false
