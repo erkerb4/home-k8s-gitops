@@ -179,6 +179,8 @@ vw-db:
             repository: mysql
             tag: "5.7.44"
             pullPolicy: IfNotPresent
+          args:
+            - "--ignore-db-dir=lost+found"
           env:
             TZ: "America/New_York"
             MYSQL_ROOT_PASSWORD:
