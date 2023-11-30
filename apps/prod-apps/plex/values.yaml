@@ -153,7 +153,7 @@ backupTargets:
       region: us-west-000
       credentialSecret:
         name: *target
-    thresholdCapacity: 25Gi
+    thresholdCapacity: 150Gi
 
 backupPlan:
   plex:
