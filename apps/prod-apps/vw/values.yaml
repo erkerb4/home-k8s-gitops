@@ -377,7 +377,6 @@ backupPlan:
             labels:
               - matchLabels:
                   application: database
-          containerRegex: db-*
 
 infisicalSecret:
   vw-db:
