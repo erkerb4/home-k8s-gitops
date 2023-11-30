@@ -88,16 +88,6 @@ vw:
               service:
                 name: main
                 port: http
-            # - path: /notifications/hub/negotiate
-            #   pathType: Prefix
-            #   service:
-            #     name: main
-            #     port: http
-            # - path: /notifications/hub
-            #   pathType: Prefix
-            #   service:
-            #     name: main
-            #     port: websocket
       tls:
       - hosts:
         - vw.xtr.pub
@@ -131,6 +121,10 @@ vw:
               - podSelector:
                   matchLabels:
                     application: database
+          - from:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: k8s-triliovault
           - from:
               - namespaceSelector:
                   matchLabels:
@@ -176,13 +170,6 @@ vw-db:
     main:
       type: statefulset
       strategy: OnDelete
-      statefulset:
-        volumeClaimTemplates:
-        - name: data
-          mountPath: /var/lib/mysql
-          accessMode: "ReadWriteOnce"
-          storageClass: ceph-block-gold
-          size: 2Gi
       containers:
         main:
           annotations:
@@ -264,6 +251,19 @@ vw-db:
             requests:
               cpu: 125m
               memory: 256Mi
+
+  persistence:
+    config:
+      enabled: false
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ceph-block-gold
+      accessMode: ReadWriteOnce
+      size: "2Gi"
+      globalMounts:
+        - path: /var/lib/mysql
+
   service:
     main:
       enabled: false
@@ -298,6 +298,10 @@ vw-db:
               - podSelector:
                   matchLabels:
                     application: vaultwarden
+          - from:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: k8s-triliovault
         egress:
           - to:
               - namespaceSelector: {}
