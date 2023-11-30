@@ -246,13 +246,6 @@ ffk-db:
         secrets.infisical.com/auto-reload: "true"
       type: statefulset
       strategy: OnDelete
-      statefulset:
-        volumeClaimTemplates:
-        - name: data
-          mountPath: /var/lib/mysql
-          accessMode: "ReadWriteOnce"
-          storageClass: ceph-block-gold
-          size: 2Gi
       containers:
         main:
           nameOverride: db
@@ -337,7 +330,10 @@ ffk-db:
       enabled: false
     data:
       enabled: true
-      existingClaim: data-ffk-db-0
+      type: persistentVolumeClaim
+      storageClass: ceph-block-gold
+      accessMode: ReadWriteOnce
+      size: "2Gi"
       globalMounts:
         - path: /var/lib/mysql
 
