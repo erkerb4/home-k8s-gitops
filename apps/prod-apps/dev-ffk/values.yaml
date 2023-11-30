@@ -329,6 +329,15 @@ devffk-db:
             requests:
               cpu: 100m
               memory: 128Mi
+  persistence:
+    config:
+      enabled: false
+    data:
+      enabled: true
+      existingClaim: data-dev-ffk-db-0
+      globalMounts:
+        - path: /var/lib/mysql
+        
   service:
     main:
       enabled: false
