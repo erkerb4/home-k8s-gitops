@@ -12,8 +12,8 @@ sources:
   - https://github.com/kubernetes/kube-state-metrics
 dependencies:
   - name: prometheus
-    version: "15.16.1"
+    version: "25.9.1"
     repository: "@prometheus-community"
   - name: prometheus-adapter
-    version: "3.4.1"
+    version: "4.8.3"
     repository: "@prometheus-community"
