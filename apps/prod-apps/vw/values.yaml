@@ -364,16 +364,16 @@ backupPlan:
           operator: In
           values:
           - "true"
-    backupHook: mysql
-    hookConfig:
-      mode: Sequential
-      hooks:
-        - hook:
-            name: mysql-hook
-          podSelector:
-            labels:
-              - matchLabels:
-                  application: database
+    # backupHook: mysql
+    # hookConfig:
+    #   mode: Sequential
+    #   hooks:
+    #     - hook:
+    #         name: mysql-hook
+    #       podSelector:
+    #         labels:
+    #           - matchLabels:
+    #               application: database
 
 infisicalSecret:
   vw-db:
