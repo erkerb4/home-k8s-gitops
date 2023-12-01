@@ -203,11 +203,6 @@ vw-db:
                 secretKeyRef:
                   name: vw-db
                   key: mysql-password
-            MYSQL_LOCALHOST_USER:
-              valueFrom:
-                secretKeyRef:
-                  name: vw-db
-                  key: mysql-localhost-user
           probes:
             startup:
               enabled: false
