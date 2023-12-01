@@ -181,6 +181,8 @@ vw-db:
             pullPolicy: IfNotPresent
           args:
             - "--ignore-db-dir=lost+found"
+            - "--character-set-server=utf8mb4"
+            - "--collation-server=utf8mb4_unicode_ci"
           env:
             TZ: "America/New_York"
             MYSQL_ROOT_PASSWORD:
