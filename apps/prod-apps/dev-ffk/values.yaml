@@ -382,61 +382,71 @@ devffk-db:
                   matchLabels:
                     application: ghost
 
-# backupTargets:
-#   *target:
-#     type: ObjectStore
-#     vendor: Other
-#     objectStoreCredentials:
-#       url: https://s3.us-west-000.backblazeb2.com
-#       bucketName: palebluedot-tvk
-#       region: us-west-000
-#       credentialSecret:
-#         name: *target
-#     thresholdCapacity: 25Gi
+backupTargets:
+  &target backblaze-palebluedot:
+    type: ObjectStore
+    vendor: Other
+    objectStoreCredentials:
+      url: https://s3.us-west-000.backblazeb2.com
+      bucketName: palebluedot-tvk
+      region: us-west-000
+      credentialSecret:
+        name: *target
+    thresholdCapacity: 10Gi
 
-# backupPlan:
-#   dev-ffk:
-#     backupTarget: *target
-#     backupPlanFlags:
-#       skipImageBackup: true
-#     policies:
-#       retention-policy:
-#         type: Retention
-#         spec:
-#           cleanupConfig:
-#             backupDays: 2
-#           default: false
-#           retentionConfig:
-#             dayOfWeek: Sunday
-#             weekly: 1
-#             latest: 3
-#       fullbackup-policy:
-#         type: Schedule
-#         spec:
-#           default: false
-#           scheduleConfig:
-#             schedule:
-#             - 10 4 * 1/3 *
-#       incremental-policy:
-#         type: Schedule
-#         spec:
-#           default: false
-#           scheduleConfig:
-#             schedule:
-#             - 15 4 * * *
-#     excludeResources:
-#       labelSelector:
-#       - matchExpressions:
-#         - key: tvk-skip-object
-#           operator: In
-#           values:
-#           - "true"
+backupPlan:
+  ffk:
+    backupTarget: *target
+    backupPlanFlags:
+      skipImageBackup: true
+    policies:
+      retention-policy:
+        type: Retention
+        spec:
+          cleanupConfig:
+            backupDays: 2
+          default: false
+          retentionConfig:
+            dayOfWeek: Sunday
+            weekly: 1
+            latest: 2
+      fullbackup-policy:
+        type: Schedule
+        spec:
+          default: false
+          scheduleConfig:
+            schedule:
+            - 10 4 * 1/3 *
+      incremental-policy:
+        type: Schedule
+        spec:
+          default: false
+          scheduleConfig:
+            schedule:
+            - 15 4 * * *
+    excludeResources:
+      labelSelector:
+      - matchExpressions:
+        - key: tvk-skip-object
+          operator: In
+          values:
+          - "true"
+    backupHook: mysql
+    hookConfig:
+      mode: Sequential
+      hooks:
+        - hook:
+            name: mysql-hook
+          podSelector:
+            labels:
+              - matchLabels:
+                  application: database
 
 infisicalSecret:
   ffk-db:
     syncInterval: 0
   ghost-config-vars:
     syncInterval: 0
-  # &target backblaze-palebluedot:
-  #   syncInterval: 900
-  #   secretsPath: global
+  &target backblaze-palebluedot:
+    syncInterval: 900
+    secretsPath: global
