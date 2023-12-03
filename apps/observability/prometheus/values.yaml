@@ -20,27 +20,26 @@ prometheus:
         cpu: 25m
         memory: 30Mi
   server:
-    baseURL: "http://mon.xtr.pub/prometheus"
+    baseURL: "http://prom.xtr.pub"
     global:
       scrape_interval: 15s
       scrape_timeout: 10s
-      evaluation_interval: 15s
-    prefixURL: "/prometheus"
+      evaluation_interval: 1m
     ingress:
       enabled: true
       annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: web
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
         ingress.kubernetes.io/protocol: http
         cert-manager.io/cluster-issuer: le-prod
       hosts:
-        - mon.xtr.pub
+        - prom.xtr.pub
       tls:
         - hosts:
-          - mon.xtr.pub
+          - prom.xtr.pub
           secretName: tls-secret 
-      path: /prometheus/
     persistentVolume:
-      size: 30Gi
+      size: 15Gi
     statefulSet:
       enabled: true
       headless:
