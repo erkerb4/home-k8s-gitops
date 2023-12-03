@@ -395,7 +395,7 @@ backupTargets:
     thresholdCapacity: 10Gi
 
 backupPlan:
-  ffk:
+  dev-ffk:
     backupTarget: *target
     backupPlanFlags:
       skipImageBackup: true
