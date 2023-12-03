@@ -321,6 +321,49 @@ radarr:
       cpu: 250m
       memory: 256Mi
 
+backupPlan:
+  mediadepot:
+    backupTarget: *target
+    backupPlanFlags:
+      skipImageBackup: true
+    policies:
+      retention-policy:
+        type: Retention
+        spec:
+          cleanupConfig:
+            backupDays: 2
+          default: false
+          retentionConfig:
+            dayOfWeek: Sunday
+            weekly: 1
+            latest: 2
+      fullbackup-policy:
+        type: Schedule
+        spec:
+          default: false
+          scheduleConfig:
+            schedule:
+            - 10 4 * 1/3 *
+      incremental-policy:
+        type: Schedule
+        spec:
+          default: false
+          scheduleConfig:
+            schedule:
+            - 15 4 * * *
+    excludeResources:
+      gvkSelector:
+      - groupVersionKind:
+          group: secrets.infisical.com
+          kind: InfisicalSecret
+          version: v1alpha1
+      labelSelector:
+      - matchExpressions:
+        - key: tvk-skip-object
+          operator: In
+          values:
+          - "true"
+
 infisicalSecret:
   sabnzbd-config:
     syncInterval: 86400
@@ -328,3 +371,6 @@ infisicalSecret:
     syncInterval: 86400
   sonarr-config:
     syncInterval: 86400
+  *target:
+    syncInterval: 900
+    secretsPath: global
