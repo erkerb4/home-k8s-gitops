@@ -321,6 +321,18 @@ radarr:
       cpu: 250m
       memory: 256Mi
 
+backupTargets:
+  &target backblaze-palebluedot:
+    type: ObjectStore
+    vendor: Other
+    objectStoreCredentials:
+      url: https://s3.us-west-000.backblazeb2.com
+      bucketName: palebluedot-tvk
+      region: us-west-000
+      credentialSecret:
+        name: *target
+    thresholdCapacity: 5Gi
+
 backupPlan:
   mediadepot:
     backupTarget: *target
