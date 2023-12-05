@@ -55,7 +55,7 @@ prometheus:
     service:
       gRPC:
         enabled: true
-    retentionSize: "5G"
+    retention: "3d"
   networkPolicy:
     enabled: true
 
