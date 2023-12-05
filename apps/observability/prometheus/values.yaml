@@ -47,10 +47,10 @@ prometheus:
           enabled: true
     resources:
       limits:
-        cpu: 250m
+        cpu: 375m
         memory: 3Gi
       requests:
-        cpu: 64m
+        cpu: 100m
         memory: 512Mi
     service:
       gRPC:
@@ -338,10 +338,10 @@ prometheus-adapter:
   resources: 
     requests:
       cpu: 125m
-      memory: 256Mi
+      memory: 512Mi
     limits:
-      cpu: 250m
-      memory: 384Mi
+      cpu: 500m
+      memory: 1024Mi
   # rules:
   #   resource:
   #     cpu:
