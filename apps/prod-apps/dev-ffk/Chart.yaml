@@ -12,7 +12,7 @@ dependencies:
   - name: app-template
     repository: "@bjws"
     version: "2.3.0"
-    alias: dev-ffk
+    alias: ffk
   - name: app-template
     repository: "@bjws"
     version: "2.3.0"

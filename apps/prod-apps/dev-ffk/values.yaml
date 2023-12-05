@@ -1,4 +1,4 @@
-dev-ffk:
+ffk:
   global:
     fullnameOverride: dev-ffk
   defaultPodOptions:
