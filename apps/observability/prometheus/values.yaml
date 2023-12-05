@@ -39,7 +39,7 @@ prometheus:
           - prom.xtr.pub
           secretName: tls-secret 
     persistentVolume:
-      size: 15Gi
+      size: 7Gi
     statefulSet:
       enabled: true
       headless:
