@@ -151,10 +151,7 @@ ffk:
       annotations:
         cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.middlewares: traefik-security-headers@kubernetescrd
-        traefik.ingress.kubernetes.io/router.tls.options: traefik-tls13@kubernetescrd
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-        traefik.ingress.kubernetes.io/router.tls: "true"
       hosts:
         - host: devffk.xtr.pub
           paths:

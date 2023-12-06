@@ -94,8 +94,7 @@ rook-ceph-cluster:
         - hosts:
           - mon.xtr.pub
       annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
-        ingress.kubernetes.io/protocol: http
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
 
   cephBlockPools:
     - name: replicated-metadata-pool-bronze

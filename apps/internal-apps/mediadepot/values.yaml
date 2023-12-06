@@ -53,10 +53,8 @@ sabnzbd:
     main:
       enabled: true
       annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.middlewares: traefik-security-headers@kubernetescrd
-        traefik.ingress.kubernetes.io/router.tls: "true"
         cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
       - host: mediadepot.xtr.pub
@@ -163,8 +161,6 @@ sonarr:
       enabled: true
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.middlewares: traefik-security-headers@kubernetescrd
-        traefik.ingress.kubernetes.io/router.tls: "true"
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
       - host: mediadepot.xtr.pub
@@ -265,8 +261,6 @@ radarr:
       enabled: true
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.middlewares: traefik-security-headers@kubernetescrd
-        traefik.ingress.kubernetes.io/router.tls: "true"
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
       - host: mediadepot.xtr.pub
