@@ -51,6 +51,9 @@ traefik:
       expose: true
       exposedPort: 80
       protocol: TCP
+      redirectTo:
+        port: websecure
+        priority: 10
     websecure:
       port: 8443
       expose: true
