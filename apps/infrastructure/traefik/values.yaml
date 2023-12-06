@@ -56,8 +56,8 @@ traefik:
       expose: true
       exposedPort: 443
       protocol: TCP
-      tls:
-        options: traefik-tls13@kubernetescrd
+      # tls:
+      #   options: traefik-tls13@kubernetescrd
       http3:
         enabled: true
       forwardedHeaders:
@@ -65,8 +65,8 @@ traefik:
           - 172.30.0.0/20
           - 172.30.16.0/23
           - 192.168.30.0/26
-      middlewares:
-        - traefik-security-headers@kubernetescrd
+      # middlewares:
+      #   - traefik-security-headers@kubernetescrd
       
     metrics:
       port: 9100
