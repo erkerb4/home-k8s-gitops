@@ -25,6 +25,7 @@ spec:
               kubernetes.io/metadata.name: traefik
       ports:
         - port: 8443
+        - port: 443
     - to:
         - namespaceSelector:
             matchLabels:
