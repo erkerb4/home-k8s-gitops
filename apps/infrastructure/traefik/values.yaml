@@ -20,22 +20,17 @@ traefik:
       enabled: true
       publishedService:
         enabled: true
-    kubernetesCRD:
-      enabled: true
-      allowCrossNamespace: true
 
   globalArguments: []
 
   additionalArguments:
   - --serversTransport.insecureSkipVerify=true
-  - --serversTransport.maxIdleConnsPerHost=10
   - --metrics=true
   - --metrics.prometheus=true
   - --metrics.prometheus.addEntryPointsLabels=true
   - --metrics.prometheus.addServicesLabels=true
   - --metrics.prometheus.entryPoint=metrics
   - --providers.kubernetesingress.ingressendpoint.ip=192.168.30.50
-  - --entryPoints.websecure.forwardedHeaders.trustedIPs=172.30.0.0/20,172.30.16.0/23,192.168.30.0/26
   service:
     enabled: true
     type: LoadBalancer
@@ -61,10 +56,22 @@ traefik:
       expose: true
       exposedPort: 443
       protocol: TCP
+      tls:
+        options: traefik-tls13@kubernetescrd
+      http3:
+        enabled: true
+      forwardedHeaders:
+        trustedIPs: 
+          - 172.30.0.0/20
+          - 172.30.16.0/23
+          - 192.168.30.0/26
+      middlewares:
+        - traefik-security-headers@kubernetescrd
+      
     metrics:
-      port: 8082
+      port: 9100
       expose: true
-      exposedPort: 8082
+      exposedPort: 9100
       protocol: TCP
     plex:
       port: 32400
@@ -117,7 +124,3 @@ traefik:
               app.kubernetes.io/name: '{{ template "traefik.name" . }}'
               app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
           topologyKey: kubernetes.io/hostname
-
-  experimental:
-    http3:
-      enabled: true
