@@ -4,5 +4,5 @@ helm:
     value: traefik
     forcestring: true
   - name: traefik.image.tag
-    value: 2.9.10
+    value: v2.9.10
     forcestring: true
