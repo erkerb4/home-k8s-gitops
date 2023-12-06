@@ -363,6 +363,12 @@ backupPlan:
           group: secrets.infisical.com
           kind: InfisicalSecret
           version: v1alpha1
+      - groupVersionKind:
+          kind: PersistentVolumeClaim
+          version: v1
+        objects:
+        - sabnzbd-incomplete-downloads
+        - mediadepot-downloads
       labelSelector:
       - matchExpressions:
         - key: tvk-skip-object
