@@ -4,17 +4,17 @@ helm:
     value: quay.io/linuxserver.io/sabnzbd
     forcestring: true
   - name: sabnzbd.image.tag
-    value: latest@sha256:eaad91c1504889c86ee9707a5fb8fbcd5d2a2e60cc27471551ab0858463b2d29
+    value: latest@sha256:2648edb6b5bbdede1380abc3c63def6d28f3141cc2efdc45dd475b1840255543
     forcestring: true
   - name: sonarr.image.repository
     value: quay.io/linuxserver.io/sonarr
     forcestring: true
   - name: sonarr.image.tag
-    value: latest@sha256:da37a5ba780ed94dd3be4fb35c8099f15ac52e4b21716f6f10ace1465c686887
+    value: latest@sha256:3f25015afacc1823e59095c8c516a526cf29a92e94ebd0a01b9783259caac6a3
     forcestring: true
   - name: radarr.image.repository
     value: quay.io/linuxserver.io/radarr
     forcestring: true
   - name: radarr.image.tag
-    value: latest@sha256:216f0a151aa8a3a27c4c1600e4b2fc80af19845cc1cdd7011e1f07a4eab10665
+    value: latest@sha256:170ddd0db09962ef5cb34ed277aea81d93380f46b76be4c2cf3ddc7dfb30aeaa
     forcestring: true
