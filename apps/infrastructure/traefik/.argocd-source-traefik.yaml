@@ -1,8 +1,0 @@
-helm:
-  parameters:
-  - name: traefik.image.repository
-    value: traefik
-    forcestring: true
-  - name: traefik.image.tag
-    value: 2.9.10
-    forcestring: true
