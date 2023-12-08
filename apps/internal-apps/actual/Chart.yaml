@@ -1,0 +1,15 @@
+---
+apiVersion: v2
+description: A simple, powerful publishing platform that allows you to share your stories with the world
+name: actual
+version: "5.72.0"
+keywords:
+  - ghost
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/actualbudget/actual
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "2.3.0"
+    alias: actual

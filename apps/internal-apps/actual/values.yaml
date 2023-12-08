@@ -1,0 +1,120 @@
+actual:
+  global:
+    fullnameOverride: actual
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    labels:
+      application: actual
+    securityContext:
+      fsGroup: 1000
+
+  controllers:
+    main: 
+      containers:
+        main:
+          nameOverride: actual
+          type: deployment
+          image:
+            repository: ghcr.io/actualbudget/actual-server
+            tag: "23.12.1"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB: 20
+            ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB: 50
+            ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB: 20
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+          resources:
+            limits:
+              cpu: "750m"
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+
+  service:
+    main:
+      nameOverride: actual
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+        traefik.ingress.kubernetes.io/service.passhostheader: "true" 
+      extraSelectorLabels:
+        application: actual
+      ports:
+        http:
+          enabled: true
+          port: 5006
+          primary: true
+          protocol: HTTP
+
+
+  ingress:
+    main:
+      nameOverride: actual
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: actual.xtr.pub
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              service:
+                name: main
+                port: http
+      tls:
+      - hosts:
+        - actual.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    config:
+      enabled: false
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ceph-block-gold
+      accessMode: ReadWriteOnce
+      size: "3Gi"
+      globalMounts:
+        - path: /data
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: main
+      podSelector:
+        matchLabels:
+          application: ghost
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
