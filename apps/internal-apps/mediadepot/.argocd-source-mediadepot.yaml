@@ -16,5 +16,5 @@ helm:
     value: quay.io/linuxserver.io/radarr
     forcestring: true
   - name: radarr.image.tag
-    value: latest@sha256:170ddd0db09962ef5cb34ed277aea81d93380f46b76be4c2cf3ddc7dfb30aeaa
+    value: latest@sha256:b4ea6d2132710253d14b2543a3acf6ad63c3feca9afd39e7de806592ec1ef466
     forcestring: true
