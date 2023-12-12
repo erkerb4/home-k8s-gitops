@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: dev-ffk.controllers.main.containers.main.image.repository
+    value: bitnami/ghost
+    forcestring: true
+  - name: dev-ffk.controllers.main.containers.main.image.tag
+    value: 5.75.1
+    forcestring: true
