@@ -4,5 +4,5 @@ helm:
     value: bitnami/ghost
     forcestring: true
   - name: dev-ffk.controllers.main.containers.main.image.tag
-    value: 5.75.1
+    value: 5.75.2
     forcestring: true
