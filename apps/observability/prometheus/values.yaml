@@ -47,8 +47,8 @@ prometheus:
           enabled: true
     resources:
       limits:
-        cpu: 250m
-        memory: 3Gi
+        cpu: 500m
+        memory: 4500Mi
       requests:
         cpu: 100m
         memory: 2Gi
@@ -68,8 +68,8 @@ prometheus-adapter:
       cpu: 250m
       memory: 512Mi
     limits:
-      cpu: 5000m
-      memory: 1500Mi
+      cpu: 2500m
+      memory: 2500Mi
   rules:
     default: true
     resource:
