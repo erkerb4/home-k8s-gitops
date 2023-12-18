@@ -12,7 +12,7 @@ plex:
             - key: beta.amd.com/gpu.vram.2G
               operator: In
               values:
-              - 1
+              - "1"
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 35
