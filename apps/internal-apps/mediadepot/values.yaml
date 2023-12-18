@@ -11,6 +11,15 @@ sabnzbd:
       reloader.stakater.com/search: "true"
 
   affinity:
+    nodeAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 50
+        preference:
+          matchExpressions:
+          - key: beta.amd.com/gpu.vram.2G
+            operator: In
+            values:
+            - "1"
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
       - weight: 30
@@ -20,9 +29,9 @@ sabnzbd:
             - key: app.kubernetes.io/name
               operator: In
               values:
-              - plex-ss
+              - plex
           namespaces:
-          - plex-ss
+          - plex
           topologyKey: kubernetes.io/hostname
   env:
     TZ: America/New_York
