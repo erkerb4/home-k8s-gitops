@@ -9,5 +9,5 @@ sources:
 icon: https://raw.githubusercontent.com/weaveworks/kured/main/img/logo.png
 dependencies:
   - name: kured
-    version: "5.3.1"
+    version: "5.3.2"
     repository: 'https://kubereboot.github.io/charts'
