@@ -11,13 +11,13 @@ sabnzbd:
       reloader.stakater.com/search: "true"
 
   affinity:
-    nodeAntiAffinity:
+    nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
       - weight: 50
         preference:
           matchExpressions:
           - key: beta.amd.com/gpu.vram.2G
-            operator: In
+            operator: NotIn
             values:
             - "1"
     podAntiAffinity:
