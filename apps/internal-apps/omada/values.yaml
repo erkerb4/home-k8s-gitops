@@ -19,11 +19,11 @@ omada:
             TZ: America/New_York
           resources:
             limits:
-              cpu: 1250m
-              memory: 1300Mi
+              cpu: 1000m
+              memory: 1500Mi
             requests:
-              cpu: 250m
-              memory: 768Mi
+              cpu: 200m
+              memory: 1000Mi
           probes:
             liveness:
               enabled: false
