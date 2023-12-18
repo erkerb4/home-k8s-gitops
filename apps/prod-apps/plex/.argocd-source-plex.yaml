@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: plex.controllers.main.containers.main.image.repository
+    value: plexinc/pms-docker
+    forcestring: true
+  - name: plex.controllers.main.containers.main.image.tag
+    value: latest@sha256:ebec98e2a51f48f23e556708381a3dbf036de4b3735f69c1924e4280a938dc34
+    forcestring: true
