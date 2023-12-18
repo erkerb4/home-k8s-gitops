@@ -4,6 +4,15 @@ plex:
   defaultPodOptions:
     automountServiceAccountToken: false
     affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          preference:
+            matchExpressions:
+            - key: beta.amd.com/gpu.vram.2G
+              operator: In
+              values:
+              - 1
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 35
