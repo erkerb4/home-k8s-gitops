@@ -3,7 +3,7 @@ secrets-operator:
     manager:
       image:
         repository: infisical/kubernetes-operator
-        tag: "v0.3.1"
+        tag: "v0.3.3"
 
 sealedSecrets:
   service-token:
