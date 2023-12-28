@@ -4,7 +4,7 @@ helm:
     value: quay.io/linuxserver.io/sabnzbd
     forcestring: true
   - name: sabnzbd.image.tag
-    value: latest@sha256:545c82833c1ac1c265a29188d0411c5840db6534297a3efe785d7f0cf723bf75
+    value: latest@sha256:fa1337c3b39aad026e6dcbba60ab7779bf1c50a2430f65d926f3fd3287d688db
     forcestring: true
   - name: sonarr.image.repository
     value: quay.io/linuxserver.io/sonarr
