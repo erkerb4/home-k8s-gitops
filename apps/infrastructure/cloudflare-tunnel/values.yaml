@@ -6,7 +6,7 @@ cloudflare-tunnel:
 
   image:
     repository: cloudflare/cloudflared
-    tag: "latest@sha256:908ad63a08ed0ef2058170aea0b1164dadb147974033ed0beeff4f1a1013d709"
+    tag: "latest@sha256:c18744ae1767c17c5562cc731c24e64a5a2f93f35c3dd6629b90dedaff6dff8f"
 
   args:
   - "tunnel"
