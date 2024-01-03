@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: omada.controllers.main.containers.main.image
+    value: mbentley/omada-controller
+    forcestring: true
+  - name: omada.controllers.main.containers.main.tag
+    value: "5.13"
+    forcestring: true
