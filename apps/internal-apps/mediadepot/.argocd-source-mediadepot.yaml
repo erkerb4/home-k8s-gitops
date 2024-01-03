@@ -10,7 +10,7 @@ helm:
     value: quay.io/linuxserver.io/sonarr
     forcestring: true
   - name: image.tag
-    value: 4.0.0
+    value: v4
     forcestring: true
   - name: radarr.image.repository
     value: quay.io/linuxserver.io/radarr
