@@ -227,7 +227,7 @@ radarr:
     fullnameOverride: radarr
   image:
     repository: quay.io/linuxserver.io/radarr
-    tag: latest@sha256:8b2a6aeaaa1fe5a0052041ec972df20dc20e3fbb798c9f40399eda86ef59d8d8
+    tag: 5.2.6
 
   controller:
     annotations:
