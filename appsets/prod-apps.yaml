@@ -16,7 +16,7 @@ spec:
       annotations:
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: plex=plexinc/pms-docker:latest,overseerr=ghcr.io/sct/overseerr:1.x,vw=ghcr.io/dani-garcia/vaultwarden:1.x,devffk=bitnami/ghost:5.x,devffkdb=mysql/8.0.x-debian
+        argocd-image-updater.argoproj.io/image-list: plex=plexinc/pms-docker:latest,overseerr=ghcr.io/sct/overseerr:1.x,vw=ghcr.io/dani-garcia/vaultwarden:1.x
 
         argocd-image-updater.argoproj.io/plex.helm.image-name: plex.controllers.main.containers.main.image.repository
         argocd-image-updater.argoproj.io/plex.helm.image-tag: plex.controllers.main.containers.main.image.tag
@@ -30,14 +30,14 @@ spec:
         argocd-image-updater.argoproj.io/vw.helm.image-tag: vw.controllers.main.containers.main.image.tag
         argocd-image-updater.argoproj.io/vw.update-strategy: semver
 
-        argocd-image-updater.argoproj.io/devffk.helm.image-name: dev-ffk.controllers.main.containers.main.image.repository
-        argocd-image-updater.argoproj.io/devffk.helm.image-tag: dev-ffk.controllers.main.containers.main.image.tag
-        argocd-image-updater.argoproj.io/devffk.update-strategy: semver
+        # argocd-image-updater.argoproj.io/devffk.helm.image-name: dev-ffk.controllers.main.containers.main.image.repository
+        # argocd-image-updater.argoproj.io/devffk.helm.image-tag: dev-ffk.controllers.main.containers.main.image.tag
+        # argocd-image-updater.argoproj.io/devffk.update-strategy: semver
 
-        argocd-image-updater.argoproj.io/devffkdb.helm.image-name: devffk-db.controllers.main.containers.main.image.repository
-        argocd-image-updater.argoproj.io/devffkdb.helm.image-tag: devffk-db.controllers.main.containers.main.image.tag
-        argocd-image-updater.argoproj.io/devffkdb.ignore-tags: oracle, 8.0-oracle
-        argocd-image-updater.argoproj.io/devffkdb.update-strategy: semver
+        # argocd-image-updater.argoproj.io/devffkdb.helm.image-name: devffk-db.controllers.main.containers.main.image.repository
+        # argocd-image-updater.argoproj.io/devffkdb.helm.image-tag: devffk-db.controllers.main.containers.main.image.tag
+        # argocd-image-updater.argoproj.io/devffkdb.ignore-tags: oracle, 8.0-oracle
+        # argocd-image-updater.argoproj.io/devffkdb.update-strategy: semver
 
         notifications.argoproj.io/subscribe.app-outofsync.slack: argo
         notifications.argoproj.io/subscribe.on-health-degraded.slack: argo

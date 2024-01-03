@@ -4,7 +4,7 @@ sabnzbd:
     fullnameOverride: sabnzbd
   image:
     repository: quay.io/linuxserver.io/sabnzbd
-    tag: latest@sha256:1b2d323b0ed2f4e3d46d93a8253f5e46723e6476646811e0bf84be4f0eb97cef
+    tag: 4.2.0
 
   controller:
     annotations:
@@ -121,7 +121,7 @@ sonarr:
     fullnameOverride: sonarr
   image:
     repository: quay.io/linuxserver.io/sonarr
-    tag: latest@sha256:b26fd30bb1769eea4292a2d1bdc71cb7b6c8ffad292714d0d68e936063c2396c
+    tag: 4.0.0
 
   controller:
     annotations:
