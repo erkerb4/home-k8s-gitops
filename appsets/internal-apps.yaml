@@ -26,8 +26,8 @@ spec:
         argocd-image-updater.argoproj.io/sabnzbd.helm.image-name: sabnzbd.image.repository
         argocd-image-updater.argoproj.io/sabnzbd.helm.image-tag: sabnzbd.image.tag
 
-        argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.image.repository
-        argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.image.tag
+        # argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.image.repository
+        # argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.image.tag
 
         argocd-image-updater.argoproj.io/radarr.helm.image-name: radarr.image.repository
         argocd-image-updater.argoproj.io/radarr.helm.image-tag: radarr.image.tag
