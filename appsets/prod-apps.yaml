@@ -20,6 +20,7 @@ spec:
 
         argocd-image-updater.argoproj.io/plex.helm.image-name: plex.controllers.main.containers.main.image.repository
         argocd-image-updater.argoproj.io/plex.helm.image-tag: plex.controllers.main.containers.main.image.tag
+        argocd-image-updater.argoproj.io/plex.update-strategy: semver
 
         argocd-image-updater.argoproj.io/overseerr.helm.image-name: overseerr.image.repository
         argocd-image-updater.argoproj.io/overseerr.helm.image-tag: overseerr.image.tag
