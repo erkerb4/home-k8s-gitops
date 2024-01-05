@@ -10,11 +10,11 @@ keywords:
   - gitops
 dependencies:
   - name: argo-cd
-    version: "5.51.3"
+    version: "5.52.1"
     repository: '@argo'
   - name: argocd-apps
     version: "1.4.1"
     repository: '@argo'
   - name: argocd-image-updater
-    version: "0.9.1"
+    version: "0.9.2"
     repository: '@argo'
