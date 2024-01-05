@@ -21,11 +21,13 @@ spec:
         
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        # argocd-image-updater.argoproj.io/image-list: cf=cloudflare/cloudflared:latest
+        argocd-image-updater.argoproj.io/image-list: cf=cloudflare/cloudflared:latest
 
-        # argocd-image-updater.argoproj.io/cf.helm.image-name: cloudflare-tunnel.image.repository
-        # argocd-image-updater.argoproj.io/cf.helm.image-tag: cloudflare-tunnel.image.tag
-        # argocd-image-updater.argoproj.io/cf.update-strategy: digest
+        argocd-image-updater.argoproj.io/cf.helm.image-name: cloudflare-tunnel.image.repository
+        argocd-image-updater.argoproj.io/cf.helm.image-tag: cloudflare-tunnel.image.tag
+        argocd-image-updater.argoproj.io/cf.update-strategy: digest
+        argocd-image-updater.argoproj.io/cf.ignore-tags: "*"
+        
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:

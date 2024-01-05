@@ -21,7 +21,7 @@ spec:
 
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: prom=quay.io/prometheus/prometheus:v2.x, prom-adapter=registry.k8s.io/prometheus-adapter/prometheus-adapter:v0.x
+        argocd-image-updater.argoproj.io/image-list: prom=quay.io/prometheus/prometheus:v2.x,prom-adapter=registry.k8s.io/prometheus-adapter/prometheus-adapter:v0.x
 
         argocd-image-updater.argoproj.io/prom.helm.image-name: prometheus.prometheus.image.image.repository
         argocd-image-updater.argoproj.io/prom.helm.image-tag: prometheus.prometheus.image.image.tag
