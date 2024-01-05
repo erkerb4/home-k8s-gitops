@@ -28,7 +28,7 @@ spec:
 
         argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.image.repository
         argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.image.tag
-        argocd-image-updater.argoproj.io/sonarr.helm.ignore-tags: v4, v*
+        argocd-image-updater.argoproj.io/sonarr.helm.ignore-tags: "*"
 
         argocd-image-updater.argoproj.io/radarr.helm.image-name: radarr.image.repository
         argocd-image-updater.argoproj.io/radarr.helm.image-tag: radarr.image.tag
