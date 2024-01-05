@@ -722,7 +722,14 @@ argocd-image-updater:
     gitCommitUser: "Argo Image Updater "
     gitCommitMail: "erkerb+argoimage@gmail.com"
     logLevel: "debug"
+    registries:
+      - name: Docker Hub
+        api_url: https://registry-1.docker.io
+        ping: yes
+        credentials: secret:argocd/image-updater-registry-configs#dockerio
 
 infisicalSecret:
   argocd-notifications-secret:
+    syncInterval: 1800
+  image-updater-registry-configs:
     syncInterval: 1800
