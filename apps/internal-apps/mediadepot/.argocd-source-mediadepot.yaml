@@ -6,10 +6,10 @@ helm:
   - name: sabnzbd.image.tag
     value: 4.2.1
     forcestring: true
-  - name: image.name
+  - name: sonarr.image.repository
     value: quay.io/linuxserver.io/sonarr
     forcestring: true
-  - name: image.tag
+  - name: sonarr.image.tag
     value: v4
     forcestring: true
   - name: radarr.image.repository
