@@ -21,15 +21,14 @@ spec:
               
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: sabnzbd=quay.io/linuxserver.io/sabnzbd:4.2.x,radarr=quay.io/linuxserver.io/radarr:5.2.x,sonarr=quay.io/linuxserver.io/sonarr:4.0.0,changed=ghcr.io/dgtlmoon/changedetection.io:0.x,tautulli=ghcr.io/linuxserver/tautulli:2.x,babybuddy=registry.gitlab.com/linuxserver.io/docker-babybuddy/babybuddy:1.x,omada=mbentley/omada-controller:5.13.x
+        argocd-image-updater.argoproj.io/image-list: sabnzbd=quay.io/linuxserver.io/sabnzbd:4.2.x,radarr=quay.io/linuxserver.io/radarr:5.2.x,changed=ghcr.io/dgtlmoon/changedetection.io:0.x,tautulli=ghcr.io/linuxserver/tautulli:2.x,babybuddy=registry.gitlab.com/linuxserver.io/docker-babybuddy/babybuddy:1.x,omada=mbentley/omada-controller:5.13.x
 
         argocd-image-updater.argoproj.io/sabnzbd.helm.image-name: sabnzbd.image.repository
         argocd-image-updater.argoproj.io/sabnzbd.helm.image-tag: sabnzbd.image.tag
-
-        argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.image.repository
-        argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.image.tag
-        argocd-image-updater.argoproj.io/sonarr.update-strategy: digest
-        argocd-image-updater.argoproj.io/sonarr.helm.ignore-tags: "*"
+        # sonarr=quay.io/linuxserver.io/sonarr:4.0.0
+        # argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.image.repository
+        # argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.image.tag
+        # argocd-image-updater.argoproj.io/sonarr.update-strategy: digest
 
         argocd-image-updater.argoproj.io/radarr.helm.image-name: radarr.image.repository
         argocd-image-updater.argoproj.io/radarr.helm.image-tag: radarr.image.tag
