@@ -16,5 +16,5 @@ helm:
     value: quay.io/linuxserver.io/sonarr
     forcestring: true
   - name: sonarr.image.tag
-    value: v4
+    value: 4.0.0
     forcestring: true
