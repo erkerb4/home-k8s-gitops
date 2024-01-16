@@ -12,3 +12,9 @@ helm:
   - name: radarr.image.tag
     value: 5.2.6
     forcestring: true
+  - name: sonarr.image.repository
+    value: quay.io/linuxserver.io/sonarr
+    forcestring: true
+  - name: sonarr.image.tag
+    value: v4
+    forcestring: true
