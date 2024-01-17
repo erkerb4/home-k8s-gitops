@@ -387,11 +387,11 @@ backupPlan:
 
 infisicalSecret:
   sabnzbd-config:
-    syncInterval: 86400
+    syncInterval: 120
   radarr-config:
-    syncInterval: 86400
+    syncInterval: 120
   sonarr-config:
-    syncInterval: 86400
+    syncInterval: 120
   *target:
-    syncInterval: 900
+    syncInterval: 120
     secretsPath: global
