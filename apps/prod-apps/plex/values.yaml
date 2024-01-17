@@ -179,7 +179,7 @@ backupPlan:
           retentionConfig:
             dayOfWeek: Sunday
             weekly: 1
-            latest: 2
+            latest: 7
       fullbackup-policy:
         type: Schedule
         spec:
