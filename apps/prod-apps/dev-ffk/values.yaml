@@ -6,7 +6,7 @@ ffk:
     labels:
       application: ghost
     securityContext:
-      fsGroup: 1001
+      fsGroup: 999
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -119,7 +119,7 @@ ffk:
               enabled: true
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1001
+            runAsUser: 999
           resources:
             limits:
               cpu: "2"
