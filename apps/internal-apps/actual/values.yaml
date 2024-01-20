@@ -16,7 +16,7 @@ actual:
           type: deployment
           image:
             repository: ghcr.io/actualbudget/actual-server
-            tag: "23.12.1"
+            tag: "24.1.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
