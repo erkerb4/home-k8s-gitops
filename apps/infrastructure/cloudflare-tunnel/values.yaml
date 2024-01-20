@@ -6,7 +6,7 @@ cloudflare-tunnel:
 
   image:
     repository: cloudflare/cloudflared
-    tag: "1493-f75503bf3c43"
+    tag: "2024.1.4"
 
   args:
   - "tunnel"
