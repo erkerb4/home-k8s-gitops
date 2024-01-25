@@ -121,7 +121,7 @@ sonarr:
     fullnameOverride: sonarr
   image:
     repository: quay.io/linuxserver.io/sonarr
-    tag: 4.0.0
+    tag: 4.0.1
 
   controller:
     annotations:
