@@ -28,7 +28,7 @@ tautulli:
       enabled: true
       type: pvc
       accessMode: ReadWriteOnce
-      size: 256Mi
+      size: 512Mi
       mountPath: /config
       storageClass: "ceph-block-bronze"
 
