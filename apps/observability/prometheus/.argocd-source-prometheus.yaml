@@ -4,7 +4,7 @@ helm:
     value: quay.io/prometheus/prometheus
     forcestring: true
   - name: prometheus.prometheus.image.image.tag
-    value: v2.49.1
+    value: v2.50.0
     forcestring: true
   - name: prometheus-adapter.image.repository
     value: registry.k8s.io/prometheus-adapter/prometheus-adapter
