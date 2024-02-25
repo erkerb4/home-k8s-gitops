@@ -13,7 +13,7 @@ omada:
           type: deployment
           image:
             repository: mbentley/omada-controller
-            tag: "5.13@sha256:2b62bcdbeda5c4e0cb213c005a5a76b77174ac71a3369d2bac0ef3dec6e25760"
+            tag: "5.13@sha256:4bbd60a8d9f39174f0d7690a9be79d786eb39a30417c02bc20de23f1d8bc4a50"
             pullPolicy: IfNotPresent
           env:
             TZ: America/New_York
