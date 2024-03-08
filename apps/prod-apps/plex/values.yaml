@@ -138,7 +138,16 @@ plex:
       controller: main
       policyTypes:
         - Egress
+        - Ingress
       rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: mediadepot
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot
         egress:
           - to:
               - namespaceSelector: {}
