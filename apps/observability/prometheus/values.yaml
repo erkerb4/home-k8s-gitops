@@ -14,15 +14,15 @@ prometheus:
         effect: NoSchedule
     resources:
       limits:
-        cpu: 75m
-        memory: 50Mi
+        cpu: 150m
+        memory: 75Mi
       requests:
         cpu: 25m
         memory: 30Mi
   server:
     baseURL: "http://prom.xtr.pub"
     global:
-      scrape_interval: 15s
+      scrape_interval: 1m
       scrape_timeout: 10s
       evaluation_interval: 1m
     ingress:
@@ -55,7 +55,7 @@ prometheus:
     service:
       gRPC:
         enabled: true
-    retention: "3d"
+    retention: "1d"
   networkPolicy:
     enabled: true
 
@@ -70,45 +70,3 @@ prometheus-adapter:
     limits:
       cpu: 2500m
       memory: 2500Mi
-  rules:
-    default: true
-    resource:
-      cpu:
-        containerQuery: |
-          sum by (<<.GroupBy>>) (
-            rate(container_cpu_usage_seconds_total{container!="",<<.LabelMatchers>>}[3m])
-          )
-        nodeQuery: |
-          sum  by (<<.GroupBy>>) (
-            rate(node_cpu_seconds_total{mode!="idle",mode!="iowait",mode!="steal",<<.LabelMatchers>>}[3m])
-          )
-        resources:
-          overrides:
-            node:
-              resource: node
-            namespace:
-              resource: namespace
-            pod:
-              resource: pod
-        containerLabel: container
-      memory:
-        containerQuery: |
-          sum by (<<.GroupBy>>) (
-            avg_over_time(container_memory_working_set_bytes{container!="",<<.LabelMatchers>>}[3m])
-          )
-        nodeQuery: |
-          sum by (<<.GroupBy>>) (
-            avg_over_time(node_memory_MemTotal_bytes{<<.LabelMatchers>>}[3m])
-            -
-            avg_over_time(node_memory_MemAvailable_bytes{<<.LabelMatchers>>}[3m])
-          )
-        resources:
-          overrides:
-            node:
-              resource: node
-            namespace:
-              resource: namespace
-            pod:
-              resource: pod
-        containerLabel: container
-      window: 3m
