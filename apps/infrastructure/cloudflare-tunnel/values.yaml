@@ -127,3 +127,4 @@ cloudflare-tunnel:
 
 infisicalSecret:
   cloudflare-tunnel-token:
+    syncInterval: 300
