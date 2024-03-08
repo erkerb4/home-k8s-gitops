@@ -40,9 +40,6 @@ cloudflare-tunnel:
               enabled: false
             startup:
               enabled: false
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65532
           resources:
             limits:
               cpu: "100m"
