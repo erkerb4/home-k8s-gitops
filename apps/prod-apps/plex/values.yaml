@@ -148,6 +148,12 @@ plex:
                 podSelector:
                   matchLabels:
                     app.kubernetes.io/instance: mediadepot
+          - from:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+            ports:
+              - port: 32400
+              - port: 3095
         egress:
           - to:
               - namespaceSelector: {}
