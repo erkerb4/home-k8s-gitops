@@ -9,5 +9,5 @@ sources:
 dependencies:
 - name: app-template
   repository: "@bjws"
-  version: "1.5.1"
+  version: "2.6.0"
   alias: cloudflare-tunnel

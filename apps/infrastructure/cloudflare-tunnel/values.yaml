@@ -1,25 +1,60 @@
 cloudflare-tunnel:
-  controller:
-    enabled: true
-    type: deployment
-    replicas: 3
+  global:
+    fullnameOverride: cloudflared
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsPolicy: "Default"
+    labels:
+      application: cloudflared
+    topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector: 
+        matchLabels:
+          application: cloudflare-tunnel
 
-  image:
-    repository: cloudflare/cloudflared
-    tag: "2024.1.4"
+  controllers:
+    main:
+      containers:
+        main:
+          type: deployment
+          replicas: 3
+          image:
+            repository: cloudflare/cloudflared
+            tag: "2024.2.1"
+            pullPolicy: IfNotPresent
+          args:
+          - "tunnel"
+          - "--no-autoupdate"
+          - "run"
+          env:
+            TZ: "America/New_York"
+          envFrom:
+          - secretRef:
+              name: cloudflare-tunnel-token
+          probes:
+            liveness:
+              enabled: false
+            readiness:
+              enabled: false
+            startup:
+              enabled: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+          resources:
+            limits:
+              cpu: "100m"
+              memory: 192Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
 
-  args:
-  - "tunnel"
-  - "--no-autoupdate"
-  - "run"
+  service:
+    main:
+      enabled: false
 
-  env:
-    TZ: America/New_York
-
-  envFrom:
-  - secretRef:
-      name: cloudflare-tunnel-token
-      
   ingress:
     main:
       enabled: false
@@ -28,33 +63,67 @@ cloudflare-tunnel:
     config:
       enabled: false
 
-  service:
+  networkpolicies:
     main:
-      enabled: false
-      ports:
-        http:
-          enabled: false
+      enabled: true
+      controller: main
+      podSelector:
+        matchLabels:
+          application: cloudflared
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress: []
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: traefik
+            ports:
+              - port: 8443
+              - port: 443
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: plex
+            ports:
+              - port: 32400
+          - to:
+              - ipBlock:
+                  cidr: 192.168.30.20/32
+            ports:
+              - port: 5001
+              - port: 2096
+              - port: 2087
+          - to:
+              - ipBlock:
+                  cidr: 198.41.192.0/24
+            ports:
+              - port: 443
+          - to:
+              - ipBlock:
+                  cidr: 198.41.200.0/24
+            ports:
+              - port: 443
+          - to:
+              - ipBlock:
+                  cidr: 104.18.4.0/24
+            ports:
+              - port: 443
+          - to:
+              - ipBlock:
+                  cidr: 104.18.25.0/24
+            ports:
+              - port: 443
 
-  probes:
-    liveness:
-      enabled: false
-    readiness:
-      enabled: false
-    startup:
-      enabled: false  
-
-  resources:
-    limits:
-      cpu: "100m"
-      memory: 256Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
-
-  topologySpreadConstraints:
-  - maxSkew: 1
-    topologyKey: kubernetes.io/hostname
-    whenUnsatisfiable: DoNotSchedule
-    labelSelector: 
-      matchLabels:
-        app.kubernetes.io/name: cloudflare-tunnel
+infisicalSecret:
+  cloudflare-tunnel-token:
