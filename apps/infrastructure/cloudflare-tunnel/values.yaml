@@ -74,10 +74,8 @@ cloudflare-tunnel:
         ingress: []
         egress:
           - to:
-              - namespaceSelector: {}
-                podSelector:
-                  matchLabels:
-                    k8s-app: kube-dns
+              - ipBlock:
+                  cidr: 192.168.30.1/32
             ports:
               - port: 53
                 protocol: UDP
