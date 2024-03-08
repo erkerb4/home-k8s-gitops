@@ -102,23 +102,15 @@ cloudflare-tunnel:
           - to:
               - ipBlock:
                   cidr: 198.41.192.0/24
-            ports:
-              - port: 443
           - to:
               - ipBlock:
                   cidr: 198.41.200.0/24
-            ports:
-              - port: 443
           - to:
               - ipBlock:
                   cidr: 104.18.4.0/24
-            ports:
-              - port: 443
           - to:
               - ipBlock:
                   cidr: 104.18.25.0/24
-            ports:
-              - port: 443
 
 infisicalSecret:
   cloudflare-tunnel-token:
