@@ -9,7 +9,7 @@ plex:
         - weight: 50
           preference:
             matchExpressions:
-            - key: beta.amd.com/gpu.vram.2G
+            - key: beta.amd.com/gpu.device-id.1638
               operator: In
               values:
               - "1"
