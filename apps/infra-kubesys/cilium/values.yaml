@@ -13,18 +13,18 @@ cilium:
       enabled: true
     ui:
       enabled: true
-    ingress:
-      enabled: true
-      annotations:
-        cert-manager.io/cluster-issuer: le-prod
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-      hosts:
-        - hobble.xtr.pub
-      tls:
-      - hosts:
-        - hobble.xtr.pub
-        secretName: tls-secret
+      ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: le-prod
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+          traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        hosts:
+          - hobble.xtr.pub
+        tls:
+        - hosts:
+          - hobble.xtr.pub
+          secretName: tls-secret
   ipam:
     mode: cluster-pool
     operator:
