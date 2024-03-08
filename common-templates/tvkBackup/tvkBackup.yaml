@@ -5,6 +5,8 @@ kind: Target
 metadata:
   name: {{ $target }}
   namespace: {{ $.Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
 spec:
 {{- with $targetSpec }}
 {{ toYaml . | nindent 2 }}
@@ -19,6 +21,8 @@ kind: Policy
 metadata:
   name: {{ $backupplan }}-{{ $policy }}
   namespace: {{ $.Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
 {{- with $policySpec.spec  }}
 spec:
 {{- toYaml . | nindent 2 }}
@@ -87,6 +91,8 @@ apiVersion: triliovault.trilio.io/v1
 kind: Hook
 metadata:
   name: mysql-hook
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   pre:
     execAction:
