@@ -8,8 +8,8 @@ namespace: kube-system
 
 dp:
   image:
-    repository: docker.io/rocm/k8s-device-plugin
-    tag: "1.25.2.5"
+    repository: rocm/k8s-device-plugin
+    tag: "1.25.2.7"
   resources:
     requests:
       cpu: 10m
@@ -20,8 +20,8 @@ dp:
 
 lbl:
   image:
-    repository: docker.io/rocm/k8s-device-plugin
-    tag: "labeller-1.25.2.5"
+    repository: rocm/k8s-device-plugin
+    tag: "labeller-1.25.2.7"
   resources:
     requests:
       cpu: 10m
