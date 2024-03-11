@@ -3,16 +3,17 @@ plex:
     fullnameOverride: plex
   defaultPodOptions:
     automountServiceAccountToken: false
+    dnsPolicy: "Default"
     affinity:
       nodeAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 50
           preference:
             matchExpressions:
-            - key: beta.amd.com/gpu.device-id.1638
+            - key: kubernetes.io/hostname
               operator: In
               values:
-              - "1"
+              - "intortus"
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 35
