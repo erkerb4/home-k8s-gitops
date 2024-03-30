@@ -10,3 +10,4 @@ dependencies:
   - name: sealed-secrets
     version: "2.6.2"
     repository: '@sealed-secrets'
+    condition: "sealed-secrets.deploy"
