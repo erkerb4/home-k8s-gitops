@@ -50,3 +50,13 @@ cilium:
     leaseDuration: 15s
     leaseRenewDeadline: 5s
     leaseRetryPeriod: 2s
+
+lbIP:
+  xtr-pool:
+    cidr: 192.168.30.1/26
+    selector:
+      serviceSelector:
+        matchLabels:
+          lb: "true"
+    l2announcements:
+      interfaces: ["enp2s0f1", "enp1s0"]
