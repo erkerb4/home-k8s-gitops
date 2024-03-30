@@ -1,7 +1,16 @@
 cert-manager:
-  installCRDs: true
   global:
     logLevel: 4
+    leaderElection:
+      namespace: "kube-system"
+      leaseDuration: 60s
+      renewDeadline: 40s
+      retryPeriod: 15s
+  crds:
+    enabled: true
+    keep: true
+  maxConcurrentChallenges: 15
+  enableCertificateOwnerRef: true
   podLabels:
     application: cert-manager
   affinity:
@@ -13,17 +22,6 @@ cert-manager:
             operator: In
             values:
             - ike
-    # podAntiAffinity:
-    #   preferredDuringSchedulingIgnoredDuringExecution:
-    #   - weight: 10
-    #     podAffinityTerm:
-    #       labelSelector:
-    #         matchExpressions:
-    #         - key: application
-    #           operator: In
-    #           values:
-    #           - cert-manager
-    #       topologyKey: kubernetes.io/hostname
   tolerations:
   - effect: NoSchedule
     key: node-role.kubernetes.io/control-plane
@@ -34,8 +32,6 @@ cert-manager:
     limits:
       cpu: 250m
       memory: 128Mi
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
   webhook:
     podLabels:
       application: cert-manager
@@ -51,8 +47,6 @@ cert-manager:
                 values:
                 - cert-manager
             topologyKey: kubernetes.io/hostname
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
     resources:
       requests:
         cpu: 25m
@@ -75,8 +69,6 @@ cert-manager:
                 values:
                 - cert-manager
             topologyKey: kubernetes.io/hostname
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
     resources:
       requests:
         cpu: 150m
