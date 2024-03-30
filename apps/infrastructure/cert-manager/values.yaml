@@ -25,6 +25,8 @@ cert-manager:
   tolerations:
   - effect: NoSchedule
     key: node-role.kubernetes.io/control-plane
+  - effect: NoSchedule
+    key: CriticalAddonsOnly=true
   resources:
     requests:
       cpu: 25m
