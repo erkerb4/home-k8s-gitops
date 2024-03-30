@@ -1,5 +1,27 @@
 argo-cd:
   global:
+    domain: argocd.xtr.pub
+    logging:
+      # -- Set the global logging level. One of: `debug`, `info`, `warn` or `error`
+      level: info
+    env:
+      - name: TZ
+        value: America/New_York
+    statefulsetAnnotations: {}
+    deploymentAnnotations: {}
+    podAnnotations: {}
+    podLabels: {}
+    addPrometheusAnnotations: false
+    networkPolicy:
+      create: false
+      defaultDenyIngress: false
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/instance: argocd
     resources:
       limits:
         cpu: 500m
@@ -7,15 +29,96 @@ argo-cd:
       requests:
         cpu: 250m
         memory: 256Mi
+  configs:
+    cm:
+      create: true
+      application.instanceLabelKey: argocd.argoproj.io/instance
+      exec.enabled: true
+      timeout.reconciliation: 180s
+      timeout.hard.reconciliation: 0s
+    params:
+      create: true
+      annotations: {}
+      # -- Number of application status processors
+      controller.status.processors: 20
+      # -- Number of application operation processors
+      controller.operation.processors: 10
+      # -- Specifies timeout between application self heal attempts
+      controller.self.heal.timeout.seconds: 5
+      # -- Repo server RPC call timeout seconds.
+      controller.repo.server.timeout.seconds: 60
+      server.insecure: true
+      server.disable.auth: true
+      reposerver.parallelism.limit: 5
+      applicationsetcontroller.enable.progressive.syncs: true
+      resource.customizations.ignoreDifferences.admissionregistration.k8s.io_MutatingWebhookConfiguration: |
+        jqPathExpressions:
+        - '.webhooks[]?.clientConfig.caBundle'
+      resource.customizations.ignoreDifferences.admissionregistration.k8s.io_ValidatingWebhookConfiguration: |
+        jqPathExpressions:
+        - '.webhooks[]?.clientConfig.caBundle'
+      resource.customizations.ignoreDifferences.apiextensions.k8s.io_CustomResourceDefinition: |
+        jqPathExpressions:
+        - '.spec.conversion.webhook.clientConfig.caBundle'
+    repositories:
+      argo:
+        name: argo
+        url: https://argoproj.github.io/argo-helm 
+        type: helm
+      traefik:
+        name: traefik
+        url: https://helm.traefik.io/traefik
+        type: helm
+      cilium:
+        name: cilium
+        url: https://helm.cilium.io
+        type: helm
+      rook-release:
+        name: rook-release
+        url: https://charts.rook.io/release
+        type: helm
+      k8s-at-home:
+        name: k8s-at-home
+        url: https://k8s-at-home.com/charts/
+        type: helm
+      prometheus-community:
+        name: prometheus-community
+        url: https://prometheus-community.github.io/helm-charts
+        type: helm
+      bitnami:
+        name: bitnami
+        url: https://charts.bitnami.com/bitnami
+        type: helm
+      triliovault-operator:
+        name: triliovault-operator
+        url: http://charts.k8strilio.net/trilio-stable/k8s-triliovault-operator
+        type: helm
+      kubereboot:
+        name: kubereboot
+        url: https://kubereboot.github.io/charts
+        type: helm
+      jetstack:
+        name: jetstack
+        url: https://charts.jetstack.io
+        type: helm
+      bjws:
+        name: bjws
+        url: https://bjw-s.github.io/helm-charts
+        type: helm
+      stakater:
+        name: stakater
+        url: https://stakater.github.io/stakater-charts
+        type: helm
+      infisical:
+        name: infisical
+        url: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
+        type: helm
 
   dex:
     enabled: false
 
   redis:
     enabled: true
-    env:
-    - name: TZ
-      value: America/New_York
     resources:
       limits:
         cpu: 500m
@@ -23,39 +126,57 @@ argo-cd:
       requests:
         cpu: 100m
         memory: 32Mi
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 10
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/instance
-                operator: In
-                values:
-                - argocd
-            topologyKey: kubernetes.io/hostname
+
+  server:
+    resources:
+      limits:
+        cpu: "1"
+        memory: 128Mi
+      requests:
+        cpu: 125m
+        memory: 32Mi
+    ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: le-prod
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+          traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        ingressClassName: ""
+        hosts:
+          - argocd.xtr.pub
+        paths:
+          - /
+        pathType: Prefix
+        tls:
+        - hosts:
+          - argocd.xtr.pub
+          secretName: tls-secret
+        https: false
+    ingressGrpc:
+      enabled: false
+
+  repoServer:
+    resources:
+      limits:
+        cpu: "4"
+        memory: 3Gi
+      requests:
+        cpu: "1"
+        memory: 256Mi
+  applicationSet:
+    resources:
+      limits:
+        cpu: 250m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
 
   notifications:
     enabled: true
     argocdUrl: "https://argocd.xtr.pub"
-
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 10
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/instance
-                operator: In
-                values:
-                - argocd
-            topologyKey: kubernetes.io/hostname
-
     secret:
       create: false
-
 
     notifiers:
       service.slack: |
@@ -362,346 +483,164 @@ argo-cd:
         cpu: 125m
         memory: 128Mi
 
-  server:
-    extraArgs:
-      - --insecure
-      - --disable-auth
-    env:
-    - name: TZ
-      value: America/New_York
-    resources:
-      limits:
-        cpu: "1"
-        memory: 128Mi
-      requests:
-        cpu: 125m
-        memory: 32Mi
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 10
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/instance
-                operator: In
-                values:
-                - argocd
-            topologyKey: kubernetes.io/hostname
-    ingress:
-        enabled: true
-        annotations:
-          cert-manager.io/cluster-issuer: le-prod
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-        ingressClassName: ""
-        hosts:
-          - argocd.xtr.pub
-        paths:
-          - /
-        pathType: Prefix
-        tls:
-        - hosts:
-          - argocd.xtr.pub
-          secretName: tls-secret
-        https: false
-
-    ingressGrpc:
-      enabled: false
-      annotations: {}
-      labels: {}
-      ingressClassName: ""
-
-    configEnabled: true
-    config:
-      url: https://argocd.xtr.pub
-      application.instanceLabelKey: argocd.argoproj.io/instance
-      admin.enabled: "false"
-      exec.enabled: "true"
-      resource.customizations.ignoreDifferences.admissionregistration.k8s.io_MutatingWebhookConfiguration: |
-        jqPathExpressions:
-        - '.webhooks[]?.clientConfig.caBundle'
-      resource.customizations.ignoreDifferences.admissionregistration.k8s.io_ValidatingWebhookConfiguration: |
-        jqPathExpressions:
-        - '.webhooks[]?.clientConfig.caBundle'
-      resource.customizations.ignoreDifferences.apiextensions.k8s.io_CustomResourceDefinition: |
-        jqPathExpressions:
-        - '.spec.conversion.webhook.clientConfig.caBundle'
-
-  repoServer:
-    env:
-    - name: TZ
-      value: America/New_York
-    resources:
-      limits:
-        cpu: "4"
-        memory: 3Gi
-      requests:
-        cpu: "1"
-        memory: 256Mi
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 10
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/instance
-                operator: In
-                values:
-                - argocd
-            topologyKey: kubernetes.io/hostname
-
-  configs:
-    repositories:
-      argo:
-        name: argo
-        url: https://argoproj.github.io/argo-helm 
-        type: helm
-      sealed-secrets:
-        name: sealed-secrets
-        url: https://bitnami-labs.github.io/sealed-secrets
-        type: helm
-      traefik:
-        name: traefik
-        url: https://helm.traefik.io/traefik
-        type: helm
-      cilium:
-        name: cilium
-        url: https://helm.cilium.io
-        type: helm
-      metallb:
-        name: metallb
-        url: https://metallb.github.io/metallb
-        type: helm
-      rook-release:
-        name: rook-release
-        url: https://charts.rook.io/release
-        type: helm
-      k8s-at-home:
-        name: k8s-at-home
-        url: https://k8s-at-home.com/charts/
-        type: helm
-      prometheus-community:
-        name: prometheus-community
-        url: https://prometheus-community.github.io/helm-charts
-        type: helm
-      bitnami:
-        name: bitnami
-        url: https://charts.bitnami.com/bitnami
-        type: helm
-      triliovault-operator:
-        name: triliovault-operator
-        url: http://charts.k8strilio.net/trilio-stable/k8s-triliovault-operator
-        type: helm
-      triliovault: 
-        name: triliovault
-        url: http://charts.k8strilio.net/trilio-stable/k8s-triliovault
-        type: helm
-      kubereboot:
-        name: kubereboot
-        url: https://kubereboot.github.io/charts
-        type: helm
-      jetstack:
-        name: jetstack
-        url: https://charts.jetstack.io
-        type: helm
-      bjws:
-        name: bjws
-        url: https://bjw-s.github.io/helm-charts
-        type: helm
-      stakater:
-        name: stakater
-        url: https://stakater.github.io/stakater-charts
-        type: helm
-      infisical:
-        name: infisical
-        url: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
-        type: helm
-  applicationSet:
-    args:
-      debug: false
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 10
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/instance
-                operator: In
-                values:
-                - argocd
-            topologyKey: kubernetes.io/hostname
-    extraArgs:
-      - --loglevel=warn
-
-    resources:
-      limits:
-        cpu: 250m
-        memory: 256Mi
-      requests:
-        cpu: 100m
-        memory: 128Mi
-
 argocd-apps:
   projects:
-  - name: infrastructure
-    namespace: argocd
-    additionalLabels: {}
-    additionalAnnotations: {}
-    finalizers:
-    - resources-finalizer.argocd.argoproj.io
-    description: Deployments that support cluster functionality
-    sourceRepos:
-    - 'git@github.com:erkerb4/home-k8s-gitops.git'
-    - 'https://argoproj.github.io/argo-helm'
-    - 'https://helm.traefik.io/traefik'
-    - 'https://metallb.github.io/metallb'
-    - 'https://charts.rook.io/release'
-    - 'http://charts.k8strilio.net/trilio-stable/k8s-triliovault-operator'
-    - 'http://charts.k8strilio.net/trilio-stable/k8s-triliovault'
-    - 'https://weaveworks.github.io/kured'
-    - 'https://charts.jetstack.io'
-    - 'https://bjw-s.github.io/helm-charts'
-    - 'https://stakater.github.io/stakater-charts'
-    - 'https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts'
-    destinations:
-    - namespace: argocd
-      server: https://kubernetes.default.svc
-    - namespace: traefik
-      server: https://kubernetes.default.svc
-    - namespace: metallb
-      server: https://kubernetes.default.svc
-    - namespace: rook-ceph
-      server: https://kubernetes.default.svc
-    - namespace: tvk
-      server: https://kubernetes.default.svc
-    - namespace: image-updater
-      server: https://kubernetes.default.svc
-    - namespace: kured
-      server: https://kubernetes.default.svc
-    - namespace: cert-manager
-      server: https://kubernetes.default.svc
-    - namespace: kube-system
-      server: https://kubernetes.default.svc
-    - namespace: cloudflare-tunnel
-      server: https://kubernetes.default.svc
-    - namespace: reloader
-      server: https://kubernetes.default.svc
-    - namespace: infisical
-      server: https://kubernetes.default.svc
-    clusterResourceWhitelist:
-    - group: '*'
-      kind: '*'
-    namespaceResourceBlacklist: []
-    namespaceResourceWhitelist: []
-    orphanedResources: {}
+    infrastructure:
+      namespace: argocd
+      additionalLabels: {}
+      additionalAnnotations: {}
+      finalizers:
+      - resources-finalizer.argocd.argoproj.io
+      description: Deployments that support cluster functionality
+      sourceRepos:
+      - 'git@github.com:erkerb4/home-k8s-gitops.git'
+      - 'https://argoproj.github.io/argo-helm'
+      - 'https://helm.traefik.io/traefik'
+      - 'https://metallb.github.io/metallb'
+      - 'https://charts.rook.io/release'
+      - 'http://charts.k8strilio.net/trilio-stable/k8s-triliovault-operator'
+      - 'http://charts.k8strilio.net/trilio-stable/k8s-triliovault'
+      - 'https://weaveworks.github.io/kured'
+      - 'https://charts.jetstack.io'
+      - 'https://bjw-s.github.io/helm-charts'
+      - 'https://stakater.github.io/stakater-charts'
+      - 'https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts'
+      destinations:
+      - namespace: argocd
+        server: https://kubernetes.default.svc
+      - namespace: traefik
+        server: https://kubernetes.default.svc
+      - namespace: metallb
+        server: https://kubernetes.default.svc
+      - namespace: rook-ceph
+        server: https://kubernetes.default.svc
+      - namespace: tvk
+        server: https://kubernetes.default.svc
+      - namespace: image-updater
+        server: https://kubernetes.default.svc
+      - namespace: kured
+        server: https://kubernetes.default.svc
+      - namespace: cert-manager
+        server: https://kubernetes.default.svc
+      - namespace: kube-system
+        server: https://kubernetes.default.svc
+      - namespace: cloudflare-tunnel
+        server: https://kubernetes.default.svc
+      - namespace: reloader
+        server: https://kubernetes.default.svc
+      - namespace: infisical
+        server: https://kubernetes.default.svc
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+      namespaceResourceBlacklist: []
+      namespaceResourceWhitelist: []
+      orphanedResources: {}
     
-  - name: infra-kubesys
-    namespace: argocd
-    additionalLabels: {}
-    additionalAnnotations: {}
-    finalizers:
-    - resources-finalizer.argocd.argoproj.io
-    description: Critical/Sensetive deployments that support cluster functionality
-    sourceRepos:
-    - 'git@github.com:erkerb4/home-k8s-gitops.git'
-    - 'https://bitnami-labs.github.io/sealed-secrets'
-    - 'https://helm.cilium.io'
-    destinations:
-    - namespace: kube-system
-      server: https://kubernetes.default.svc
-    clusterResourceWhitelist:
-    - group: '*'
-      kind: '*'
-    namespaceResourceBlacklist: []
-    namespaceResourceWhitelist: []
-    orphanedResources: {}
+    infra-kubesys:
+      namespace: argocd
+      additionalLabels: {}
+      additionalAnnotations: {}
+      finalizers:
+      - resources-finalizer.argocd.argoproj.io
+      description: Critical/Sensetive deployments that support cluster functionality
+      sourceRepos:
+      - 'git@github.com:erkerb4/home-k8s-gitops.git'
+      - 'https://bitnami-labs.github.io/sealed-secrets'
+      - 'https://helm.cilium.io'
+      destinations:
+      - namespace: kube-system
+        server: https://kubernetes.default.svc
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+      namespaceResourceBlacklist: []
+      namespaceResourceWhitelist: []
+      orphanedResources: {}
 
-  - name: observability
-    namespace: argocd
-    additionalLabels: {}
-    additionalAnnotations: {}
-    finalizers:
-    - resources-finalizer.argocd.argoproj.io
-    description: Deployments that provide cluster observability
-    sourceRepos:
-    - 'git@github.com:erkerb4/home-k8s-gitops.git'
-    - 'https://prometheus-community.github.io/helm-charts'
-    destinations:
-    - namespace: kube-system
-      server: https://kubernetes.default.svc
-    - namespace: prometheus
-      server: https://kubernetes.default.svc
-    clusterResourceWhitelist:
-    - group: '*'
-      kind: '*'
-    namespaceResourceBlacklist: []
-    namespaceResourceWhitelist: []
-    orphanedResources: {}
+    observability:
+      namespace: argocd
+      additionalLabels: {}
+      additionalAnnotations: {}
+      finalizers:
+      - resources-finalizer.argocd.argoproj.io
+      description: Deployments that provide cluster observability
+      sourceRepos:
+      - 'git@github.com:erkerb4/home-k8s-gitops.git'
+      - 'https://prometheus-community.github.io/helm-charts'
+      destinations:
+      - namespace: kube-system
+        server: https://kubernetes.default.svc
+      - namespace: prometheus
+        server: https://kubernetes.default.svc
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+      namespaceResourceBlacklist: []
+      namespaceResourceWhitelist: []
+      orphanedResources: {}
 
-  - name: prod-apps
-    namespace: argocd
-    additionalLabels: {}
-    additionalAnnotations: {}
-    finalizers:
-    - resources-finalizer.argocd.argoproj.io
-    description: Deployments that support production deployments
-    sourceRepos:
-    - 'git@github.com:erkerb4/home-k8s-gitops.git'
-    - 'https://k8s-at-home.com/charts/'
-    - 'https://charts.bitnami.com/bitnami'
-    - 'https://bjw-s.github.io/helm-charts'
-    - 'oci://registry-1.docker.io/bitnamicharts'
-    destinations:
-    - namespace: plex
-      server: https://kubernetes.default.svc
-    - namespace: ffk
-      server: https://kubernetes.default.svc
-    - namespace: dev-ffk
-      server: https://kubernetes.default.svc
-    - namespace: overseerr
-      server: https://kubernetes.default.svc
-    - namespace: vw
-      server: https://kubernetes.default.svc
-    clusterResourceWhitelist:
-    - group: '*'
-      kind: '*'
-    namespaceResourceBlacklist: []
-    namespaceResourceWhitelist: []
-    orphanedResources: {}
+    prod-apps:
+      namespace: argocd
+      additionalLabels: {}
+      additionalAnnotations: {}
+      finalizers:
+      - resources-finalizer.argocd.argoproj.io
+      description: Deployments that support production deployments
+      sourceRepos:
+      - 'git@github.com:erkerb4/home-k8s-gitops.git'
+      - 'https://k8s-at-home.com/charts/'
+      - 'https://charts.bitnami.com/bitnami'
+      - 'https://bjw-s.github.io/helm-charts'
+      - 'oci://registry-1.docker.io/bitnamicharts'
+      destinations:
+      - namespace: plex
+        server: https://kubernetes.default.svc
+      - namespace: ffk
+        server: https://kubernetes.default.svc
+      - namespace: dev-ffk
+        server: https://kubernetes.default.svc
+      - namespace: overseerr
+        server: https://kubernetes.default.svc
+      - namespace: vw
+        server: https://kubernetes.default.svc
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+      namespaceResourceBlacklist: []
+      namespaceResourceWhitelist: []
+      orphanedResources: {}
 
-  - name: internal-apps
-    namespace: argocd
-    additionalLabels: {}
-    additionalAnnotations: {}
-    finalizers:
-    - resources-finalizer.argocd.argoproj.io
-    description: Deployments that are used locally
-    sourceRepos:
-    - 'git@github.com:erkerb4/home-k8s-gitops.git'
-    - 'https://k8s-at-home.com/charts/'
-    - 'https://bjw-s.github.io/helm-charts'
-    destinations:
-    - namespace: babybuddy
-      server: https://kubernetes.default.svc
-    - namespace: mediadepot
-      server: https://kubernetes.default.svc
-    - namespace: tautulli
-      server: https://kubernetes.default.svc
-    - namespace: changedetection
-      server: https://kubernetes.default.svc
-    - namespace: omada
-      server: https://kubernetes.default.svc
-    - namespace: actual
-      server: https://kubernetes.default.svc
-    clusterResourceWhitelist:
-    - group: '*'
-      kind: '*'
-    namespaceResourceBlacklist: []
-    namespaceResourceWhitelist: []
-    orphanedResources: {}
+    internal-apps:
+      namespace: argocd
+      additionalLabels: {}
+      additionalAnnotations: {}
+      finalizers:
+      - resources-finalizer.argocd.argoproj.io
+      description: Deployments that are used locally
+      sourceRepos:
+      - 'git@github.com:erkerb4/home-k8s-gitops.git'
+      - 'https://k8s-at-home.com/charts/'
+      - 'https://bjw-s.github.io/helm-charts'
+      destinations:
+      - namespace: babybuddy
+        server: https://kubernetes.default.svc
+      - namespace: mediadepot
+        server: https://kubernetes.default.svc
+      - namespace: tautulli
+        server: https://kubernetes.default.svc
+      - namespace: changedetection
+        server: https://kubernetes.default.svc
+      - namespace: omada
+        server: https://kubernetes.default.svc
+      - namespace: actual
+        server: https://kubernetes.default.svc
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+      namespaceResourceBlacklist: []
+      namespaceResourceWhitelist: []
+      orphanedResources: {}
 
 argocd-image-updater:
   extraEnv:
@@ -733,3 +672,7 @@ infisicalSecret:
     syncInterval: 1800
   image-updater-registry-configs:
     syncInterval: 1800
+  argocd-repo-home-k8s-gitops:
+    syncInterval: 1800
+    labels:
+      argocd.argoproj.io/secret-type: repository

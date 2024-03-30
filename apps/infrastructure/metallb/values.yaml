@@ -1,4 +1,5 @@
 metallb:
+  deploy: false
   controller:
     resources:
       requests:
