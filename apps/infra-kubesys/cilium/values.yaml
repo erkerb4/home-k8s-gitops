@@ -1,8 +1,4 @@
 cilium:
-  upgradeCompatibility: "1.13"
-  bpf:
-    autoMount:
-      enabled: true
   extraEnv:
     - name: TZ
       value: "America/New_York"
@@ -44,8 +40,13 @@ cilium:
     enabled: true
     hostNamespaceOnly: true
   externalIPs:
-    enabled: true
+    enabled: false
   nodePort:
     enabled: true
   hostPort:
     enabled: true
+  l2announcements:
+    enabled: true
+    leaseDuration: 15s
+    leaseRenewDeadline: 5s
+    leaseRetryPeriod: 2s
