@@ -51,9 +51,9 @@ spec:
     spec:
       project: internal-apps
       syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
+        # automated:
+        #   prune: true
+        #   selfHeal: true
         syncOptions:
         - PruneLast=true
         - ApplyOutOfSyncOnly=true

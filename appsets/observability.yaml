@@ -33,9 +33,9 @@ spec:
     spec:
       project: observability
       syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
+        # automated:
+        #   prune: true
+        #   selfHeal: true
         syncOptions:
         - PruneLast=true
         - ApplyOutOfSyncOnly=true
