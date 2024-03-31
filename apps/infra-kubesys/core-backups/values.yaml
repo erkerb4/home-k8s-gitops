@@ -36,8 +36,8 @@ infraBackup:
     size: 500Mi
     storageClass: ceph-filesystem-gold
 
-infisicalSecret:
-  backblaze-restic-credentials:
-    syncInterval: 86400
-  restic-encryption:
-    syncInterval: 86400
+# infisicalSecret:
+#   backblaze-restic-credentials:
+#     syncInterval: 86400
+#   restic-encryption:
+#     syncInterval: 86400

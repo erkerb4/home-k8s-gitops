@@ -1,4 +1,5 @@
 kured:
+  deploy: false
   revisionHistoryLimit: 3
   dsAnnotations:
     secrets.infisical.com/auto-reload: "true"
