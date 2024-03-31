@@ -22,34 +22,34 @@ rook-ceph-cluster:
       nodes:
         - name: "arcus"
           devices:
-            - name: "nvme0n1p4"
+            - name: "nvme0n1p5"
               config:
                 deviceClass: nvme
-            - name: "sda1"
+                metadataDevice: "/dev/nvme0n1p4"
+            - name: "sda2"
               config:
                 deviceClass: ssd
-          config:
-            metadataDevice: "/dev/nvme0n1p4"
+                metadataDevice: "/dev/sda1"
         - name: "cirrus"
           devices:
-            - name: "nvme0n1p4"
+            - name: "nvme0n1p5"
               config:
                 deviceClass: nvme
-            - name: "sda1"
+                metadataDevice: "/dev/nvme0n1p4"
+            - name: "sda2"
               config:
                 deviceClass: ssd
-          config:
-            metadataDevice: "/dev/nvme0n1p4"
+                metadataDevice: "/dev/sda1"
         - name: "intortus"
           devices:
-            - name: "nvme0n1p4"
+            - name: "nvme0n1p5"
               config:
                 deviceClass: nvme
-            - name: "sda1"
+                metadataDevice: "/dev/nvme0n1p4"
+            - name: "sda2"
               config:
                 deviceClass: ssd
-          config:
-            metadataDevice: "/dev/nvme0n1p4"
+                metadataDevice: "/dev/sda1"
   ingress:
     dashboard:
       host:
