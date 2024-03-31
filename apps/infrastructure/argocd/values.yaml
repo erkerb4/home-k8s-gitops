@@ -174,7 +174,8 @@ argo-cd:
 
   notifications:
     enabled: true
-    argocdUrl: "https://argocd.xtr.pub"
+    deploymentAnnotations:
+      secrets.infisical.com/auto-reload: "true"
     secret:
       create: false
 
