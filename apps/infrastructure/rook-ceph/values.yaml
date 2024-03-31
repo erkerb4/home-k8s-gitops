@@ -114,6 +114,8 @@ rook-ceph-cluster:
   ## does not render
   cephECBlockPools: {}
 
+
+operatorNamespace: rook-ceph
 cephECBlockPoolz:
   - name: ec-silver
     spec:
@@ -130,7 +132,7 @@ cephECBlockPoolz:
       name:  ec-silver
       enabled: true
       isDefault: true
-      provisioner: rook-ceph.rbd.csi.ceph.com
+      provisioner: "rook-ceph.rbd.csi.ceph.com"
       allowVolumeExpansion: true
       reclaimPolicy: Delete
     parameters:
@@ -153,7 +155,7 @@ cephECBlockPoolz:
       imageFormat: "2"
       imageFeatures: layering
     storageClass:
-      provisioner: rook-ceph.rbd.csi.ceph.com
+      provisioner: "rook-ceph.rbd.csi.ceph.com"
       enabled: true
       name:  ec-gold
       isDefault: false
