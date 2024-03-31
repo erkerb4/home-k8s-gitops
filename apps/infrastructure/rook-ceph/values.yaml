@@ -17,18 +17,39 @@ rook-ceph-cluster:
       disable: true
       daysToRetain: 14
     storage:
-      useAllNodes: true
+      useAllNodes: false
       useAllDevices: false
-      config:
-        metadataDevice: "nvme0n1p4"
-      devices:
-      - name: "nvme0n1p5"
-        config:
-          deviceClass: nvme
-      - name: "sda1"
-        config:
-          deviceClass: ssd
-
+      nodes:
+        - name: "arcus"
+          devices:
+            - name: "nvme0n1p4"
+              config:
+                deviceClass: nvme
+            - name: "sda1"
+              config:
+                deviceClass: ssd
+          config:
+            metadataDevice: "/dev/nvme0n1p4"
+        - name: "cirrus"
+          devices:
+            - name: "nvme0n1p4"
+              config:
+                deviceClass: nvme
+            - name: "sda1"
+              config:
+                deviceClass: ssd
+          config:
+            metadataDevice: "/dev/nvme0n1p4"
+        - name: "intortus"
+          devices:
+            - name: "nvme0n1p4"
+              config:
+                deviceClass: nvme
+            - name: "sda1"
+              config:
+                deviceClass: ssd
+          config:
+            metadataDevice: "/dev/nvme0n1p4"
   ingress:
     dashboard:
       host:
