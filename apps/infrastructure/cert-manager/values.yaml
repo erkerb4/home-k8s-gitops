@@ -6,9 +6,10 @@ cert-manager:
       leaseDuration: 60s
       renewDeadline: 40s
       retryPeriod: 15s
-  crds:
-    enabled: true
-    keep: true
+  installCRDs: true
+  # crds:
+  #   enabled: true
+  #   keep: false
   maxConcurrentChallenges: 15
   enableCertificateOwnerRef: true
   podLabels:
