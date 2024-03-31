@@ -1,5 +1,5 @@
 nfd:
-  enabled: false
+  enabled: true
 
 labeller:
   enabled: false
