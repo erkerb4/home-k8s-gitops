@@ -6,6 +6,11 @@ cloudflare-tunnel:
     dnsPolicy: "Default"
     labels:
       application: cloudflared
+    securityContext:
+      runAsUser: 1234
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: kubernetes.io/hostname
@@ -47,6 +52,12 @@ cloudflare-tunnel:
             requests:
               cpu: 50m
               memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
 
   service:
     main:
