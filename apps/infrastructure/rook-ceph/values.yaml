@@ -11,7 +11,7 @@ rook-ceph-cluster:
     enabled: true
   cephClusterSpec:
     dashboard:
-      urlPrefix: /ceph-dashboard
+      urlPrefix: /
       ssl: false
     crashCollector:
       disable: true
@@ -53,11 +53,11 @@ rook-ceph-cluster:
   ingress:
     dashboard:
       host:
-        name: mon.xtr.pub
-        path: "/ceph-dashboard"
+        name: ceph.xtr.pub
+        path: "/"
       tls:
         - hosts:
-          - mon.xtr.pub
+          - ceph.xtr.pub
           secretName: tls-secret
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
