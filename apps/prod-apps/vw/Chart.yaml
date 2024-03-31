@@ -13,9 +13,9 @@ sources:
 dependencies:
   - name: app-template
     repository: "@bjws"
-    version: "2.3.0"
+    version: "2.6.0"
     alias: vw
   - name: app-template
     repository: "@bjws"
-    version: "2.3.0"
+    version: "2.6.0"
     alias: vw-db

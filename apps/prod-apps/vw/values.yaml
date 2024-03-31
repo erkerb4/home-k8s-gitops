@@ -6,7 +6,9 @@ vw:
     labels:
       application: vaultwarden
     securityContext:
+      runAsUser: 1001
       fsGroup: 1001
+      fsGroupChangePolicy: "OnRootMismatch"
       runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
@@ -46,10 +48,11 @@ vw:
             startup:
               enabled: true
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1001
-            seccompProfile:
-              type: RuntimeDefault
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: "1"
@@ -156,7 +159,9 @@ vw-db:
     labels:
       application: database
     securityContext:
+      runAsUser: 999
       fsGroup: 999
+      fsGroupChangePolicy: "OnRootMismatch"
       runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
@@ -246,8 +251,11 @@ vw-db:
                 successThreshold: 1
                 timeoutSeconds: 1
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 999
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: 1000m
