@@ -60,18 +60,6 @@ tvkvaultmanager:
           memory: "1500Mi"
           cpu: "500m"
 
-# sealedSecrets:
-#   backblaze-palebluedot:
-#     annotations:
-#       sealedsecrets.bitnami.com/cluster-wide: "true"
-#     labels:
-#       triliovault.trilio.io/secret: "true"
-#       triliovault.trilio.io/target-secret: "true"
-#     encryptedData:
-#       accessKey: AgCLfDlTb1wzCeNWfeWckXKxUuxOfAXFDwjpfyHyXpnRTsco2FNBy3lH0q9i7IOSm6K/LQl7wwQUb+3WpF8KmRBXTyfcNMHSxcA+MrAhPWIKV9T4B8qIEpeYcEA6tL26VpSa2rCJqUflNPIGD7IzWZbDajNdR8/4bM7+tTwukKwuUc7a/2ziLqDVZ3DRFopSL2Ifot7XpBMTCtV8ovGrpsiGnjiI8k89JDo3+Xh2eHOXJp6OORkJ/hLw3cKDp/4523Wt/DAnBgt5Rll/aa0R4r5JAMqmBEHVaaxYbd/YmBOv6G/SQLeh31knX5PnIWJw2e3wGHuMkE/j0/XBgTWk57uyrRFSDxiMf7i9tX027fCgnyTlo65b+Mk/kT78IZS4ukM1aUbus5SvkBQ4iMAM58xbPp4JKBmiBo6epi1OWnfEGLZ935XrmzOcFr1NrT9QPN0qdqibYXOpZNYaTCRlQPb/6Cg9GImZ8QduYPc38G0RY0j5IwgZEGKyrkhqMyNPOqhwCX4L5E5JFLhTWR81Gr6gwL2NI6qrbKJfjeOy39O7O6ouxNuOAZcgqWeFgyRpOiys7arWxyifRssq8TjpnX9K51pUcCiGnpDaawF9YektYFkrLnzh1ikL7v5vQAxWjAXuU27Vd579PEIaFc3z1IjHmW9s6jgU5HlgEGNGlorrIDO39itxL90m8Zwn9lCZIITmAalyNnEIzJ7ACgTFSqEGAsxw6PNhqBXG
-#       secretKey: AgAYd3JM81x1i3FWEnCmkRriATyzJy0cHG3FCUmTGRMX1FwEkScfeusUO55OQcSB62NsWOsvc/Dhx/N7mVs3WVVjXW1wrDPYISYBrg/PTIXTIiex+CdFkwMaVgakP6u+0CUOMykQZiT2ellAV3gT81GUCOjXWbkPhkE39AwiLMvo8JmeL5KEft2Fg/KJ2EMJZZuT3otHj00ZW2t1on/8fTALTyL95YMSFQQxUSBIrlXbNGQ18pyQZJGh1hgr2jQD4K705KxV+aYpyaaltGVO4fW8J7SJVOrWluQqdNZw4lDpaHVI9ga0jFn7JM4UT0Ca7gJjbltZmvLFSy8NajTdaHiOv+1bKx/Q3wStzE/OzM1yytCZiPo6vilE4Lbd+41zjG7HMi/pXTMtr3p2QykLtjt2uTocY8JevEG52xpx67z2neHNusC/CY0oARiKaF7OCMJwbQDdsXXuQ7pWBBGyUrWDE45bOf2p1X1Q312GV9X1iIv/9gyCoipk3O88ye1mtR+hrbtISQAnKmSKq/WuMl0vsKLMBg+LDLH4LgaCwnAJxp6OaTkmIBj560tgV1OAHftMZrwJ8I61TagMhPwz2dpb5QUGhx+uJ4IEekG/ZpUVrYc/9t8iFE2CrfujbCZrogBF5k8iVEIzIR7QAp6BeGwcE7sODwwIPp5HIvxVah55a1j7z/PsdW1St9fZmTqiSUQIRJ0AccbbkDMCNlDmey2zykD8sdK1m+98feSuQoMR
-#     type: Opaque
-
 # backupTargets:
 #   backblaze-palebluedot:
 #     nfsCredentials:

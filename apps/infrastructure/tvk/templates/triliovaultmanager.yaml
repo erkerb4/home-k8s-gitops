@@ -5,6 +5,8 @@ kind: TrilioVaultManager
 metadata:
   labels:
     triliovault: k8s
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   name: tvk
 spec:
   logLevel: {{ .Values.tvkvaultmanager.loglevel | default "Error" }}
