@@ -6,6 +6,8 @@ cert-manager:
       leaseDuration: 60s
       renewDeadline: 40s
       retryPeriod: 15s
+    deploymentAnnotations:
+      secrets.infisical.com/auto-reload: "true"
   installCRDs: true
   # crds:
   #   enabled: true
