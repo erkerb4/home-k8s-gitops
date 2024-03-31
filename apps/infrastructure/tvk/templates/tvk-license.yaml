@@ -4,7 +4,7 @@
 apiVersion: triliovault.trilio.io/v1
 kind: License
 metadata:
-    name: {{ .Values.tvkvaultmanager.license.name }}
+  name: {{ .Values.tvkvaultmanager.license.name }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
