@@ -180,6 +180,8 @@ vw-db:
     main:
       type: statefulset
       strategy: OnDelete
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
       containers:
         main:
           annotations:
