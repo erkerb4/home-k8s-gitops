@@ -87,7 +87,6 @@ plex:
             capabilities:
               drop:
               - ALL
-            readOnlyRootFilesystem: true
 
   service:
     main:
