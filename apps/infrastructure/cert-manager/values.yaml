@@ -25,15 +25,15 @@ cert-manager:
   tolerations:
   - effect: NoSchedule
     key: node-role.kubernetes.io/control-plane
-  - effect: NoSchedule
+  - operator: Exists
     key: CriticalAddonsOnly
   resources:
     requests:
       cpu: 25m
-      memory: 64Mi
+      memory: 32Mi
     limits:
       cpu: 250m
-      memory: 128Mi
+      memory: 192Mi
   webhook:
     podLabels:
       application: cert-manager
@@ -73,11 +73,11 @@ cert-manager:
             topologyKey: kubernetes.io/hostname
     resources:
       requests:
-        cpu: 150m
+        cpu: 125m
         memory: 128Mi
       limits:
-        cpu: 300m
-        memory: 256Mi
+        cpu: 400m
+        memory: 512Mi
   startupapicheck:
     podLabels:
       application: cert-manager
