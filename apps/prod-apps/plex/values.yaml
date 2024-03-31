@@ -82,6 +82,12 @@ plex:
                 periodSeconds: 10
                 timeoutSeconds: 3
                 failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
 
   service:
     main:
