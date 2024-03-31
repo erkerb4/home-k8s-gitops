@@ -7,6 +7,9 @@ vw:
       application: vaultwarden
     securityContext:
       fsGroup: 1001
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -45,6 +48,8 @@ vw:
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
+            seccompProfile:
+              type: RuntimeDefault
           resources:
             limits:
               cpu: "1"
@@ -152,6 +157,9 @@ vw-db:
       application: database
     securityContext:
       fsGroup: 999
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -254,7 +262,7 @@ vw-db:
     data:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ceph-block-gold
+      storageClass: ec-gold
       accessMode: ReadWriteOnce
       size: "2Gi"
       globalMounts:
@@ -361,16 +369,6 @@ backupPlan:
           operator: In
           values:
           - "true"
-    # backupHook: mysql
-    # hookConfig:
-    #   mode: Sequential
-    #   hooks:
-    #     - hook:
-    #         name: mysql-hook
-    #       podSelector:
-    #         labels:
-    #           - matchLabels:
-    #               application: database
 
 infisicalSecret:
   vw-db:
