@@ -27,7 +27,7 @@ vw:
           type: deployment
           image:
             repository: ghcr.io/dani-garcia/vaultwarden
-            tag: "1.30.0"
+            tag: "1.30.5"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -96,7 +96,7 @@ vw:
     vw-data:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ceph-block-gold
+      storageClass: ec-silver
       accessMode: ReadWriteOnce
       size: "96Mi"
       globalMounts:
