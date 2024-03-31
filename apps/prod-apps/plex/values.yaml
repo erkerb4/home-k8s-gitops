@@ -4,6 +4,9 @@ plex:
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsPolicy: "Default"
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
     affinity:
       nodeAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
@@ -84,9 +87,6 @@ plex:
                 failureThreshold: 3
           securityContext:
             allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
 
   service:
     main:
