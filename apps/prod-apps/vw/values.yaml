@@ -255,7 +255,6 @@ vw-db:
             capabilities:
               drop:
               - ALL
-            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: 1000m
