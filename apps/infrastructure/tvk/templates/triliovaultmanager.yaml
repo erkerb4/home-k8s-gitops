@@ -6,7 +6,7 @@ metadata:
   labels:
     triliovault: k8s
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-wave: "1"
   name: tvk
 spec:
   logLevel: {{ .Values.tvkvaultmanager.loglevel | default "Error" }}
