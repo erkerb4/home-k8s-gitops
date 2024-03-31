@@ -1,8 +1,8 @@
 nfd:
-  enabled: true
+  enabled: false
 
 labeller:
-  enabled: true
+  enabled: false
 
 namespace: kube-system
 
