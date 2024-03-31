@@ -28,6 +28,6 @@ kured:
     messageTemplateReboot: "Rebooting node %s"
     messageTemplateUncordon: "Node %s rebooted & uncordoned successfully! It is back in action!"
 
-infisicalSecret:
-  config-vars:
-    syncInterval: 900
+# infisicalSecret:
+#   config-vars:
+#     syncInterval: 900
