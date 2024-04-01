@@ -1,145 +1,31 @@
 sabnzbd:
-  enabled: true
   global:
     fullnameOverride: sabnzbd
-  image:
-    repository: quay.io/linuxserver.io/sabnzbd
-    tag: 4.2.0
-
-  controller:
-    annotations:
-      reloader.stakater.com/search: "true"
-
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 50
-        preference:
-          matchExpressions:
-          - key: beta.amd.com/gpu.vram.2G
-            operator: NotIn
-            values:
-            - "1"
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 30
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - plex
-          namespaces:
-          - plex
-          topologyKey: kubernetes.io/hostname
-  env:
-    TZ: America/New_York
-
-  initContainers:
-    copy-sab-config:  
-      name: copy-sab-config
-      image: quay.io/prometheus/busybox:latest
-      command: ["sh", "-c", "cp /cm/sabnzbd-configmap.ini /config/sabnzbd.ini && chown 911:911 /config/sabnzbd.ini"] 
-      volumeMounts:
-      - name: config
-        mountPath: /config
-      - name: cm-config
-        mountPath: /cm
-
-  probes:
-    liveness:
-      spec:
-        periodSeconds: 2400
-
-  service:
-    main:
-      ports:
-        http:
-          port: 8080
-
-  ingress:
-    main:
-      enabled: true
-      annotations:
-        cert-manager.io/cluster-issuer: le-prod
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-      hosts:
-      - host: mediadepot.xtr.pub
-        paths:
-        - path: /sabnzbd
-          pathType: Prefix
-      tls:
-      - hosts:
-        - mediadepot.xtr.pub
-        secretName: tls-secret
-
-  persistence:
-    config:
-      enabled: true
-      type: pvc
-      accessMode: ReadWriteOnce
-      size: 128Mi
-      mountPath: /config
-      storageClass: ceph-block-bronze
-
-    incomplete-downloads:
-      enabled: true
-      type: pvc
-      accessMode: ReadWriteMany
-      size: 150Gi
-      mountPath: /incomplete-downloads
-      storageClass: ceph-filesystem-gold
-
-    downloads:
-      enabled: true
-      type: pvc
-      accessMode: ReadWriteMany
-      existingClaim: "mediadepot-downloads"
-      mountPath: /downloads
-      storageClass: ceph-filesystem-bronze
-
-    cm-config:
-      enabled: true
-      type: custom
-      mountPath: /cm
-      volumeSpec:
-        secret:
-          secretName: sabnzbd-config
-
-  resources:
-    limits:
-      cpu: 8
-      memory: 3072Mi
-    requests:
-      cpu: 125m
-      memory: 128Mi
-
-sonarr:
-  global:
-    fullnameOverride: sonarr
-  image:
-    repository: quay.io/linuxserver.io/sonarr
-    tag: 4.0.1
-
-  controller:
-    annotations:
-      reloader.stakater.com/search: "true"
-
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 25
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - sabnzbd
-          topologyKey: kubernetes.io/hostname
-
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    labels:
+      application: sabnzbd
+    securityContext:
+      runAsUser: 911
+      fsGroup: 911
+      fsGroupChangePolicy: "OnRootMismatch"
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - plex
+            namespaces:
+            - plex
+            topologyKey: kubernetes.io/hostname
   initContainers:
     copy-config:  
       name: copy-config
@@ -150,61 +36,95 @@ sonarr:
         mountPath: /config
       - name: cm-config
         mountPath: /cm
-
-  probes:
-    liveness:
-      spec:
-        periodSeconds: 900
-
-  env:
-    TZ: America/New_York
-
+  controllers:
+    main:
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          type: deployment
+          image:
+            repository: quay.io/linuxserver.io/sabnzbd
+            tag: "4.2.3"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          envFrom:
+            - secretRef:
+                name: vw-config-vars
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+          resources:
+            limits:
+              cpu: "8"
+              memory: 3500Mi
+            requests:
+              cpu: 125m
+              memory: 128Mi
   service:
     main:
+      extraSelectorLabels:
+        application: sabnzbd
       ports:
         http:
+          enabled: true
           port: 8989
-
+          primary: true
+          protocol: HTTP
   ingress:
     main:
       enabled: true
       annotations:
+        cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
-      - host: mediadepot.xtr.pub
-        paths:
-        - path: /tv
-          pathType: Prefix
+        - host: mediadepot.xtr.pub
+          paths:
+            - path: /sabnzbd
+              pathType: Prefix
+              service:
+                name: main
+                port: http
       tls:
       - hosts:
         - mediadepot.xtr.pub
-
+        secretName: tls-secret
   persistence:
     config:
       enabled: true
-      type: pvc
+      type: persistentVolumeClaim
       accessMode: ReadWriteOnce
-      size: 768Mi
+      size: 128Mi
       mountPath: /config
-      storageClass: ceph-block-bronze
+      storageClass: ec-silver
+
+    incomplete-downloads:
+      enabled: true
+      type: persistentVolumeClaim
+      accessMode: ReadWriteMany
+      size: 150Gi
+      mountPath: /incomplete-downloads
+      storageClass: fs-silver
 
     downloads:
       enabled: true
-      type: pvc
+      type: persistentVolumeClaim
       accessMode: ReadWriteMany
       existingClaim: "mediadepot-downloads"
       mountPath: /downloads
-      storageClass: ceph-filesystem-bronze
-      
-    tv:
-      enabled: true
-      type: custom
-      volumeSpec:
-        nfs:
-          server: 192.168.30.20
-          path: /volume1/entertainment/tvshows
-      mountPath: /tv
+      storageClass: fs-silver
 
     cm-config:
       enabled: true
@@ -212,186 +132,41 @@ sonarr:
       mountPath: /cm
       volumeSpec:
         secret:
-          secretName: sonarr-config
+          secretName: sabnzbd-config
 
-  resources:
-    limits:
-      cpu: "1"
-      memory: 768Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
-
-radarr:
-  global:
-    fullnameOverride: radarr
-  image:
-    repository: quay.io/linuxserver.io/radarr
-    tag: 5.2.6
-
-  controller:
-    annotations:
-      reloader.stakater.com/search: "true"
-
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 25
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-              - sabnzbd
-          topologyKey: kubernetes.io/hostname
-  env:
-    TZ: America/New_York
-
-  initContainers:
-    copy-sab-config:  
-      name: copy-config
-      image: quay.io/prometheus/busybox:latest
-      command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"] 
-      volumeMounts:
-      - name: config
-        mountPath: /config
-      - name: cm-config
-        mountPath: /cm
-
-  service:
-    main:
-      ports:
-        http:
-          port: 7878
-
-  ingress:
+  networkpolicies:
     main:
       enabled: true
-      annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-      hosts:
-      - host: mediadepot.xtr.pub
-        paths:
-        - path: /movies
-          pathType: Prefix
-      tls:
-      - hosts:
-        - mediadepot.xtr.pub
-
-  # -- Configure persistence settings for the chart under this key.
-  # @default -- See values.yaml
-  persistence:
-    config:
-      enabled: true
-      type: pvc
-      accessMode: ReadWriteOnce
-      size: 2Gi
-      mountPath: /config
-      storageClass: ceph-block-bronze
-
-    downloads:
-      enabled: true
-      type: pvc
-      accessMode: ReadWriteMany
-      existingClaim: "mediadepot-downloads"
-      mountPath: /downloads
-      storageClass: ceph-filesystem-bronze
-  
-    movies:
-      enabled: true
-      type: custom
-      volumeSpec:
-        nfs:
-          server: 192.168.30.20
-          path: /volume1/entertainment/movies
-      mountPath: /movies
-
-    cm-config:
-      enabled: true
-      type: custom
-      mountPath: /cm
-      volumeSpec:
-        secret:
-          secretName: radarr-config
-
-  resources:
-    limits:
-      cpu: "1"
-      memory: 768Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
-
-backupTargets:
-  &target backblaze-palebluedot:
-    type: ObjectStore
-    vendor: Other
-    objectStoreCredentials:
-      url: https://s3.us-west-000.backblazeb2.com
-      bucketName: palebluedot-tvk
-      region: us-west-000
-      credentialSecret:
-        name: *target
-    thresholdCapacity: 5Gi
-
-backupPlan:
-  mediadepot:
-    backupTarget: *target
-    backupPlanFlags:
-      skipImageBackup: true
-    policies:
-      retention-policy:
-        type: Retention
-        spec:
-          cleanupConfig:
-            backupDays: 2
-          default: false
-          retentionConfig:
-            dayOfWeek: Sunday
-            weekly: 1
-            latest: 10
-      fullbackup-policy:
-        type: Schedule
-        spec:
-          default: false
-          scheduleConfig:
-            schedule:
-            - 10 4 * 1/3 *
-      incremental-policy:
-        type: Schedule
-        spec:
-          default: false
-          scheduleConfig:
-            schedule:
-            - 15 4 * * *
-    excludeResources:
-      gvkSelector:
-      - groupVersionKind:
-          group: secrets.infisical.com
-          kind: InfisicalSecret
-          version: v1alpha1
-      - groupVersionKind:
-          kind: PersistentVolumeClaim
-          version: v1
-        objects:
-        - sabnzbd-incomplete-downloads
-        - mediadepot-downloads
-      labelSelector:
-      - matchExpressions:
-        - key: tvk-skip-object
-          operator: In
-          values:
-          - "true"
-
-infisicalSecret:
-  sabnzbd-config:
-    syncInterval: 120
-  radarr-config:
-    syncInterval: 120
-  sonarr-config:
-    syncInterval: 120
-  *target:
-    syncInterval: 120
-    secretsPath: global
+      controller: main
+      podSelector:
+        matchLabels:
+          application: ghost
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot

@@ -7,8 +7,10 @@ cilium:
   hubble:
     relay:
       enabled: true
+      rollOutPods: true
     ui:
       enabled: true
+      rollOutPods: true
       ingress:
         enabled: true
         annotations:
