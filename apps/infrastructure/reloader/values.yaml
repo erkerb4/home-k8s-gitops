@@ -19,6 +19,17 @@ reloader:
         failureThreshold: 5
         periodSeconds: 10
         successThreshold: 1
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containerSecurityContext:
+        capabilities:
+          drop:
+            - ALL
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
     serviceMonitor:
       enabled: false
     podMonitor:
