@@ -133,8 +133,7 @@ rook-ceph-cluster:
   ## StorageClass for cephECBlookPool
   ## does not render
   cephECBlockPools: {}
-
-
+  
 operatorNamespace: rook-ceph
 cephECBlockPoolz:
   - name: ec-silver

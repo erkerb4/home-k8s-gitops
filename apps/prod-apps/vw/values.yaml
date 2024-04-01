@@ -6,7 +6,12 @@ vw:
     labels:
       application: vaultwarden
     securityContext:
+      runAsUser: 1001
       fsGroup: 1001
+      fsGroupChangePolicy: "OnRootMismatch"
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -27,7 +32,7 @@ vw:
           type: deployment
           image:
             repository: ghcr.io/dani-garcia/vaultwarden
-            tag: "1.30.0"
+            tag: "1.30.5"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -43,8 +48,11 @@ vw:
             startup:
               enabled: true
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1001
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: "1"
@@ -96,7 +104,7 @@ vw:
     vw-data:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ceph-block-gold
+      storageClass: ec-silver
       accessMode: ReadWriteOnce
       size: "96Mi"
       globalMounts:
@@ -151,7 +159,12 @@ vw-db:
     labels:
       application: database
     securityContext:
+      runAsUser: 999
       fsGroup: 999
+      fsGroupChangePolicy: "OnRootMismatch"
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     affinity:
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -167,6 +180,8 @@ vw-db:
     main:
       type: statefulset
       strategy: OnDelete
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
       containers:
         main:
           annotations:
@@ -238,8 +253,10 @@ vw-db:
                 successThreshold: 1
                 timeoutSeconds: 1
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 999
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
           resources:
             limits:
               cpu: 1000m
@@ -254,7 +271,7 @@ vw-db:
     data:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ceph-block-gold
+      storageClass: ec-gold
       accessMode: ReadWriteOnce
       size: "2Gi"
       globalMounts:
@@ -361,16 +378,6 @@ backupPlan:
           operator: In
           values:
           - "true"
-    # backupHook: mysql
-    # hookConfig:
-    #   mode: Sequential
-    #   hooks:
-    #     - hook:
-    #         name: mysql-hook
-    #       podSelector:
-    #         labels:
-    #           - matchLabels:
-    #               application: database
 
 infisicalSecret:
   vw-db:
