@@ -122,7 +122,7 @@ sabnzbd:
       enabled: true
       type: persistentVolumeClaim
       accessMode: ReadWriteMany
-      mountPath: /downloads
+      size: 200Gi
       storageClass: fs-silver
       globalMounts:
         - path: /downloads
