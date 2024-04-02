@@ -2,6 +2,7 @@ sabnzbd:
   global:
     fullnameOverride: sabnzbd
   defaultPodOptions:
+    dnsPolicy: Default
     automountServiceAccountToken: false
     labels:
       application: sabnzbd
@@ -146,6 +147,7 @@ sonarr:
   global:
     fullnameOverride: sonarr
   defaultPodOptions:
+    dnsPolicy: Default
     automountServiceAccountToken: false
     labels:
       application: sonarr
@@ -286,6 +288,7 @@ radarr:
   global:
     fullnameOverride: radarr
   defaultPodOptions:
+    dnsPolicy: Default
     automountServiceAccountToken: false
     labels:
       application: radarr
