@@ -31,12 +31,7 @@ sabnzbd:
             repository: "quay.io/prometheus/busybox"
             tag: "latest"
             pullPolicy: Always
-          command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"] 
-          volumeMounts:
-          - name: config
-            mountPath: /config
-          - name: cm-config
-            mountPath: /cm
+          command: ["sh", "-c", "cp /cm/sabnzbd-configmap.ini /config/sabnzbd.ini && chown 911:911 /config/sabnzbd.ini"] 
       annotations:
         secrets.infisical.com/auto-reload: "true"
       containers:
