@@ -6,10 +6,6 @@ sabnzbd:
     labels:
       application: sabnzbd
     securityContext:
-      runAsUser: 911
-      fsGroup: 911
-      fsGroupChangePolicy: "OnRootMismatch"
-      runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
     affinity:
@@ -49,9 +45,6 @@ sabnzbd:
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
-          envFrom:
-            - secretRef:
-                name: vw-config-vars
           probes:
             liveness:
               enabled: true
@@ -59,12 +52,6 @@ sabnzbd:
               enabled: true
             startup:
               enabled: true
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: "8"
@@ -79,7 +66,7 @@ sabnzbd:
       ports:
         http:
           enabled: true
-          port: 8989
+          port: 8080
           primary: true
           protocol: HTTP
   ingress:
