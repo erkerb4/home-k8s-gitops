@@ -107,8 +107,7 @@ sabnzbd:
       enabled: true
       type: persistentVolumeClaim
       accessMode: ReadWriteMany
-      size: 200Gi
-      storageClass: fs-silver
+      existingClaim: "mediadepot-downloads"
       globalMounts:
         - path: /downloads
     cm-config:
@@ -129,7 +128,6 @@ sabnzbd:
           application: mediadepot
       policyTypes:
         - Ingress
-        - Egress
       rules:
         ingress:
           - from:
@@ -143,19 +141,6 @@ sabnzbd:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
-        egress:
-          - to:
-              - namespaceSelector: {}
-                podSelector:
-                  matchLabels:
-                    k8s-app: kube-dns
-            ports:
-              - port: 53
-                protocol: UDP
-          - to:
-              - podSelector:
-                  matchLabels:
-                    app.kubernetes.io/instance: mediadepot
 
 sonarr:
   global:
@@ -174,7 +159,7 @@ sonarr:
           podAffinityTerm:
             labelSelector:
               matchExpressions:
-              - key: app.kubernetes.io/name
+              - key: application
                 operator: In
                 values:
                 - sabnzbd
@@ -254,8 +239,7 @@ sonarr:
       enabled: true
       type: persistentVolumeClaim
       accessMode: ReadWriteMany
-      size: 200Gi
-      storageClass: fs-silver
+      existingClaim: "mediadepot-downloads"
       globalMounts:
         - path: /downloads
     cm-config:
@@ -284,7 +268,6 @@ sonarr:
           application: sonarr
       policyTypes:
         - Ingress
-        - Egress
       rules:
         ingress:
           - from:
@@ -298,19 +281,6 @@ sonarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
-        egress:
-          - to:
-              - namespaceSelector: {}
-                podSelector:
-                  matchLabels:
-                    k8s-app: kube-dns
-            ports:
-              - port: 53
-                protocol: UDP
-          - to:
-              - podSelector:
-                  matchLabels:
-                    app.kubernetes.io/instance: mediadepot
 
 radarr:
   global:
@@ -329,7 +299,7 @@ radarr:
           podAffinityTerm:
             labelSelector:
               matchExpressions:
-              - key: app.kubernetes.io/name
+              - key: application
                 operator: In
                 values:
                 - sabnzbd
@@ -409,8 +379,7 @@ radarr:
       enabled: true
       type: persistentVolumeClaim
       accessMode: ReadWriteMany
-      size: 200Gi
-      storageClass: fs-silver
+      existingClaim: "mediadepot-downloads"
       globalMounts:
         - path: /downloads
     cm-config:
@@ -439,7 +408,6 @@ radarr:
           application: radarr
       policyTypes:
         - Ingress
-        - Egress
       rules:
         ingress:
           - from:
@@ -453,19 +421,67 @@ radarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
-        egress:
-          - to:
-              - namespaceSelector: {}
-                podSelector:
-                  matchLabels:
-                    k8s-app: kube-dns
-            ports:
-              - port: 53
-                protocol: UDP
-          - to:
-              - podSelector:
-                  matchLabels:
-                    app.kubernetes.io/instance: mediadepot
+
+backupTargets:
+  &target backblaze-palebluedot:
+    type: ObjectStore
+    vendor: Other
+    objectStoreCredentials:
+      url: https://s3.us-west-000.backblazeb2.com
+      bucketName: palebluedot-tvk
+      region: us-west-000
+      credentialSecret:
+        name: *target
+    thresholdCapacity: 5Gi
+
+backupPlan:
+  mediadepot:
+    backupTarget: *target
+    backupPlanFlags:
+      skipImageBackup: true
+    policies:
+      retention-policy:
+        type: Retention
+        spec:
+          cleanupConfig:
+            backupDays: 2
+          default: false
+          retentionConfig:
+            dayOfWeek: Sunday
+            weekly: 1
+            latest: 10
+      fullbackup-policy:
+        type: Schedule
+        spec:
+          default: false
+          scheduleConfig:
+            schedule:
+            - 10 4 * 1/3 *
+      incremental-policy:
+        type: Schedule
+        spec:
+          default: false
+          scheduleConfig:
+            schedule:
+            - 15 4 * * *
+    excludeResources:
+      gvkSelector:
+      - groupVersionKind:
+          group: secrets.infisical.com
+          kind: InfisicalSecret
+          version: v1alpha1
+      - groupVersionKind:
+          kind: PersistentVolumeClaim
+          version: v1
+        objects:
+        - sabnzbd-incomplete-downloads
+        - mediadepot-downloads
+      labelSelector:
+      - matchExpressions:
+        - key: tvk-skip-object
+          operator: In
+          values:
+          - "true"
 
 infisicalSecret:
   sabnzbd-config:
@@ -474,3 +490,6 @@ infisicalSecret:
     syncInterval: 120
   radarr-config:
     syncInterval: 120
+  *target:
+    syncInterval: 120
+    secretsPath: global
