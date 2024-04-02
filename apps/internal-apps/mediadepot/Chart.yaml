@@ -16,6 +16,7 @@ dependencies:
     repository: "@bjws"
     version: "2.6.0"
     alias: sonarr
-# - name: radarr
-#   repository: "@k8s-at-home"
-#   version: "16.2.3"
+  - name: app-template
+    repository: "@bjws"
+    version: "2.6.0"
+    alias: radarr
