@@ -107,32 +107,33 @@ sabnzbd:
       type: persistentVolumeClaim
       accessMode: ReadWriteOnce
       size: 128Mi
-      mountPath: /config
       storageClass: ec-silver
-
+      globalMounts:
+        - path: /config
     incomplete-downloads:
       enabled: true
       type: persistentVolumeClaim
       accessMode: ReadWriteMany
       size: 150Gi
-      mountPath: /incomplete-downloads
       storageClass: fs-silver
-
+      globalMounts:
+        - path: /incomplete-downloads
     downloads:
       enabled: true
       type: persistentVolumeClaim
       accessMode: ReadWriteMany
-      existingClaim: "mediadepot-downloads"
       mountPath: /downloads
       storageClass: fs-silver
-
+      globalMounts:
+        - path: /downloads
     cm-config:
       enabled: true
       type: custom
-      mountPath: /cm
       volumeSpec:
         secret:
           secretName: sabnzbd-config
+      globalMounts:
+        - path: /cm
 
   networkpolicies:
     main:
