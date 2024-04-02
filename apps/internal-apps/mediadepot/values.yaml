@@ -475,3 +475,5 @@ infisicalSecret:
     syncInterval: 120
   sonarr-config:
     syncInterval: 120
+  radarr-config:
+    syncInterval: 120
