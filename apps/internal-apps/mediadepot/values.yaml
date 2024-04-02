@@ -22,18 +22,21 @@ sabnzbd:
             namespaces:
             - plex
             topologyKey: kubernetes.io/hostname
-  initContainers:
-    copy-config:  
-      name: copy-config
-      image: quay.io/prometheus/busybox:latest
-      command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"] 
-      volumeMounts:
-      - name: config
-        mountPath: /config
-      - name: cm-config
-        mountPath: /cm
   controllers:
     main:
+      initContainers:
+        copy-config:
+          name: copy-config
+          image: 
+            repository: "quay.io/prometheus/busybox"
+            tag: "latest"
+            pullPolicy: Always
+          command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"] 
+          volumeMounts:
+          - name: config
+            mountPath: /config
+          - name: cm-config
+            mountPath: /cm
       annotations:
         secrets.infisical.com/auto-reload: "true"
       containers:
