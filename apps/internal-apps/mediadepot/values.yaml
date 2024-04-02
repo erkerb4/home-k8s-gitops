@@ -171,3 +171,7 @@ sabnzbd:
               - podSelector:
                   matchLabels:
                     app.kubernetes.io/instance: mediadepot
+
+infisicalSecret:
+  sabnzbd-config:
+    syncInterval: 120
