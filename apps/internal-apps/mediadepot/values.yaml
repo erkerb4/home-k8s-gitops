@@ -242,7 +242,6 @@ sonarr:
       tls:
       - hosts:
         - mediadepot.xtr.pub
-        secretName: tls-secret
   persistence:
     config:
       enabled: true
