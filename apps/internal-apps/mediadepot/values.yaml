@@ -228,7 +228,6 @@ sonarr:
     main:
       enabled: true
       annotations:
-        cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
@@ -373,7 +372,7 @@ radarr:
   service:
     main:
       extraSelectorLabels:
-        application: sonarr
+        application: radarr
       ports:
         http:
           enabled: true
@@ -384,7 +383,6 @@ radarr:
     main:
       enabled: true
       annotations:
-        cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
