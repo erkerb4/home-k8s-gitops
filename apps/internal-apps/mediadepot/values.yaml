@@ -126,7 +126,7 @@ sabnzbd:
       controller: main
       podSelector:
         matchLabels:
-          application: ghost
+          application: mediadepot
       policyTypes:
         - Ingress
         - Egress
@@ -265,7 +265,7 @@ sonarr:
       type: custom
       volumeSpec:
         secret:
-          secretName: sabnzbd-config
+          secretName: sonarr-config
       globalMounts:
         - path: /cm
     tv:
@@ -283,7 +283,163 @@ sonarr:
       controller: main
       podSelector:
         matchLabels:
-          application: ghost
+          application: sonarr
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot
+
+radarr:
+  global:
+    fullnameOverride: radarr
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    labels:
+      application: radarr
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 25
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - sabnzbd
+            topologyKey: kubernetes.io/hostname
+  controllers:
+    main:
+      initContainers:
+        copy-config:
+          name: copy-config
+          image: 
+            repository: "quay.io/prometheus/busybox"
+            tag: "latest"
+            pullPolicy: Always
+          command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"]
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          type: deployment
+          image:
+            repository: quay.io/linuxserver.io/radarr
+            tag: "5.3.6"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 125m
+              memory: 256Mi
+  service:
+    main:
+      extraSelectorLabels:
+        application: sonarr
+      ports:
+        http:
+          enabled: true
+          port: 7878
+          primary: true
+          protocol: HTTP
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: mediadepot.xtr.pub
+          paths:
+            - path: /movies
+              pathType: Prefix
+              service:
+                name: main
+                port: http
+      tls:
+      - hosts:
+        - mediadepot.xtr.pub
+  persistence:
+    config:
+      enabled: true
+      type: persistentVolumeClaim
+      accessMode: ReadWriteOnce
+      size: 1Gi
+      storageClass: ec-silver
+      globalMounts:
+        - path: /config
+    downloads:
+      enabled: true
+      type: persistentVolumeClaim
+      accessMode: ReadWriteMany
+      size: 200Gi
+      storageClass: fs-silver
+      globalMounts:
+        - path: /downloads
+    cm-config:
+      enabled: true
+      type: custom
+      volumeSpec:
+        secret:
+          secretName: radarr-config
+      globalMounts:
+        - path: /cm
+    movies:
+      enabled: true
+      type: custom
+      volumeSpec:
+        nfs:
+          server: 192.168.30.20
+          path: /volume1/entertainment/movies
+      mountPath: /movies
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: main
+      podSelector:
+        matchLabels:
+          application: radarr
       policyTypes:
         - Ingress
         - Egress
