@@ -200,7 +200,7 @@ sonarr:
               memory: 1Gi
             requests:
               cpu: 125m
-              memory: 256Mi
+              memory: 128Mi
   service:
     main:
       extraSelectorLabels:
