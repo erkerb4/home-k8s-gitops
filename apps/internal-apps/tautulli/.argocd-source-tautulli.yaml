@@ -1,8 +1,0 @@
-helm:
-  parameters:
-  - name: tautulli.image.repository
-    value: ghcr.io/linuxserver/tautulli
-    forcestring: true
-  - name: tautulli.image.tag
-    value: 2.13.4
-    forcestring: true
