@@ -4,8 +4,6 @@ sabnzbd:
   defaultPodOptions:
     dnsPolicy: Default
     automountServiceAccountToken: false
-    labels:
-      application: sabnzbd
     securityContext:
       seccompProfile:
         type: RuntimeDefault
@@ -24,20 +22,19 @@ sabnzbd:
             - plex
             topologyKey: kubernetes.io/hostname
   controllers:
-    main:
+    sabnzbd:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
       initContainers:
         copy-config:
-          name: copy-config
           image: 
             repository: "quay.io/prometheus/busybox"
             tag: "latest"
             pullPolicy: Always
-          command: ["sh", "-c", "cp /cm/sabnzbd-configmap.ini /config/sabnzbd.ini && chown 911:911 /config/sabnzbd.ini"] 
-      annotations:
-        secrets.infisical.com/auto-reload: "true"
+          command: ["sh", "-c", "cp /cm/sabnzbd-configmap.ini /config/sabnzbd.ini && chown 911:911 /config/sabnzbd.ini"]
       containers:
         main:
-          type: deployment
           image:
             repository: quay.io/linuxserver.io/sabnzbd
             tag: "4.2.3"
@@ -59,9 +56,8 @@ sabnzbd:
               cpu: 125m
               memory: 128Mi
   service:
-    main:
-      extraSelectorLabels:
-        application: sabnzbd
+    app:
+      controller: sabnzbd
       ports:
         http:
           enabled: true
@@ -81,7 +77,7 @@ sabnzbd:
             - path: /sabnzbd
               pathType: Prefix
               service:
-                name: main
+                identifier: app
                 port: http
       tls:
       - hosts:
@@ -107,7 +103,6 @@ sabnzbd:
     downloads:
       enabled: true
       type: persistentVolumeClaim
-      accessMode: ReadWriteMany
       existingClaim: "mediadepot-downloads"
       globalMounts:
         - path: /downloads
@@ -123,12 +118,10 @@ sabnzbd:
   networkpolicies:
     main:
       enabled: true
-      controller: main
-      podSelector:
-        matchLabels:
-          application: mediadepot
+      controller: sabnzbd
       policyTypes:
         - Ingress
+        - Egress
       rules:
         ingress:
           - from:
@@ -142,12 +135,16 @@ sabnzbd:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
 
 sonarr:
   global:
     fullnameOverride: sonarr
   defaultPodOptions:
-    dnsPolicy: Default
+    # dnsPolicy: Default
     automountServiceAccountToken: false
     labels:
       application: sonarr
@@ -167,20 +164,19 @@ sonarr:
                 - sabnzbd
             topologyKey: kubernetes.io/hostname
   controllers:
-    main:
+    sonarr:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
       initContainers:
         copy-config:
-          name: copy-config
           image: 
             repository: "quay.io/prometheus/busybox"
             tag: "latest"
             pullPolicy: Always
           command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"]
-      annotations:
-        secrets.infisical.com/auto-reload: "true"
       containers:
         main:
-          type: deployment
           image:
             repository: quay.io/linuxserver.io/sonarr
             tag: "4.0.3"
@@ -202,7 +198,8 @@ sonarr:
               cpu: 125m
               memory: 128Mi
   service:
-    main:
+    app:
+      controller: sonarr
       extraSelectorLabels:
         application: sonarr
       ports:
@@ -223,7 +220,7 @@ sonarr:
             - path: /tv
               pathType: Prefix
               service:
-                name: main
+                identifier: app
                 port: http
       tls:
       - hosts:
@@ -240,7 +237,6 @@ sonarr:
     downloads:
       enabled: true
       type: persistentVolumeClaim
-      accessMode: ReadWriteMany
       existingClaim: "mediadepot-downloads"
       globalMounts:
         - path: /downloads
@@ -259,17 +255,14 @@ sonarr:
         nfs:
           server: 192.168.30.20
           path: /volume1/entertainment/tvshows
-      mountPath: /tv
 
   networkpolicies:
     main:
       enabled: true
-      controller: main
-      podSelector:
-        matchLabels:
-          application: sonarr
+      controller: sonarr
       policyTypes:
         - Ingress
+        - Egress
       rules:
         ingress:
           - from:
@@ -283,12 +276,28 @@ sonarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
 
 radarr:
   global:
     fullnameOverride: radarr
   defaultPodOptions:
-    dnsPolicy: Default
+    # dnsPolicy: Default
     automountServiceAccountToken: false
     labels:
       application: radarr
@@ -308,20 +317,19 @@ radarr:
                 - sabnzbd
             topologyKey: kubernetes.io/hostname
   controllers:
-    main:
+    radarr:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
       initContainers:
         copy-config:
-          name: copy-config
           image: 
             repository: "quay.io/prometheus/busybox"
             tag: "latest"
             pullPolicy: Always
           command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"]
-      annotations:
-        secrets.infisical.com/auto-reload: "true"
       containers:
         main:
-          type: deployment
           image:
             repository: quay.io/linuxserver.io/radarr
             tag: "5.3.6"
@@ -343,7 +351,8 @@ radarr:
               cpu: 125m
               memory: 256Mi
   service:
-    main:
+    app:
+      controller: radarr
       extraSelectorLabels:
         application: radarr
       ports:
@@ -364,7 +373,7 @@ radarr:
             - path: /movies
               pathType: Prefix
               service:
-                name: main
+                identifier: app
                 port: http
       tls:
       - hosts:
@@ -381,7 +390,6 @@ radarr:
     downloads:
       enabled: true
       type: persistentVolumeClaim
-      accessMode: ReadWriteMany
       existingClaim: "mediadepot-downloads"
       globalMounts:
         - path: /downloads
@@ -400,17 +408,14 @@ radarr:
         nfs:
           server: 192.168.30.20
           path: /volume1/entertainment/movies
-      mountPath: /movies
 
   networkpolicies:
     main:
       enabled: true
-      controller: main
-      podSelector:
-        matchLabels:
-          application: radarr
+      controller: radarr
       policyTypes:
         - Ingress
+        - Egress
       rules:
         ingress:
           - from:
@@ -424,6 +429,22 @@ radarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot
 
 backupTargets:
   &target backblaze-palebluedot:
