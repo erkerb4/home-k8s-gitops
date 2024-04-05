@@ -262,7 +262,6 @@ sonarr:
       controller: sonarr
       policyTypes:
         - Ingress
-        - Egress
       rules:
         ingress:
           - from:
@@ -276,32 +275,6 @@ sonarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
-        egress:
-          - to:
-              - namespaceSelector: {}
-                podSelector:
-                  matchLabels:
-                    k8s-app: kube-dns
-            ports:
-              - port: 53
-                protocol: UDP
-          - to:
-              - podSelector:
-                  matchLabels:
-                    app.kubernetes.io/instance: mediadepot
-          - to:
-              - ipBlock:
-                  cidr: 0.0.0.0/0
-          - to:
-              - namespaceSelector:
-                  matchLabels:
-                    name: plex
-                podSelector:
-                  matchLabels:
-                     app.kubernetes.io/name: plex
-            ports:
-              - port: 32400
-                protocol: TCP
 
 radarr:
   global:
@@ -425,7 +398,6 @@ radarr:
       controller: radarr
       policyTypes:
         - Ingress
-        - Egress
       rules:
         ingress:
           - from:
@@ -439,32 +411,6 @@ radarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
-        egress:
-          - to:
-              - ipBlock:
-                  cidr: 0.0.0.0/0
-          - to:
-              - namespaceSelector: {}
-                podSelector:
-                  matchLabels:
-                    k8s-app: kube-dns
-            ports:
-              - port: 53
-                protocol: UDP
-          - to:
-              - podSelector:
-                  matchLabels:
-                    app.kubernetes.io/instance: mediadepot
-          - to:
-              - namespaceSelector:
-                  matchLabels:
-                    name: plex
-                podSelector:
-                  matchLabels:
-                     app.kubernetes.io/name: plex
-            ports:
-              - port: 32400
-                protocol: TCP
 
 backupTargets:
   &target backblaze-palebluedot:
