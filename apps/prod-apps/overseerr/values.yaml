@@ -1,37 +1,91 @@
 overseerr:
-  image:
-    tag: 1.29.1
-
-  env:
-    TZ: America/New_York
-
+  global:
+    fullnameOverride: overseer
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    labels:
+      application: overseer
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    overseer: 
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          image:
+            repository: docker pull ghcr.io/linuxserver/overseerr
+            tag: "v1.33.2"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          resources:
+            limits:
+              cpu: "2000m"
+              memory: 1300Mi
+            requests:
+              cpu: 250m
+              memory: 768Mi
+  service:
+    app:
+      controller: overseer
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+        traefik.ingress.kubernetes.io/service.passhostheader: "true" 
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 5055
+          protocol: HTTP
   ingress:
-    # -- Enable and configure ingress settings for the chart under this key.
-    # @default -- See values.yaml
     main:
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
-      - host: overseer.xtr.pub
-        paths:
-        - path: /
-          pathType: Prefix
+        - host: overseer.xtr.pub
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                identifier: app
+                port: http
       tls:
       - hosts:
         - overseer.xtr.pub
         secretName: tls-secret
-  resources:
-    limits:
-      cpu: 2000m
-      memory: 1250Mi
-    requests:
-      cpu: 250m
-      memory: 768Mi
-
   persistence:
     config:
       enabled: true
-      type: pvc
-      storageClass: ceph-block-bronze
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: overseer
+      policyTypes:
+        - Ingress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
