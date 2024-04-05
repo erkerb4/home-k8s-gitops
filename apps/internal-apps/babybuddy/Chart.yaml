@@ -1,8 +1,9 @@
-piVersion: v2
-appVersion: 1.10.2
+---
+apiVersion: v2
+appVersion: 1.0.0
 description: A buddy for babies! Helps caregivers track sleep, feedings, diaper changes, tummy time and more to learn about and predict baby's needs without (as much) guess work.
 name: babybuddy
-version: 1.1.2
+version: 2.2.1
 kubeVersion: ">=1.16.0-0"
 keywords:
   - babybuddy
@@ -13,9 +14,6 @@ sources:
   - https://github.com/babybuddy/babybuddy
   - https://hub.docker.com/r/linuxserver/babybuddy
 dependencies:
-# - name: babybuddy
-#   repository: "@k8s-at-home"
-#   version: "1.1.2"
   - name: app-template
     repository: "@bjws"
     version: "3.1.0"
