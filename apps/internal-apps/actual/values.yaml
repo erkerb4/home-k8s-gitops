@@ -6,7 +6,10 @@ actual:
     labels:
       application: actual
     securityContext:
+      runAsUser: 1000
       fsGroup: 1000
+      fsGroupChangePolicy: "OnRootMismatch"
+      runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
   controllers:
@@ -33,8 +36,11 @@ actual:
             startup:
               enabled: true
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: "750m"
