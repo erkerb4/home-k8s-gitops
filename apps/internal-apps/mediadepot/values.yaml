@@ -144,7 +144,7 @@ sonarr:
   global:
     fullnameOverride: sonarr
   defaultPodOptions:
-    # dnsPolicy: Default
+    dnsPolicy: Default
     automountServiceAccountToken: false
     labels:
       application: sonarr
@@ -297,7 +297,7 @@ radarr:
   global:
     fullnameOverride: radarr
   defaultPodOptions:
-    # dnsPolicy: Default
+    dnsPolicy: Default
     automountServiceAccountToken: false
     labels:
       application: radarr
