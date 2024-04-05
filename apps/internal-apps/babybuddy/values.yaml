@@ -21,6 +21,7 @@ babybuddy:
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
+            CSRF_TRUSTED_ORIGINS: "https://baby.xtr.pub"
           resources:
             limits:
               cpu: "2000m"
@@ -52,7 +53,7 @@ babybuddy:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
-        - host: babby.xtr.pub
+        - host: baby.xtr.pub
           paths:
             - path: /
               pathType: Prefix
@@ -61,7 +62,7 @@ babybuddy:
                 port: http
       tls:
       - hosts:
-        - babby.xtr.pub
+        - baby.xtr.pub
         secretName: tls-secret
   persistence:
     config:
