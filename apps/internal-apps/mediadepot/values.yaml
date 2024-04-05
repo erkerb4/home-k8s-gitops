@@ -292,6 +292,16 @@ sonarr:
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    name: plex
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: plex
+            ports:
+              - port: 32400
+                protocol: TCP
 
 radarr:
   global:
@@ -445,6 +455,16 @@ radarr:
               - podSelector:
                   matchLabels:
                     app.kubernetes.io/instance: mediadepot
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    name: plex
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: plex
+            ports:
+              - port: 32400
+                protocol: TCP
 
 backupTargets:
   &target backblaze-palebluedot:
