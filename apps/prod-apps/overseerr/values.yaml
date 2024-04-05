@@ -17,7 +17,7 @@ overseerr:
         main:
           image:
             repository: docker pull ghcr.io/linuxserver/overseerr
-            tag: "v1.33.2"
+            tag: "1.33.2"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
