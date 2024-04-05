@@ -43,6 +43,8 @@ omada:
       primary: true
       annotations:
         io.cilium/lb-ipam-ips: 192.168.30.52
+      labels:
+        lb: "true"
       type: LoadBalancer
       externalTrafficPolicy: Local
       ports:
