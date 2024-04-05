@@ -77,9 +77,6 @@ tautulli:
     main:
       enabled: true
       controller: tautulli
-      podSelector:
-        matchLabels:
-          application: tautulli
       policyTypes:
         - Ingress
         - Egress

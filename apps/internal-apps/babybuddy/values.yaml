@@ -78,9 +78,6 @@ babybuddy:
     main:
       enabled: true
       controller: babybuddy
-      podSelector:
-        matchLabels:
-          app.kubernetes.io/name: babybuddy
       policyTypes:
         - Ingress
         - Egress

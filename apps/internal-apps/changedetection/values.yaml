@@ -74,9 +74,6 @@ changedetection:
     main:
       enabled: true
       controller: changedetection
-      podSelector:
-        matchLabels:
-          application: mediadepot
       policyTypes:
         - Ingress
         - Egress
