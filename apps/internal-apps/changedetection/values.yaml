@@ -1,40 +1,100 @@
-changedetection-io:
-  image:
-    tag: "0.39.15"
-
-  env:
-    TZ: America/New_York
-
+changedetection:
+  global:
+    fullnameOverride: changedetection
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsPolicy: "Default"
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    changedetection:
+      type: deployment
+      containers:
+        main:
+          image:
+            repository: ghcr.io/linuxserver/changedetection.io
+            tag: "0.45.17"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+  service:
+    app:
+      controller: changedetection
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 5000
+          protocol: HTTP
   ingress:
     main:
       enabled: true
       annotations:
+        cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-        cert-manager.io/cluster-issuer: le-prod
       hosts:
-      - host: changed.xtr.pub
-        paths:
-        - path: /
-          pathType: Prefix
+        - host: changed.xtr.pub
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                identifier: app
+                port: http
       tls:
       - hosts:
         - changed.xtr.pub
         secretName: tls-secret
-
   persistence:
-    data:
+    config:
       enabled: true
-      type: pvc
+      type: persistentVolumeClaim
       accessMode: ReadWriteOnce
       size: 128Mi
-      mountPath: /datastore
-      storageClass: "ceph-block-bronze"
+      storageClass: ec-silver
+      globalMounts:
+        - path: /config
 
-  resources:
-    limits:
-      cpu: "1"
-      memory: 256Mi
-    requests:
-      cpu: 125m
-      memory: 64Mi
+  networkpolicies:
+    main:
+      enabled: true
+      controller: changedetection
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0

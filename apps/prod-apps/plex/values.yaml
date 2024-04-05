@@ -157,6 +157,13 @@ plex:
           - from:
               - namespaceSelector:
                   matchLabels:
+                    kubernetes.io/metadata.name: tautulli
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: tautulli
+          - from:
+              - namespaceSelector:
+                  matchLabels:
                     kubernetes.io/metadata.name: traefik
                 podSelector:
                   matchLabels:

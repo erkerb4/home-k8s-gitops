@@ -4,16 +4,19 @@ name: mediadepot
 version: 1.0.0
 keywords:
 - sabnzbd
+- sonarr
+- radarr
 - usenet
-sources:
-- https://sabnzbd.org/
 dependencies:
-- name: sabnzbd
-  repository: "@k8s-at-home"
-  version: "9.3.2"
-- name: sonarr
-  repository: "@k8s-at-home"
-  version: "16.2.3"
-- name: radarr
-  repository: "@k8s-at-home"
-  version: "16.2.3"
+  - name: app-template
+    repository: "@bjws"
+    version: "3.1.0"
+    alias: sabnzbd
+  - name: app-template
+    repository: "@bjws"
+    version: "3.1.0"
+    alias: sonarr
+  - name: app-template
+    repository: "@bjws"
+    version: "3.1.0"
+    alias: radarr

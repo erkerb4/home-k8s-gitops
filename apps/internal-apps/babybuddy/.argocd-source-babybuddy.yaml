@@ -1,8 +1,0 @@
-helm:
-  parameters:
-  - name: babybuddy.image.repository
-    value: registry.gitlab.com/linuxserver.io/docker-babybuddy/babybuddy
-    forcestring: true
-  - name: babybuddy.image.tag
-    value: 1.16.0
-    forcestring: true

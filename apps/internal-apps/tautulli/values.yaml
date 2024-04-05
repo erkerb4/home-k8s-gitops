@@ -1,41 +1,101 @@
 tautulli:
-  image:
-    repository: ghcr.io/linuxserver/tautulli
-    tag: 2.10.2
-
-  env:
-    TZ: America/New_York
-
+  global:
+    fullnameOverride: tautulli
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    labels:
+      application: tautulli
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    tautulli:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          image:
+            repository: ghcr.io/linuxserver/tautulli
+            tag: "2.13.4"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          resources:
+            limits:
+              cpu: "1250m"
+              memory: 512Mi
+            requests:
+              cpu: 125m
+              memory: 256Mi
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+  service:
+    app:
+      controller: tautulli
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 8181
+          protocol: HTTP
   ingress:
     main:
       enabled: true
       annotations:
+        cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-        cert-manager.io/cluster-issuer: le-prod
       hosts:
-      - host: tau.xtr.pub
-        paths:
-        - path: /
-          pathType: Prefix
+        - host: tau.xtr.pub
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                identifier: app
+                port: http
       tls:
       - hosts:
         - tau.xtr.pub
         secretName: tls-secret
-
   persistence:
     config:
       enabled: true
-      type: pvc
+      type: persistentVolumeClaim
       accessMode: ReadWriteOnce
       size: 512Mi
-      mountPath: /config
-      storageClass: "ceph-block-bronze"
+      storageClass: ec-silver
+      globalMounts:
+        - path: /config
 
-  resources:
-    limits:
-      cpu: "1"
-      memory: 512Mi
-    requests:
-      cpu: 250m
-      memory: 256Mi
+  networkpolicies:
+    main:
+      enabled: true
+      controller: tautulli
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: plex
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: plex
+            ports:
+              - port: 32400

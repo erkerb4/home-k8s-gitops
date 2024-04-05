@@ -3,20 +3,26 @@ omada:
     fullnameOverride: omada-controller
   defaultPodOptions:
     automountServiceAccountToken: false
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
     hostNetwork: true
     dnsPolicy: ClusterFirstWithHostNet
 
   controllers:
-    main:
+    omada:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
       containers:
         main:
-          type: deployment
           image:
             repository: mbentley/omada-controller
-            tag: "5.13@sha256:4bbd60a8d9f39174f0d7690a9be79d786eb39a30417c02bc20de23f1d8bc4a50"
+            tag: "5.13@sha256:d1aa99f9c39c93f03e9addd1d723932e8b7725cbe1e9cf6f98734071cbf017ad"
             pullPolicy: IfNotPresent
           env:
             TZ: America/New_York
+            PORTAL_HTTP_PORT: "8082"
           resources:
             limits:
               cpu: 1000m
@@ -33,15 +39,20 @@ omada:
               enabled: false
 
   service:
-    main:
+    app:
+      controller: omada
+      primary: true
       annotations:
-        metallb.universe.tf/address-pool: vl30
-        metallb.universe.tf/loadBalancerIPs: 192.168.30.52
+        io.cilium/lb-ipam-ips: 192.168.30.52
+      labels:
+        lb: "true"
       type: LoadBalancer
-      externalTrafficPolicy: Cluster
+      externalTrafficPolicy: Local
       ports:
         http:
           enabled: false
+          primary: false
+          port: 8088
         mgmt-http:
           enabled: true
           primary: true
@@ -50,6 +61,10 @@ omada:
         mgmt-https:
           enabled: true
           port: 8043
+          protocol: TCP
+        portal-http:
+          enabled: true
+          port: 8082
           protocol: TCP
         portal-https:
           enabled: true
@@ -97,15 +112,15 @@ omada:
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: le-prod
-        # traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        # traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-        # traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        traefik.ingress.kubernetes.io/router.tls: "true"
       hosts:
         - host: omada.xtr.pub
           paths:
             - path: /
               service:
-                name: main
+                identifier: app
                 port: mgmt-http
       tls:
       - hosts:
@@ -114,11 +129,9 @@ omada:
 
   persistence:
     config:
-      enabled: false
-    data:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ceph-block-gold
+      storageClass: ec-silver
       accessMode: ReadWriteOnce
       size: "2Gi"
       globalMounts:
@@ -126,15 +139,11 @@ omada:
     logs:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ceph-block-bronze
+      storageClass: ec-silver
       accessMode: ReadWriteOnce
       size: "1Gi"
       globalMounts:
         - path: /opt/tplink/EAPController/logs
-    cert:
-      enabled: true
-      type: secret
-      name: tls-secret
 
 backupTargets:
   &target backblaze-palebluedot:

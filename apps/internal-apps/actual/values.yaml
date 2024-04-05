@@ -6,17 +6,22 @@ actual:
     labels:
       application: actual
     securityContext:
+      runAsUser: 1000
       fsGroup: 1000
-
+      fsGroupChangePolicy: "OnRootMismatch"
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
   controllers:
-    main: 
+    actual: 
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
       containers:
         main:
-          nameOverride: actual
-          type: deployment
           image:
             repository: ghcr.io/actualbudget/actual-server
-            tag: "24.3.0"
+            tag: "24.4.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -31,8 +36,11 @@ actual:
             startup:
               enabled: true
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: "750m"
@@ -40,26 +48,20 @@ actual:
             requests:
               cpu: 250m
               memory: 256Mi
-
   service:
-    main:
-      nameOverride: actual
+    app:
+      controller: actual
       annotations:
         traefik.ingress.kubernetes.io/service.serversscheme: http
         traefik.ingress.kubernetes.io/service.passhostheader: "true" 
-      extraSelectorLabels:
-        application: actual
       ports:
         http:
           enabled: true
-          port: 5006
           primary: true
+          port: 5006
           protocol: HTTP
-
-
   ingress:
     main:
-      nameOverride: actual
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: le-prod
@@ -71,20 +73,17 @@ actual:
             - path: /
               pathType: ImplementationSpecific
               service:
-                name: main
+                identifier: app
                 port: http
       tls:
       - hosts:
         - actual.xtr.pub
         secretName: tls-secret
-
   persistence:
     config:
-      enabled: false
-    data:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ceph-block-gold
+      storageClass: ec-silver
       accessMode: ReadWriteOnce
       size: "3Gi"
       globalMounts:
@@ -93,10 +92,7 @@ actual:
   networkpolicies:
     main:
       enabled: true
-      controller: main
-      podSelector:
-        matchLabels:
-          application: ghost
+      controller: actual
       policyTypes:
         - Ingress
         - Egress
@@ -118,3 +114,6 @@ actual:
             ports:
               - port: 53
                 protocol: UDP
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
