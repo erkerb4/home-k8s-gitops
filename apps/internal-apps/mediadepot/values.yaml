@@ -158,7 +158,7 @@ sonarr:
           podAffinityTerm:
             labelSelector:
               matchExpressions:
-              - key: application
+              - key: app.kubernetes.io/component
                 operator: In
                 values:
                 - sabnzbd
@@ -311,7 +311,7 @@ radarr:
           podAffinityTerm:
             labelSelector:
               matchExpressions:
-              - key: application
+              - key: app.kubernetes.io/component
                 operator: In
                 values:
                 - sabnzbd
