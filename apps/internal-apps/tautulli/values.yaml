@@ -9,12 +9,12 @@ tautulli:
       seccompProfile:
         type: RuntimeDefault
   controllers:
-    main:
+    tautulli:
+      type: deployment
       annotations:
         secrets.infisical.com/auto-reload: "true"
       containers:
         main:
-          type: deployment
           image:
             repository: ghcr.io/linuxserver/tautulli
             tag: "2.13.4"
@@ -28,15 +28,21 @@ tautulli:
             requests:
               cpu: 125m
               memory: 256Mi
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
   service:
-    main:
-      extraSelectorLabels:
-        application: tautulli
+    app:
+      controller: tautulli
       ports:
         http:
           enabled: true
-          port: 8181
           primary: true
+          port: 8181
           protocol: HTTP
   ingress:
     main:
@@ -51,7 +57,7 @@ tautulli:
             - path: /
               pathType: Prefix
               service:
-                name: main
+                identifier: app
                 port: http
       tls:
       - hosts:
