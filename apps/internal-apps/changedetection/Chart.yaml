@@ -18,6 +18,3 @@ dependencies:
     repository: "@bjws"
     version: "3.1.0"
     alias: changedetection
-  # - name: changedetection-io
-  #   repository: "@k8s-at-home"
-  #   version: "1.4.2"

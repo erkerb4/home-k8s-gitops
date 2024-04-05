@@ -76,10 +76,10 @@ tautulli:
   networkpolicies:
     main:
       enabled: true
-      controller: main
+      controller: tautulli
       podSelector:
         matchLabels:
-          application: mediadepot
+          application: tautulli
       policyTypes:
         - Ingress
         - Egress
