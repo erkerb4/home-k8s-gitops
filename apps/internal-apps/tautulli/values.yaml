@@ -79,7 +79,7 @@ tautulli:
       controller: tautulli
       policyTypes:
         - Ingress
-        - Egress
+        # - Egress
       rules:
         ingress:
           - from:
@@ -89,13 +89,13 @@ tautulli:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
-        egress:
-          - to:
-              - namespaceSelector:
-                  matchLabels:
-                    kubernetes.io/metadata.name: plex
-                podSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: plex
-            ports:
-              - port: 32400
+        # egress:
+        #   - to:
+        #       - namespaceSelector:
+        #           matchLabels:
+        #             kubernetes.io/metadata.name: plex
+        #         podSelector:
+        #           matchLabels:
+        #             app.kubernetes.io/name: plex
+        #     ports:
+        #       - port: 32400
