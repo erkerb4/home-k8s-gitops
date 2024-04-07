@@ -56,6 +56,13 @@ cilium:
   ipv4NativeRoutingCIDR: "172.30.0.0/20"
   autoDirectNodeRoutes: true
   annotateK8sNode: true
+  bpf:
+    masquerade: true
+  ipMasqAgent:
+    enabled: true
+    config:
+      nonMasqueradeCIDRs:
+       - 172.30.0.0/16
 
 lbIP:
   xtr-pool:
