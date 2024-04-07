@@ -30,7 +30,7 @@ cilium:
       clusterPoolIPv4PodCIDRList: ["172.30.0.0/20"]
   k8sServiceHost: 192.168.30.10
   k8sServicePort: 6443
-  kubeProxyReplacement: strict
+  kubeProxyReplacement: true
   resources:
     requests:
       cpu: 100m
@@ -63,6 +63,7 @@ cilium:
     config:
       nonMasqueradeCIDRs:
        - 172.30.0.0/16
+  enableIPv4BIGTCP: true
   loadBalancer:
     acceleration: native
     mode: hybrid
