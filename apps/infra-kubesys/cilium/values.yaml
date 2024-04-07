@@ -64,9 +64,9 @@ cilium:
       nonMasqueradeCIDRs:
        - 172.30.0.0/16
   enableIPv4BIGTCP: true
-  loadBalancer:
-    acceleration: native
-    mode: hybrid
+  # loadBalancer:
+  #   acceleration: native
+  #   mode: hybrid
 
 lbIP:
   xtr-pool:
