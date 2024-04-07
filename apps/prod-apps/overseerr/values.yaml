@@ -2,6 +2,7 @@ overseerr:
   global:
     fullnameOverride: overseer
   defaultPodOptions:
+    dnsPolicy: "Default"
     automountServiceAccountToken: false
     labels:
       application: overseer
