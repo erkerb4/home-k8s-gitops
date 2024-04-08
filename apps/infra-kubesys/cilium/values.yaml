@@ -8,6 +8,8 @@ cilium:
     relay:
       enabled: true
       rollOutPods: true
+    tls:
+      enabled: false
     ui:
       enabled: true
       rollOutPods: true
