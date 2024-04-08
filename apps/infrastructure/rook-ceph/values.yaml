@@ -216,7 +216,6 @@ rook-ceph-cluster:
           csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
           csi.storage.k8s.io/fstype: ext4
 
-
   cephFileSystemVolumeSnapshotClass:
     enabled: true
     name: fs

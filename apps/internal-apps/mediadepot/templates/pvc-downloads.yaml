@@ -11,4 +11,4 @@ spec:
   resources:
     requests:
       storage: 200Gi
-  storageClassName: fs-silver
+  storageClassName: fs-gold-r1
