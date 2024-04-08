@@ -5,6 +5,10 @@ tautulli:
     automountServiceAccountToken: false
     labels:
       application: tautulli
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "2"
     securityContext:
       seccompProfile:
         type: RuntimeDefault
