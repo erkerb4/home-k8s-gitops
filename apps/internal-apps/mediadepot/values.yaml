@@ -299,6 +299,18 @@ sonarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
+        egress:
+          - ports:
+            - port: 53
+              protocol: UDP
+            to:
+            - namespaceSelector: {}
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
 
 radarr:
   global:
