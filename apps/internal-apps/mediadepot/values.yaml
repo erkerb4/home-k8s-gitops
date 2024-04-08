@@ -16,10 +16,10 @@ sabnzbd:
         - weight: 75
           preference:
             matchExpressions:
-            - key: amd.cpu.model
+            - key: feature.node.kubernetes.io/cpu-model.family
               operator: In
               values:
-              - "5750ge"
+              - "25"
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 50
