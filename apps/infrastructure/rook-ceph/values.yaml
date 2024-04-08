@@ -91,7 +91,7 @@ rook-ceph-cluster:
                   - key: app.kubernetes.io/part-of
                     operator: In
                     values:
-                    - ec-fs-silver
+                    - fs-silver
                 topologyKey: kubernetes.io/hostname
           resources:
             limits:
@@ -140,7 +140,7 @@ rook-ceph-cluster:
                   - key: app.kubernetes.io/part-of
                     operator: In
                     values:
-                    - ec-fs-silver-r1
+                    - fs-silver-r1
                 topologyKey: kubernetes.io/hostname
           resources:
             limits:
