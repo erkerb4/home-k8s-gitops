@@ -2,7 +2,10 @@ overseerr:
   global:
     fullnameOverride: overseer
   defaultPodOptions:
-    dnsPolicy: "Default"
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "2"
     automountServiceAccountToken: false
     labels:
       application: overseer

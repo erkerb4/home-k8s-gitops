@@ -3,7 +3,10 @@ plex:
     fullnameOverride: plex
   defaultPodOptions:
     automountServiceAccountToken: false
-    dnsPolicy: "Default"
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "2"
     securityContext:
       seccompProfile:
         type: RuntimeDefault
