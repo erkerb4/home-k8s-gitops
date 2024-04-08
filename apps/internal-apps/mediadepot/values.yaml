@@ -109,7 +109,7 @@ sabnzbd:
       type: persistentVolumeClaim
       accessMode: ReadWriteOnce
       size: 150Gi
-      storageClass: ec-gold
+      storageClass: fs-gold-r1
       globalMounts:
         - path: /incomplete-downloads
     downloads:
