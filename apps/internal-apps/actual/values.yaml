@@ -3,6 +3,10 @@ actual:
     fullnameOverride: actual
   defaultPodOptions:
     automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "2"
     labels:
       application: actual
     securityContext:

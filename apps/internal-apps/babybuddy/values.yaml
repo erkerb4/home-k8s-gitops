@@ -3,6 +3,10 @@ babybuddy:
     fullnameOverride: babybuddy
   defaultPodOptions:
     automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "2"
     labels:
       application: babybuddy
     securityContext:

@@ -2,8 +2,11 @@ sabnzbd:
   global:
     fullnameOverride: sabnzbd
   defaultPodOptions:
-    dnsPolicy: Default
     automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "2"
     securityContext:
       seccompProfile:
         type: RuntimeDefault
@@ -144,8 +147,11 @@ sonarr:
   global:
     fullnameOverride: sonarr
   defaultPodOptions:
-    dnsPolicy: Default
     automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "2"
     labels:
       application: sonarr
     securityContext:
@@ -280,8 +286,11 @@ radarr:
   global:
     fullnameOverride: radarr
   defaultPodOptions:
-    dnsPolicy: Default
     automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "2"
     labels:
       application: radarr
     securityContext:
