@@ -98,9 +98,9 @@ sabnzbd:
     incomplete-downloads:
       enabled: true
       type: persistentVolumeClaim
-      accessMode: ReadWriteMany
+      accessMode: ReadWriteOnce
       size: 150Gi
-      storageClass: fs-silver
+      storageClass: ec-gold
       globalMounts:
         - path: /incomplete-downloads
     downloads:
