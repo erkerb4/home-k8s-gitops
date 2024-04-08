@@ -52,7 +52,7 @@ spec:
       project: internal-apps
       syncPolicy:
         automated:
-          prune: true
+          prune: false
           selfHeal: true
         syncOptions:
         - PruneLast=true
