@@ -11,4 +11,4 @@ spec:
   resources:
     requests:
       storage: 200Gi
-  storageClassName: ec-gold-r1
+  storageClassName: fs-silver-r1
