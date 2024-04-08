@@ -13,7 +13,14 @@ plex:
     affinity:
       nodeAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 50
+        - weight: 100
+          preference:
+            matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+              - "arcus"
+        - weight: 75
           preference:
             matchExpressions:
             - key: kubernetes.io/hostname
