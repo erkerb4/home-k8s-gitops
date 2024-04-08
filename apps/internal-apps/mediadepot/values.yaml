@@ -11,6 +11,15 @@ sabnzbd:
       seccompProfile:
         type: RuntimeDefault
     affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 75
+          preference:
+            matchExpressions:
+            - key: amd.cpu.model
+              operator: In
+              values:
+              - "5750ge"
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 50

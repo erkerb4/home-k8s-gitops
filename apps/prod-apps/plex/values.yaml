@@ -16,17 +16,17 @@ plex:
         - weight: 100
           preference:
             matchExpressions:
-            - key: kubernetes.io/hostname
+            - key: amd.gpu.vram
               operator: In
               values:
-              - "arcus"
+              - "1024Mi"
         - weight: 75
           preference:
             matchExpressions:
-            - key: kubernetes.io/hostname
+            - key: amd.cpu.model
               operator: In
               values:
-              - "intortus"
+              - "5750ge"
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 35
