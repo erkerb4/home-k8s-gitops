@@ -117,6 +117,55 @@ rook-ceph-cluster:
           csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
           csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
           csi.storage.k8s.io/fstype: ext4
+    - name: fs-silver-r1
+      spec:
+        metadataPool:
+          deviceClass: ssd
+          replicated:
+            size: 1
+        dataPools:
+          - failureDomain: host
+            replicated:
+              size: 1
+            name: data1
+        metadataServer:
+          activeCount: 1
+          activeStandby: false
+          priorityClassName: system-cluster-critical
+          placement:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/part-of
+                    operator: In
+                    values:
+                    - ec-fs-silver-r1
+                topologyKey: kubernetes.io/hostname
+          resources:
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+            requests:
+              cpu: "500m"
+              memory: "4Gi"
+      storageClass:
+        enabled: true
+        isDefault: false
+        name: fs-silver-r1
+        pool: data1
+        reclaimPolicy: Delete
+        allowVolumeExpansion: true
+        volumeBindingMode: "Immediate"
+        mountOptions: []
+        parameters:
+          csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+          csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+          csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+          csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+          csi.storage.k8s.io/fstype: ext4
 
   cephFileSystemVolumeSnapshotClass:
     enabled: true
