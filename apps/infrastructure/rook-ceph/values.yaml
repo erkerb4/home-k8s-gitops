@@ -176,7 +176,7 @@ rook-ceph-cluster:
           - failureDomain: host
             replicated:
               size: 1
-            name: data1
+            name: data0
         metadataServer:
           activeCount: 1
           activeStandby: false
