@@ -8,8 +8,8 @@ ffk:
         - name: ndots
           value: "2"
     securityContext:
-      runAsUser: 999
-      fsGroup: 999
+      runAsUser: 1001
+      fsGroup: 1001
       fsGroupChangePolicy: "OnRootMismatch"
       runAsNonRoot: true
       seccompProfile:
