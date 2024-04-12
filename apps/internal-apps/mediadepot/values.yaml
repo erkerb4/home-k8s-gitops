@@ -309,6 +309,10 @@ sonarr:
                 matchLabels:
                   k8s-app: kube-dns
           - to:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: sabnzbd 
+          - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
 
@@ -460,6 +464,10 @@ radarr:
               podSelector:
                 matchLabels:
                   k8s-app: kube-dns
+          - to:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: sabnzbd 
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
