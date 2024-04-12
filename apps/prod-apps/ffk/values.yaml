@@ -332,7 +332,7 @@ ffk-db:
     config:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ceph-block-gold
+      storageClass: ec-gold
       accessMode: ReadWriteOnce
       size: "2Gi"
       globalMounts:
