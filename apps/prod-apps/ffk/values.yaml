@@ -189,10 +189,6 @@ ffk:
       rules:
         ingress:
           - from:
-              - podSelector:
-                  matchLabels:
-                    application: database
-          - from:
               - namespaceSelector:
                   matchLabels:
                     name: traefik
@@ -211,7 +207,7 @@ ffk:
           - to:
               - podSelector:
                   matchLabels:
-                    application: database
+                    app.kubernetes.io/component: db
 
 ffk-db:
   global:
@@ -356,7 +352,7 @@ ffk-db:
           - from:
               - podSelector:
                   matchLabels:
-                    application: ghost
+                    app.kubernetes.io/component: ghost
           # - from:
           #     - podSelector:
           #         matchLabels:
@@ -370,10 +366,10 @@ ffk-db:
             ports:
               - port: 53
                 protocol: UDP
-          - to:
-              - podSelector:
-                  matchLabels:
-                    application: ghost
+          # - to:
+          #     - podSelector:
+          #         matchLabels:
+          #           application: ghost
 
 backupTargets:
   &target backblaze-palebluedot:
