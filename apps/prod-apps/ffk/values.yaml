@@ -248,8 +248,6 @@ ffk-db:
       strategy: OnDelete
       containers:
         main:
-          args:
-            - "--ignore-db-dir=lost+found"
           image:
             repository: mysql
             tag: "8.0.36-debian"
@@ -321,7 +319,6 @@ ffk-db:
             capabilities:
               drop:
               - ALL
-            readOnlyRootFilesystem: true
           resources:
             limits:
               cpu: 1000m
