@@ -33,7 +33,7 @@ ffk:
         main:
           image:
             repository: bitnami/ghost
-            tag: "5.73.2"
+            tag: "5.82.1"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -251,7 +251,7 @@ ffk-db:
         main:
           image:
             repository: mysql
-            tag: "8.0.35-debian"
+            tag: "8.0.36-debian"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
