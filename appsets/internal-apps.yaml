@@ -18,7 +18,7 @@ spec:
         notifications.argoproj.io/subscribe.on-health-degraded.slack: argo
         notifications.argoproj.io/subscribe.on-sync-failed.slack: argo
         notifications.argoproj.io/subscribe.on-sync-succeeded.slack: argo
-              
+
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
         argocd-image-updater.argoproj.io/image-list: sabnzbd=quay.io/linuxserver.io/sabnzbd:4.2.x,radarr=quay.io/linuxserver.io/radarr:5.2.x,changed=ghcr.io/dgtlmoon/changedetection.io:0.x,tautulli=ghcr.io/linuxserver/tautulli:2.x,babybuddy=registry.gitlab.com/linuxserver.io/docker-babybuddy/babybuddy:1.x,omada=mbentley/omada-controller:5.13.x
@@ -45,14 +45,14 @@ spec:
 
         argocd-image-updater.argoproj.io/omada.helm.image-name: omada.controllers.main.containers.main.image
         argocd-image-updater.argoproj.io/omada.helm.image-tag: omada.controllers.main.containers.main.tag
-        
+
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:
       project: internal-apps
       syncPolicy:
         automated:
-          prune: false
+          prune: true
           selfHeal: true
         syncOptions:
         - PruneLast=true

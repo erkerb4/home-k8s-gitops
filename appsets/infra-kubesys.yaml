@@ -24,7 +24,7 @@ spec:
       project: infra-kubesys
       syncPolicy:
         automated:
-          prune: false
+          prune: true
           selfHeal: true
         syncOptions:
         - PruneLast=true

@@ -18,21 +18,21 @@ spec:
         notifications.argoproj.io/subscribe.on-health-degraded.slack: argo
         notifications.argoproj.io/subscribe.on-sync-failed.slack: argo
         notifications.argoproj.io/subscribe.on-sync-succeeded.slack: argo
-        
+
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
         argocd-image-updater.argoproj.io/image-list: cf=cloudflare/cloudflared:2024.x
 
         argocd-image-updater.argoproj.io/cf.helm.image-name: cloudflare-tunnel.image.repository
         argocd-image-updater.argoproj.io/cf.helm.image-tag: cloudflare-tunnel.image.tag
-        
+
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:
       project: infrastructure
       syncPolicy:
         automated:
-          prune: false
+          prune: true
           selfHeal: true
         syncOptions:
         - PruneLast=true

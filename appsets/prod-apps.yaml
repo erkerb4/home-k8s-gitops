@@ -48,9 +48,9 @@ spec:
     spec:
       project: prod-apps
       syncPolicy:
-        # automated:
-        #   prune: false
-        #   selfHeal: true
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
         - PruneLast=true
         - ApplyOutOfSyncOnly=true
