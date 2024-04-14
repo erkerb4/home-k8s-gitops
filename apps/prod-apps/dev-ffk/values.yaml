@@ -440,11 +440,11 @@ devffk-db:
 #               - matchLabels:
 #                   application: database
 
-infisicalSecret:
-  ffk-db:
-    syncInterval: 0
-  ghost-config-vars:
-    syncInterval: 0
+# infisicalSecret:
+#   ffk-db:
+#     syncInterval: 0
+#   ghost-config-vars:
+#     syncInterval: 0
   # &target backblaze-palebluedot:
   #   syncInterval: 900
   #   secretsPath: global
