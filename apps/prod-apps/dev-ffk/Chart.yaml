@@ -12,8 +12,10 @@ dependencies:
   - name: app-template
     repository: "@bjws"
     version: "2.3.0"
+    condition: ffk.deploy
     alias: ffk
   - name: app-template
     repository: "@bjws"
     version: "2.3.0"
     alias: devffk-db
+    condition: ffk.deploy

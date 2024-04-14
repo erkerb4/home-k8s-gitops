@@ -8,8 +8,8 @@ ffk:
         - name: ndots
           value: "2"
     securityContext:
-      runAsUser: 1001
-      fsGroup: 1001
+      runAsUser: 999
+      fsGroup: 999
       fsGroupChangePolicy: "OnRootMismatch"
       runAsNonRoot: true
       seccompProfile:
@@ -318,10 +318,10 @@ ffk-db:
           resources:
             limits:
               cpu: 1000m
-              memory: 512Mi
+              memory: 768Mi
             requests:
               cpu: 125m
-              memory: 256Mi
+              memory: 384Mi
   persistence:
     config:
       enabled: true
@@ -430,7 +430,6 @@ backupPlan:
             labels:
               - matchLabels:
                   app.kubernetes.io/component: db
-          # containerRegex: ffk-db-*
 
 infisicalSecret:
   ffk-db:

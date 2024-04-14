@@ -1,4 +1,5 @@
 ffk:
+  deploy: false
   global:
     fullnameOverride: dev-ffk
   defaultPodOptions:
@@ -133,7 +134,7 @@ ffk:
       nameOverride: ghost
       annotations:
         traefik.ingress.kubernetes.io/service.serversscheme: http
-        traefik.ingress.kubernetes.io/service.passhostheader: "true" 
+        traefik.ingress.kubernetes.io/service.passhostheader: "true"
       extraSelectorLabels:
         application: ghost
       ports:
@@ -330,7 +331,7 @@ devffk-db:
       size: "2Gi"
       globalMounts:
         - path: /var/lib/mysql
-        
+
   service:
     main:
       enabled: false
