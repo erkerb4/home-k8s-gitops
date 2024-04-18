@@ -14,5 +14,5 @@ sources:
   - https://github.com/cilium/cilium
 dependencies:
   - name: cilium
-    version: "1.15.4"
+    version: "1.15.1"
     repository: '@cilium'
