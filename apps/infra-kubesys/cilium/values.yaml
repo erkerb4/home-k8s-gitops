@@ -54,11 +54,12 @@ cilium:
     leaseDuration: 15s
     leaseRenewDeadline: 5s
     leaseRetryPeriod: 2s
-  # routingMode: "native"
-  # ipv4NativeRoutingCIDR: "172.30.0.0/20"
-  # autoDirectNodeRoutes: true
-  # installNoConntrackIptablesRules: true
+  routingMode: "native"
+  ipv4NativeRoutingCIDR: "172.30.0.0/20"
+  autoDirectNodeRoutes: true
+  installNoConntrackIptablesRules: true
   annotateK8sNode: true
+  enableIPv4BIGTCP: true
   bpf:
     masquerade: true
   ipMasqAgent:
@@ -66,7 +67,6 @@ cilium:
     config:
       nonMasqueradeCIDRs:
        - 172.30.0.0/16
-  enableIPv4BIGTCP: true
   loadBalancer:
     acceleration: best-effort
     mode: hybrid
