@@ -57,6 +57,7 @@ cilium:
   # routingMode: "native"
   # ipv4NativeRoutingCIDR: "172.30.0.0/20"
   # autoDirectNodeRoutes: true
+  # installNoConntrackIptablesRules: true
   annotateK8sNode: true
   bpf:
     masquerade: true
@@ -66,7 +67,6 @@ cilium:
       nonMasqueradeCIDRs:
        - 172.30.0.0/16
   enableIPv4BIGTCP: true
-  installNoConntrackIptablesRules: true
   loadBalancer:
     acceleration: best-effort
     mode: hybrid
