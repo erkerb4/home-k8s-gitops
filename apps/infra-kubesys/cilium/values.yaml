@@ -56,7 +56,7 @@ cilium:
     leaseRetryPeriod: 2s
   # routingMode: "native"
   # ipv4NativeRoutingCIDR: "172.30.0.0/20"
-  autoDirectNodeRoutes: true
+  # autoDirectNodeRoutes: true
   annotateK8sNode: true
   bpf:
     masquerade: true
