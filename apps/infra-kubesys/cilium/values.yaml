@@ -12,6 +12,8 @@ cilium:
       enabled: false
     ui:
       enabled: true
+      standalone:
+        enabled: true
       rollOutPods: true
       ingress:
         enabled: true
