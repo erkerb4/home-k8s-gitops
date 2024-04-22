@@ -40,7 +40,7 @@ sabnzbd:
         secrets.infisical.com/auto-reload: "true"
       initContainers:
         copy-config:
-          image: 
+          image:
             repository: "quay.io/prometheus/busybox"
             tag: "latest"
             pullPolicy: Always
@@ -193,7 +193,7 @@ sonarr:
         secrets.infisical.com/auto-reload: "true"
       initContainers:
         copy-config:
-          image: 
+          image:
             repository: "quay.io/prometheus/busybox"
             tag: "latest"
             pullPolicy: Always
@@ -311,7 +311,7 @@ sonarr:
           - to:
               - podSelector:
                   matchLabels:
-                    app.kubernetes.io/component: sabnzbd 
+                    app.kubernetes.io/component: sabnzbd
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
@@ -349,7 +349,7 @@ radarr:
         secrets.infisical.com/auto-reload: "true"
       initContainers:
         copy-config:
-          image: 
+          image:
             repository: "quay.io/prometheus/busybox"
             tag: "latest"
             pullPolicy: Always
@@ -467,7 +467,7 @@ radarr:
           - to:
               - podSelector:
                   matchLabels:
-                    app.kubernetes.io/component: sabnzbd 
+                    app.kubernetes.io/component: sabnzbd
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
@@ -507,14 +507,14 @@ backupPlan:
           default: false
           scheduleConfig:
             schedule:
-            - 10 4 * 1/3 *
+            - 40 4 * 1/3 *
       incremental-policy:
         type: Schedule
         spec:
           default: false
           scheduleConfig:
             schedule:
-            - 15 4 * * *
+            - 45 4 * * *
     excludeResources:
       gvkSelector:
       - groupVersionKind:

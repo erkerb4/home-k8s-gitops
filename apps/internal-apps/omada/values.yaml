@@ -179,14 +179,14 @@ backupPlan:
           default: false
           scheduleConfig:
             schedule:
-            - 10 4 * 1/3 *
+            - 10 5 * 1/3 *
       incremental-policy:
         type: Schedule
         spec:
           default: false
           scheduleConfig:
             schedule:
-            - 15 4 * * *
+            - 15 5 * * *
     excludeResources:
       gvkSelector:
       - groupVersionKind:
