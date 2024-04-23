@@ -420,16 +420,16 @@ backupPlan:
           operator: In
           values:
           - "true"
-    backupHook: mysql
-    hookConfig:
-      mode: Sequential
-      hooks:
-        - hook:
-            name: mysql-hook
-          podSelector:
-            labels:
-              - matchLabels:
-                  app.kubernetes.io/component: db
+    # backupHook: mysql
+    # hookConfig:
+    #   mode: Sequential
+    #   hooks:
+    #     - hook:
+    #         name: mysql-hook
+    #       podSelector:
+    #         labels:
+    #           - matchLabels:
+    #               app.kubernetes.io/component: db
 
 infisicalSecret:
   ffk-db:
