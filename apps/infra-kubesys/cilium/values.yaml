@@ -46,7 +46,7 @@ cilium:
     enabled: true
     hostNamespaceOnly: true
   externalIPs:
-    enabled: false
+    enabled: true
   nodePort:
     enabled: true
   hostPort:
