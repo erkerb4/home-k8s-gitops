@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zen-http
+  annotations:
+    traefik.ingress.kubernetes.io/service.nativelb: "true"
+    traefik.ingress.kubernetes.io/service.serversscheme: http
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+spec:
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: zen-http
+  labels:
+    kubernetes.io/service-name: zen-http
+addressType: IPv4
+ports:
+  - name: http
+    appProtocol: http
+    port: 5000
+endpoints:
+  - addresses:
+      - "192.168.30.20"
+    conditions:
+      ready: true
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zen-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: le-prod
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: epyc.xtr.pub
+    http:
+      paths:
+      - backend:
+          service:
+            name: zen-http
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - epyc.xtr.pub
+    secretName: tls-secret-epyc
