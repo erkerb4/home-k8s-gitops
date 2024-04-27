@@ -19,6 +19,8 @@ mealie:
   controllers:
     mealie:
       type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
       containers:
         main:
           image:
@@ -33,6 +35,26 @@ mealie:
             MAX_WORKERS: 1
             WEB_CONCURRENCY: 1
             BASE_URL: "https://mealie.xtr.pub"
+            SMTP_HOST:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: smtp_host
+            SMTP_FROM_EMAIL:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: smtp_from_email
+            SMTP_USER:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: smtp_user
+            SMTP_PASSWORD:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: smtp_password
           probes:
             liveness:
               enabled: true
@@ -122,3 +144,7 @@ mealie:
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
+
+infisicalSecret:
+  config-vars:
+    syncInterval: 900
