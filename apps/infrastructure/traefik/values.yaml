@@ -4,7 +4,7 @@ traefik:
     general:
       level: ERROR
     access:
-      enabled: false
+      enabled: true
       format: json
   ingressClass:
     enabled: true
@@ -65,13 +65,13 @@ traefik:
       http3:
         enabled: false
       forwardedHeaders:
-        trustedIPs: 
+        trustedIPs:
           - 172.30.0.0/20
           - 172.30.16.0/23
           - 192.168.30.0/26
       middlewares:
         - traefik-security-headers@kubernetescrd
-      
+
     metrics:
       port: 9100
       expose: true
@@ -128,7 +128,7 @@ traefik:
               app.kubernetes.io/name: '{{ template "traefik.name" . }}'
               app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
           topologyKey: kubernetes.io/hostname
-          
+
   ingressRoute:
     dashboard:
       enabled: true

@@ -1,0 +1,124 @@
+mealie:
+  global:
+    fullnameOverride: mealie
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    labels:
+      application: mealie
+    securityContext:
+      runAsUser: 8123
+      fsGroup: 8123
+      fsGroupChangePolicy: "OnRootMismatch"
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    mealie:
+      type: deployment
+      containers:
+        main:
+          image:
+            repository: ghcr.io/mealie-recipes/mealie
+            tag: "v1.5.1"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            ALLOW_SIGNUP: true
+            PUID: 8123
+            PGID: 8123
+            MAX_WORKERS: 1
+            WEB_CONCURRENCY: 1
+            BASE_URL: "https://mealie.xtr.pub"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+          resources:
+            limits:
+              cpu: "500m"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+  service:
+    app:
+      controller: mealie
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+        traefik.ingress.kubernetes.io/service.passhostheader: "true"
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 9000
+          protocol: HTTP
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: mealie.xtr.pub
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              service:
+                identifier: app
+                port: http
+      tls:
+      - hosts:
+        - mealie.xtr.pub
+        secretName: tls-secret
+  persistence:
+    config:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "2Gi"
+      globalMounts:
+        - path: /app/data
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: mealie
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0

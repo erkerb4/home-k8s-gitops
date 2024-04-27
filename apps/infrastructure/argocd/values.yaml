@@ -63,7 +63,7 @@ argo-cd:
     repositories:
       argo:
         name: argo
-        url: https://argoproj.github.io/argo-helm 
+        url: https://argoproj.github.io/argo-helm
         type: helm
       traefik:
         name: traefik
@@ -187,7 +187,7 @@ argo-cd:
     #     - slack:palebluedot
     #     triggers:
     #     - on-sync-status-unknown
-    templates: 
+    templates:
       template.app-deployed: |
         email:
           subject: New version of an application {{.app.metadata.name}} is up and running.
@@ -537,7 +537,7 @@ argocd-apps:
       namespaceResourceBlacklist: []
       namespaceResourceWhitelist: []
       orphanedResources: {}
-    
+
     infra-kubesys:
       namespace: argocd
       additionalLabels: {}
@@ -635,6 +635,8 @@ argocd-apps:
       - namespace: omada
         server: https://kubernetes.default.svc
       - namespace: actual
+        server: https://kubernetes.default.svc
+      - namespace: mealie
         server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
