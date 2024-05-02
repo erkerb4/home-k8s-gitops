@@ -69,9 +69,11 @@ cilium:
     config:
       nonMasqueradeCIDRs:
        - 172.30.0.0/16
+  tunnelProtocol: geneve
   loadBalancer:
     acceleration: best-effort
-    mode: hybrid
+    mode: dsr
+    dsrDispatch: geneve
 
 lbIP:
   xtr-pool:
