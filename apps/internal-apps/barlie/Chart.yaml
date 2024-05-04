@@ -1,0 +1,15 @@
+---
+apiVersion: v2
+description: Bar assistant is a all-in-one solution for managing your home bar.
+name: barlie
+version: "3.12.1"
+keywords:
+  - bar-assistant
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/karlomikus/bar-assistant
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "3.1.0"
+    alias: barlie

@@ -1,0 +1,10 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: stripprefix
+  namespace: {{ $.Release.Namespace }}
+spec:
+  stripPrefixRegex:
+    regex:
+      - /[a-zA-Z0-9_-]*(/|$)

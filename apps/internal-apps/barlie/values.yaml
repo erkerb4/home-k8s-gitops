@@ -1,0 +1,352 @@
+barlie:
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/instance: barlie
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    meilisearch:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          image:
+            repository: getmeili/meilisearch
+            tag: "v1.6"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            MEILI_MASTER_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: meili_master_key
+            MEILI_ENV: production
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            allowPrivilegeEscalation: false
+          resources:
+            limits:
+              cpu: "200m"
+              memory: 196Mi
+            requests:
+              cpu: 50m
+              memory: 32Mi
+    redis:
+      type: deployment
+      containers:
+        main:
+          image:
+            repository: redis
+            tag: "7.2.4"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            ALLOW_EMPTY_PASSWORD: yes
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            runAsUser: 999
+            capabilities:
+              drop:
+              - ALL
+            allowPrivilegeEscalation: false
+          resources:
+            limits:
+              cpu: "250m"
+              memory: 128Mi
+            requests:
+              cpu: 75m
+              memory: 64Mi
+    assistant:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          image:
+            repository: barassistant/server
+            tag: "v3"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            APP_URL: "https://barlie.xtr.pub/bar"
+            LOG_CHANNEL: stderr
+            MEILISEARCH_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: meili_master_key
+            MEILISEARCH_HOST: http://barlie-meilisearch:7700
+            REDIS_HOST: barlie-redis
+            ALLOW_REGISTRATION: true
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          resources:
+            limits:
+              cpu: "750m"
+              memory: 384Mi
+            requests:
+              cpu: 75m
+              memory: 128Mi
+    salt-rim:
+      type: deployment
+      containers:
+        main:
+          image:
+            repository: barassistant/salt-rim
+            tag: "v2"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            API_URL: "https://barlie.xtr.pub/bar/"
+            LOG_CHANNEL: stderr
+            MEILISEARCH_URL: "https://barlie.xtr.pub/search/"
+            DEFAULT_LOCALE: en-US
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          resources:
+            limits:
+              cpu: "500m"
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 96Mi
+
+  service:
+    meilisearch:
+      controller: meilisearch
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 7700
+          protocol: HTTP
+    assistant:
+      controller: assistant
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 3000
+          protocol: HTTP
+    salt-rim:
+      controller: salt-rim
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+        traefik.ingress.kubernetes.io/service.passhostheader: "true"
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 8080
+          protocol: HTTP
+    redis:
+      controller: redis
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 6379
+          protocol: HTTP
+  ingress:
+    salt-rim:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        traefik.ingress.kubernetes.io/router.priority: "10"
+      hosts:
+        - host: barlie.xtr.pub
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                identifier: salt-rim
+                port: http
+      tls:
+      - hosts:
+        - barlie.xtr.pub
+        secretName: tls-secret
+    assistant:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        traefik.ingress.kubernetes.io/router.priority: "20"
+        traefik.ingress.kubernetes.io/router.middlewares: "{{ $.Release.Namespace }}-stripprefix@kubernetescrd"
+      hosts:
+        - host: barlie.xtr.pub
+          paths:
+            - path: /bar
+              pathType: Prefix
+              service:
+                identifier: assistant
+                port: http
+      tls:
+      - hosts:
+        - barlie.xtr.pub
+        secretName: tls-secret
+    search:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        traefik.ingress.kubernetes.io/router.priority: "20"
+        traefik.ingress.kubernetes.io/router.middlewares: "{{ $.Release.Namespace }}-stripprefix@kubernetescrd"
+      hosts:
+        - host: barlie.xtr.pub
+          paths:
+            - path: /search
+              pathType: Prefix
+              service:
+                identifier: meilisearch
+                port: http
+      tls:
+      - hosts:
+        - barlie.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    meilidata:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+      advancedMounts:
+        meilisearch:
+          main:
+            - path: /meili_data
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+      advancedMounts:
+        assistant:
+          main:
+            - path: /var/www/cocktails/storage/bar-assistant
+
+  networkpolicies:
+    main:
+      enabled: false
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: barlie
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - podSelector: {}
+        egress:
+          - to:
+              - podSelector: {}
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+    salt-rim:
+      enabled: false
+      controller: salt-rim
+      policyTypes:
+        - Ingress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+    meilisearch:
+      enabled: false
+      controller: meilisearch
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+    assistant:
+      enabled: false
+      controller: assistant
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+
+infisicalSecret:
+  config-vars:
+    syncInterval: 900
