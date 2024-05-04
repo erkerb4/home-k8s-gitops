@@ -638,6 +638,8 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: mealie
         server: https://kubernetes.default.svc
+      - namespace: barlie
+        server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'
