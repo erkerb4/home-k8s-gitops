@@ -215,7 +215,7 @@ barlie:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
         traefik.ingress.kubernetes.io/router.priority: "20"
-        traefik.ingress.kubernetes.io/router.middlewares: "{{ .Release.Namespace }}-stripprefix@kubernetescrd"
+        traefik.ingress.kubernetes.io/router.middlewares: barlie-stripprefix@kubernetescrd
       hosts:
         - host: barlie.xtr.pub
           paths:
@@ -234,7 +234,7 @@ barlie:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
         traefik.ingress.kubernetes.io/router.priority: "20"
-        traefik.ingress.kubernetes.io/router.middlewares: "{{ .Release.Namespace }}-stripprefix@kubernetescrd"
+        traefik.ingress.kubernetes.io/router.middlewares: barlie-stripprefix@kubernetescrd
       hosts:
         - host: barlie.xtr.pub
           paths:
