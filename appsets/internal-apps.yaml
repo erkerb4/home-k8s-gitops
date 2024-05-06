@@ -21,7 +21,7 @@ spec:
 
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: actual=ghcr.io/actualbudget/actual-server:24.x,babybuddy=ghcr.io/linuxserver/babybuddy:2.x,meilisearch=getmeili/meilisearch:v1.8.x,barlie-redis=redis:7.x,barlie-assistant=barassistant/server:3.13.x,barlie-sr=barassistant/salt-rim:2.12.,changed=ghcr.io/dgtlmoon/changedetection.io:0.x,mealie=ghcr.io/mealie-recipes/mealie:v1.x,sabnzbd=quay.io/linuxserver.io/sabnzbd:4.2.x,radarr=quay.io/linuxserver.io/radarr:5.3.x,omada=mbentley/omada-controller:5.13,receipt-fe=noah231515/receipt-wrangler-desktop:latest,receipt-api=noah231515/receipt-wrangler-api:latest,receipt-db=mariadb:10.11.x,tautulli=ghcr.io/linuxserver/tautulli:2.13.x
+        argocd-image-updater.argoproj.io/image-list: actual=ghcr.io/actualbudget/actual-server:~24.x,babybuddy=ghcr.io/linuxserver/babybuddy:2.x,meilisearch=getmeili/meilisearch:v1.8.x,barlie-redis=redis:7.x,barlie-assistant=barassistant/server:3.13.x,barlie-sr=barassistant/salt-rim:2.12.,changed=ghcr.io/dgtlmoon/changedetection.io:0.x,mealie=ghcr.io/mealie-recipes/mealie:v1.x,sabnzbd=quay.io/linuxserver.io/sabnzbd:4.x,radarr=quay.io/linuxserver.io/radarr:5.x,sonarr=quay.io/linuxserver.io/sonarr:4.x,omada=mbentley/omada-controller:5.13,receipt-fe=noah231515/receipt-wrangler-desktop:latest,receipt-api=noah231515/receipt-wrangler-api:latest,receipt-db=mariadb:10.11.x,tautulli=ghcr.io/linuxserver/tautulli:2.13.x
 
         argocd-image-updater.argoproj.io/actual.helm.image-name: actual.controllers.main.containers.main.image.repository
         argocd-image-updater.argoproj.io/actual.helm.image-tag: actual.controllers.main.containers.main.image.tag
@@ -31,15 +31,14 @@ spec:
 
         argocd-image-updater.argoproj.io/meilisearch.helm.image-name: barlie.controllers.meilisearch.containers.main.image.repository
         argocd-image-updater.argoproj.io/meilisearch.helm.image-tag: barlie.controllers.meilisearch.containers.main.image.tag
-        argocd-image-updater.argoproj.io/meilisearch.update-strategy: semver
+        argocd-image-updater.argoproj.io/meilisearch.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
         argocd-image-updater.argoproj.io/barlie-redis.helm.image-name: barlie.controllers.redis.containers.main.image.repository
         argocd-image-updater.argoproj.io/barlie-redis.helm.image-tag: barlie.controllers.redis.containers.main.image.tag
         argocd-image-updater.argoproj.io/barlie-assistant.helm.image-name: barlie.controllers.assistant.containers.main.image.repository
         argocd-image-updater.argoproj.io/barlie-assistant.helm.image-tag: barlie.controllers.assistant.containers.main.image.tag
-        argocd-image-updater.argoproj.io/barlie-assistant.update-strategy: semver
+        argocd-image-updater.argoproj.io/barlie-assistant.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
         argocd-image-updater.argoproj.io/barlie-sr.helm.image-name: barlie.controllers.salt-rim.containers.main.image.repository
         argocd-image-updater.argoproj.io/barlie-sr.helm.image-tag: barlie.controllers.salt-rim.containers.main.image.tag
-        argocd-image-updater.argoproj.io/barlie-sr.update-strategy: semver
 
         argocd-image-updater.argoproj.io/changed.helm.image-name: changedetection.controllers.changedetection.containers.main.image.repository
         argocd-image-updater.argoproj.io/changed.helm.image-tag: changedetection.controllers.changedetection.containers.main.image.tag
@@ -50,13 +49,13 @@ spec:
         argocd-image-updater.argoproj.io/sabnzbd.helm.image-name: sabnzbd.controllers.sabnzbd.containers.main.image.repository
         argocd-image-updater.argoproj.io/sabnzbd.helm.image-tag: sabnzbd.controllers.sabnzbd.containers.main.image.tag
 
-        # sonarr=quay.io/linuxserver.io/sonarr:4.0.0
-        # argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.image.repository
-        # argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.image.tag
-        # argocd-image-updater.argoproj.io/sonarr.update-strategy: digest
+        argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.controllers.sonarr.containers.main.image.repository
+        argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.image.tag
+        argocd-image-updater.argoproj.io/sonarr.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
 
         argocd-image-updater.argoproj.io/radarr.helm.image-name: radarr.controllers.main.containers.main.image.repository
         argocd-image-updater.argoproj.io/radarr.helm.image-tag: radarr.controllers.main.containers.main.image.tag
+        argocd-image-updater.argoproj.io/radarr.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
 
         argocd-image-updater.argoproj.io/omada.helm.image-name: omada.controllers.omada.containers.main.image.repository
         argocd-image-updater.argoproj.io/omada.helm.image-tag: omada.controllers.omada.containers.main.image.repository
