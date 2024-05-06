@@ -1,6 +1,4 @@
 actual:
-  global:
-    fullnameOverride: actual
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
@@ -17,7 +15,7 @@ actual:
       seccompProfile:
         type: RuntimeDefault
   controllers:
-    actual: 
+    actual:
       type: deployment
       annotations:
         secrets.infisical.com/auto-reload: "true"
@@ -57,7 +55,7 @@ actual:
       controller: actual
       annotations:
         traefik.ingress.kubernetes.io/service.serversscheme: http
-        traefik.ingress.kubernetes.io/service.passhostheader: "true" 
+        traefik.ingress.kubernetes.io/service.passhostheader: "true"
       ports:
         http:
           enabled: true
