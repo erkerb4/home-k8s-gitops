@@ -28,6 +28,10 @@ cloudflare-tunnel:
       replicas: 3
       annotations:
         secrets.infisical.com/auto-reload: "true"
+      strategy: RollingUpdate
+      rollingUpdate:
+        unavailable: 1
+        surge: 0
       containers:
         main:
           image:
