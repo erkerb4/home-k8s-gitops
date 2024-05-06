@@ -31,12 +31,15 @@ spec:
 
         argocd-image-updater.argoproj.io/meilisearch.helm.image-name: barlie.controllers.meilisearch.containers.main.image.repository
         argocd-image-updater.argoproj.io/meilisearch.helm.image-tag: barlie.controllers.meilisearch.containers.main.image.tag
+        argocd-image-updater.argoproj.io/meilisearch.update-strategy: semver
         argocd-image-updater.argoproj.io/barlie-redis.helm.image-name: barlie.controllers.redis.containers.main.image.repository
         argocd-image-updater.argoproj.io/barlie-redis.helm.image-tag: barlie.controllers.redis.containers.main.image.tag
         argocd-image-updater.argoproj.io/barlie-assistant.helm.image-name: barlie.controllers.assistant.containers.main.image.repository
         argocd-image-updater.argoproj.io/barlie-assistant.helm.image-tag: barlie.controllers.assistant.containers.main.image.tag
+        argocd-image-updater.argoproj.io/barlie-assistant.update-strategy: semver
         argocd-image-updater.argoproj.io/barlie-sr.helm.image-name: barlie.controllers.salt-rim.containers.main.image.repository
         argocd-image-updater.argoproj.io/barlie-sr.helm.image-tag: barlie.controllers.salt-rim.containers.main.image.tag
+        argocd-image-updater.argoproj.io/barlie-sr.update-strategy: semver
 
         argocd-image-updater.argoproj.io/changed.helm.image-name: changedetection.controllers.changedetection.containers.main.image.repository
         argocd-image-updater.argoproj.io/changed.helm.image-tag: changedetection.controllers.changedetection.containers.main.image.tag
