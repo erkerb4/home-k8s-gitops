@@ -11,13 +11,16 @@ cloudflare-tunnel:
       runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
-    topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: kubernetes.io/hostname
-      whenUnsatisfiable: DoNotSchedule
-      labelSelector: 
-        matchLabels:
-          application: cloudflare-tunnel
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/instance
+              operator: In
+              values:
+              - cloudflare-tunnel
+          topologyKey: kubernetes.io/hostname
 
   controllers:
     main:
