@@ -1,0 +1,15 @@
+---
+apiVersion: v2
+description: Receipt Wrangler is an easy-to-use self-hosted receipt manager.
+name: receipt-wrangler
+version: "4.3.0"
+keywords:
+  - receipt-wrangler
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/Receipt-Wrangler
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "3.1.0"
+    alias: receipt

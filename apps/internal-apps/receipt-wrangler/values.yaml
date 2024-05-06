@@ -1,0 +1,313 @@
+receipt:
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/instance: receipt
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    frontend:
+      type: deployment
+      containers:
+        main:
+          image:
+            repository: noah231515/receipt-wrangler-desktop
+            tag: "latest"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          resources:
+            limits:
+              cpu: "250m"
+              memory: 192Mi
+            requests:
+              cpu: 75m
+              memory: 128Mi
+    api:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      initContainers:
+        copy-config:
+          image:
+            repository: "quay.io/prometheus/busybox"
+            tag: "latest"
+            pullPolicy: Always
+          command: ["sh", "-c", "cp /cm/config.prod.json /go/api/config/config.prod.json"]
+      containers:
+        main:
+          workingDir: "/go/api"
+          command: "./api"
+          args:
+          - "--env"
+          - "prod"
+          image:
+            repository: noah231515/receipt-wrangler-api
+            tag: "latest"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          # securityContext:
+          #   runAsUser: 999
+          #   capabilities:
+          #     drop:
+          #     - ALL
+          #   allowPrivilegeEscalation: false
+          resources:
+            limits:
+              cpu: "250m"
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+    db:
+      type: statefulset
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      strategy: OnDelete
+      containers:
+        main:
+          image:
+            repository: mariadb
+            tag: "10.11.7"
+            pullPolicy: IfNotPresent
+          args:
+            - "--ignore_db_dirs=lost+found"
+          env:
+            TZ: "America/New_York"
+            MARIADB_ROOT_PASSWORD:
+              valueFrom:
+                secretKeyRef:
+                  name: db-config-vars
+                  key: db-root-password
+            MARIADB_DATABASE:
+              valueFrom:
+                secretKeyRef:
+                  name: db-config-vars
+                  key: db
+            MARIADB_USER:
+              valueFrom:
+                secretKeyRef:
+                  name: db-config-vars
+                  key: db-user
+            MARIADB_PASSWORD:
+              valueFrom:
+                secretKeyRef:
+                  name: db-config-vars
+                  key: db-password
+          probes:
+            liveness:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                    mysqladmin status -uroot -p"${password_aux}"
+                failureThreshold: 3
+                initialDelaySeconds: 120
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+            readiness:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command:
+                  - /bin/bash
+                  - -ec
+                  - |
+                    password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                    mysqladmin status -uroot -p"${password_aux}"
+                failureThreshold: 3
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+            startup:
+              enabled: true
+          resources:
+            limits:
+              cpu: "500m"
+              memory: 384Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+  service:
+    frontend:
+      controller: frontend
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+        traefik.ingress.kubernetes.io/service.passhostheader: "true"
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 80
+          protocol: HTTP
+    api:
+      controller: api
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 8081
+          protocol: HTTP
+    db:
+      controller: db
+      ports:
+        main:
+          enabled: true
+          primary: true
+          port: 3306
+          protocol: HTTP
+
+  ingress:
+    frontend:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: receipts.xtr.pub
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                identifier: frontend
+                port: http
+      tls:
+      - hosts:
+        - receipts.xtr.pub
+        secretName: tls-secret
+    api:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: receipts.xtr.pub
+          paths:
+            - path: /api
+              pathType: Prefix
+              service:
+                identifier: api
+                port: http
+      tls:
+      - hosts:
+        - receipts.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    api-config:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "100Mi"
+      advancedMounts:
+        api:
+          main:
+            - path: /go/api/config
+          copy-config:
+            - path: /go/api/config
+    api-data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-gold
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+      advancedMounts:
+        api:
+          main:
+            - path: /go/api/data
+    api-logs:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "100Mi"
+      advancedMounts:
+        api:
+          main:
+            - path: /go/api/logs
+    api-config-prd-json:
+      enabled: true
+      type: secret
+      name: app-config-vars
+      advancedMounts:
+        api:
+          copy-config:
+            - path: /cm
+    db:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-gold
+      accessMode: ReadWriteOnce
+      size: "250Mi"
+      advancedMounts:
+        db:
+          main:
+            - path: /var/lib/mysql
+
+  networkpolicies:
+    main:
+      enabled: false
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: barlie
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - podSelector: {}
+        egress:
+          - to:
+              - podSelector: {}
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+
+infisicalSecret:
+  app-config-vars:
+    syncInterval: 900
+  db-config-vars:
+    syncInterval: 900
