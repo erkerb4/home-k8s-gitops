@@ -16,5 +16,5 @@ helm:
     value: barassistant/server
     forcestring: true
   - name: barlie.controllers.assistant.containers.main.image.tag
-    value: 3.13.0
+    value: "3.13"
     forcestring: true
