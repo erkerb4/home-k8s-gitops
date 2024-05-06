@@ -640,6 +640,8 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: barlie
         server: https://kubernetes.default.svc
+      - namespace: receipt-wrangler
+        server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'
