@@ -4,7 +4,7 @@ helm:
     value: getmeili/meilisearch
     forcestring: true
   - name: barlie.controllers.meilisearch.containers.main.image.tag
-    value: v1.8
+    value: v1.8.0
     forcestring: true
   - name: barlie.controllers.redis.containers.main.image.repository
     value: redis
