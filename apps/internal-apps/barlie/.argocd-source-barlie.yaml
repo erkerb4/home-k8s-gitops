@@ -4,7 +4,7 @@ helm:
     value: getmeili/meilisearch
     forcestring: true
   - name: barlie.controllers.meilisearch.containers.main.image.tag
-    value: v1.8.0
+    value: v1.8
     forcestring: true
   - name: barlie.controllers.redis.containers.main.image.repository
     value: redis
@@ -16,11 +16,11 @@ helm:
     value: barassistant/server
     forcestring: true
   - name: barlie.controllers.assistant.containers.main.image.tag
-    value: "3.13"
+    value: 3.13.0
     forcestring: true
   - name: barlie.controllers.salt-rim.containers.main.image.repository
     value: barassistant/salt-rim
     forcestring: true
   - name: barlie.controllers.salt-rim.containers.main.image.tag
-    value: "2.12"
+    value: 2.12.0
     forcestring: true
