@@ -6,7 +6,7 @@ plex:
     dnsConfig:
       options:
         - name: ndots
-          value: "2"
+          value: "3"
     securityContext:
       seccompProfile:
         type: RuntimeDefault
@@ -16,10 +16,10 @@ plex:
         - weight: 100
           preference:
             matchExpressions:
-            - key: amd.gpu.vram
+            - key: amd.cpu.model
               operator: In
               values:
-              - "1024Mi"
+              - "5750ge"
         - weight: 75
           preference:
             matchExpressions:
