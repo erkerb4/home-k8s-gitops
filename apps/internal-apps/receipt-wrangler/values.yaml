@@ -11,7 +11,7 @@ receipt:
         whenUnsatisfiable: ScheduleAnyway
         labelSelector:
           matchLabels:
-            app.kubernetes.io/instance: receipt
+            app.kubernetes.io/instance: receipt-wrangler
     securityContext:
       seccompProfile:
         type: RuntimeDefault
