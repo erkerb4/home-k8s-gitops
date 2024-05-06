@@ -1,8 +1,0 @@
-helm:
-  parameters:
-  - name: overseerr.image.repository
-    value: ghcr.io/sct/overseerr
-    forcestring: true
-  - name: overseerr.image.tag
-    value: 1.33.2
-    forcestring: true
