@@ -22,7 +22,7 @@ receipt:
         main:
           image:
             repository: noah231515/receipt-wrangler-desktop
-            tag: "latest"
+            tag: "v4.1.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -60,7 +60,7 @@ receipt:
           - "prod"
           image:
             repository: noah231515/receipt-wrangler-api
-            tag: "latest"
+            tag: "v4.3.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
