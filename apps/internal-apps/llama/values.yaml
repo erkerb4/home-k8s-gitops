@@ -50,11 +50,11 @@ llama:
           resources:
             limits:
               cpu: "6"
-              memory: 9Gi
+              memory: 6Gi
               amd.com/gpu: 1
             requests:
               cpu: "1"
-              memory: 4Gi
+              memory: 2Gi
               amd.com/gpu: 1
 
     webui:
@@ -140,7 +140,7 @@ llama:
       type: persistentVolumeClaim
       storageClass: ec-gold-r1
       accessMode: ReadWriteOnce
-      size: "50Gi"
+      size: "25Gi"
       advancedMounts:
         llama:
           main:
