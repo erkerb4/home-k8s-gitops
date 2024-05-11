@@ -30,7 +30,7 @@ llama:
             repository: erkerb4/llama.cpp-server
             tag: "6.1.1-1"
             pullPolicy: IfNotPresent
-          args: ["--host", "0.0.0.0","-hfr","TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF","-hff","tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf", "-m", "/models/tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf","-n","512", "-ngl","99", "-c", "8192", "-t", "6","--timeout", "900", "--log-disable", "--mlock"]
+          args: ["--host", "0.0.0.0","-hfr","TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF","-hff","tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf","-n","512", "-ngl","99", "-c", "8192", "-t", "6","--timeout", "900", "--log-disable", "--mlock"]
           env:
             TZ: "America/New_York"
             HSA_OVERRIDE_GFX_VERSION: "9.0.0"
@@ -138,13 +138,13 @@ llama:
     data:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ec-gold-r1
-      accessMode: ReadWriteOnce
-      size: "25Gi"
+      storageClass: fs-silver-r1
+      accessMode: ReadWriteMany
+      size: "30Gi"
       advancedMounts:
         llama:
           main:
-            - path: /models
+            - path: /app/models
     web:
       enabled: true
       type: persistentVolumeClaim
