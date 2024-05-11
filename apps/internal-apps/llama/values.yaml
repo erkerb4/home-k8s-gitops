@@ -24,24 +24,63 @@ llama:
   controllers:
     llama:
       type: deployment
+      initContainers:
+        model-init:
+          image:
+            repository: "quay.io/prometheus/busybox"
+            tag: "latest"
+            pullPolicy: IfNotPresent
+          command: ["sh", "-c", "chown 1234:1234 /app/models -Rf && ls -lsatr /app/models/"]
+          # command: ["sh", "-c", "wget --no-clobber -P /app/models https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-fp16.gguf && chown 1234:1234 /app/modesl/ -Rf && ls -al /app/models/"]
       containers:
         main:
           image:
             repository: erkerb4/llama.cpp-server
             tag: "6.1.1-1"
             pullPolicy: IfNotPresent
-          args: ["--host", "0.0.0.0","-hfr","TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF","-hff","tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf","-n","512", "-ngl","99", "-c", "8192", "-t", "6","--timeout", "900", "--log-disable", "--mlock"]
+          args: ["--host", "0.0.0.0","-hfr","microsoft/Phi-3-mini-4k-instruct-gguf","-hff","Phi-3-mini-4k-instruct-fp16.gguf","-n","512", "-ngl","99", "-c", "8192", "-t", "8","--timeout", "900", "--log-disable", "--mlock"]
           env:
             TZ: "America/New_York"
             HSA_OVERRIDE_GFX_VERSION: "9.0.0"
             HCC_AMDGPU_TARGET: "gfx900"
           probes:
-            liveness:
-              enabled: true
-            readiness:
-              enabled: true
             startup:
               enabled: true
+              custom: true
+              type: HTTP
+              spec:
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 150
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+            readiness:
+              enabled: true
+              custom: true
+              type: HTTP
+              spec:
+                httpGet:
+                  path: /health
+                  scheme: HTTP
+                  port: 8080
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+            liveness:
+              enabled: true
+              custom: true
+              type: HTTP
+              spec:
+                httpGet:
+                  path: /health
+                  scheme: HTTP
+                  port: 8080
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -49,8 +88,8 @@ llama:
               - ALL
           resources:
             limits:
-              cpu: "6"
-              memory: 6Gi
+              cpu: "8"
+              memory: 12Gi
               amd.com/gpu: 1
             requests:
               cpu: "1"
@@ -138,12 +177,14 @@ llama:
     data:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: fs-silver-r1
-      accessMode: ReadWriteMany
+      storageClass: ec-silver-r1
+      accessMode: ReadWriteOnce
       size: "30Gi"
       advancedMounts:
         llama:
           main:
+            - path: /app/models
+          model-init:
             - path: /app/models
     web:
       enabled: true
