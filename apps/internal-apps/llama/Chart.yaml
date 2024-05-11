@@ -1,0 +1,17 @@
+---
+apiVersion: v2
+description: A simple, powerful publishing platform that allows you to share your stories with the world
+name: llama
+version: "5.72.0"
+keywords:
+  - llama
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/ggerganov/llama.cpp
+  - https://github.com/erkerb4/llama.cpp
+  - https://github.com/open-webui/open-webui
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "3.1.0"
+    alias: llama

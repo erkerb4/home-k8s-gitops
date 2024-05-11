@@ -1,0 +1,187 @@
+llama:
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    securityContext:
+      # runAsUser: 1234
+      # fsGroup: 1234
+      # fsGroupChangePolicy: "Always"
+      # runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+              - "intortus"
+  controllers:
+    llama:
+      type: deployment
+      containers:
+        main:
+          image:
+            repository: erkerb4/llama.cpp-server
+            tag: "6.1.1-1"
+            pullPolicy: IfNotPresent
+          args: ["--host", "0.0.0.0","-hfr","TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF","-hff","tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf", "-m", "/models/tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf","-n","512", "-ngl","99", "-c", "8192", "-t", "8","--timeout", "900", "--log-disable", "--mlock"]
+          env:
+            TZ: "America/New_York"
+            HSA_OVERRIDE_GFX_VERSION: "9.0.0"
+            HCC_AMDGPU_TARGET: "gfx900"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+          resources:
+            limits:
+              cpu: "4"
+              memory: 9Gi
+              amd.com/gpu: 1
+            requests:
+              cpu: "1"
+              memory: 4Gi
+              amd.com/gpu: 1
+
+    webui:
+      type: deployment
+      containers:
+        main:
+          image:
+            repository: ghcr.io/open-webui/open-webui
+            tag: "main"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            OPENAI_API_BASE_URL: "http://llama:8080/v1"
+            OPENAI_API_KEYS: "none"
+            WEBUI_AUTH: "false"
+            WEBUI_URL: "https://llama.xtr.pub"
+            WEBUI_SECRET_KEY: "APa48aB5pjfdU5mQSktV7mLn6Jj6dS9Nt4G5CP58gfm6CP5KMFctfcFB3ZYNZE7o"
+            ENABLE_LITELLM: "false"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: "150m"
+              memory: 256Mi
+
+  service:
+    llama:
+      controller: llama
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 8080
+          protocol: HTTP
+    webui:
+      controller: webui
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 8080
+          protocol: HTTP
+
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: llama.xtr.pub
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              service:
+                identifier: webui
+                port: http
+      tls:
+      - hosts:
+        - llama.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-gold-r1
+      accessMode: ReadWriteOnce
+      size: "50Gi"
+      advancedMounts:
+        llama:
+          main:
+            - path: /models
+    web:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-gold
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+      advancedMounts:
+        webui:
+          main:
+            - path: /app/backend/data
+
+  networkpolicies:
+    main:
+      enabled: false
+      controller: llama
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
