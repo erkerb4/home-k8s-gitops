@@ -71,7 +71,6 @@ llama:
             OPENAI_API_KEYS: "none"
             WEBUI_AUTH: "false"
             WEBUI_URL: "https://llama.xtr.pub"
-            WEBUI_SECRET_KEY: "APa48aB5pjfdU5mQSktV7mLn6Jj6dS9Nt4G5CP58gfm6CP5KMFctfcFB3ZYNZE7o"
             ENABLE_LITELLM: "false"
           probes:
             liveness:
@@ -173,6 +172,8 @@ llama:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
+          - from:
+              - podSelector: {}
         egress:
           - to:
               - namespaceSelector: {}
@@ -182,6 +183,8 @@ llama:
             ports:
               - port: 53
                 protocol: UDP
+          - to:
+              - podSelector: {}
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
