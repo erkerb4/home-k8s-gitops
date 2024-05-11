@@ -30,7 +30,7 @@ llama:
             repository: erkerb4/llama.cpp-server
             tag: "6.1.1-1"
             pullPolicy: IfNotPresent
-          args: ["--host", "0.0.0.0","-hfr","TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF","-hff","tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf", "-m", "/models/tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf","-n","512", "-ngl","99", "-c", "8192", "-t", "8","--timeout", "900", "--log-disable", "--mlock"]
+          args: ["--host", "0.0.0.0","-hfr","TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF","-hff","tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf", "-m", "/models/tinyllama-1.1b-chat-v1.0.Q5_K_M.gguf","-n","512", "-ngl","99", "-c", "8192", "-t", "6","--timeout", "900", "--log-disable", "--mlock"]
           env:
             TZ: "America/New_York"
             HSA_OVERRIDE_GFX_VERSION: "9.0.0"
@@ -49,7 +49,7 @@ llama:
               - ALL
           resources:
             limits:
-              cpu: "4"
+              cpu: "6"
               memory: 9Gi
               amd.com/gpu: 1
             requests:
