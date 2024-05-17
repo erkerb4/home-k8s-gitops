@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.name
+    value: barassistant/salt-rim
+    forcestring: true
+  - name: image.tag
+    value: 2.12.0
+    forcestring: true
