@@ -16,7 +16,7 @@ helm:
     value: barassistant/server
     forcestring: true
   - name: barlie.controllers.assistant.containers.main.image.tag
-    value: "3.14"
+    value: 3.14.0
     forcestring: true
   - name: barlie.controllers.salt-rim.containers.main.image.repository
     value: barassistant/salt-rim
