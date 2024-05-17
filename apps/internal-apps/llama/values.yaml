@@ -38,7 +38,7 @@ llama:
             repository: erkerb4/llama.cpp-server
             tag: "6.1.1-1"
             pullPolicy: IfNotPresent
-          args: ["--host", "0.0.0.0","-hfr","microsoft/Phi-3-mini-4k-instruct-gguf","-hff","Phi-3-mini-4k-instruct-fp16.gguf","-n","512", "-ngl","99", "-c", "8192", "-t", "8","--timeout", "900", "--log-disable", "--mlock"]
+          args: ["--host", "0.0.0.0","-hfr","xtuner/llava-phi-3-mini-gguf","-hff","llava-phi-3-mini-f16.gguf","-n","512", "-ngl","99", "-c", "4096", "-t", "8","--timeout", "900", "--log-disable", "--mlock"]
           env:
             TZ: "America/New_York"
             HSA_OVERRIDE_GFX_VERSION: "9.0.0"
