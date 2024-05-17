@@ -59,7 +59,7 @@ spec:
 
         argocd-image-updater.argoproj.io/omada.helm.image-name: omada.controllers.omada.containers.main.image.repository
         argocd-image-updater.argoproj.io/omada.helm.image-tag: omada.controllers.omada.containers.main.image.repository
-        argocd-image-updater.argoproj.io/omada.allow-tags: 5.13
+        argocd-image-updater.argoproj.io/omada.allow-tags: "5.13"
         argocd-image-updater.argoproj.io/omada.update-strategy: digest
 
         # argocd-image-updater.argoproj.io/receipt-fe.helm.image-name: receipt.controllers.frontend.containers.main.image.repository
