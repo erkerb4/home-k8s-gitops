@@ -1,0 +1,20 @@
+helm:
+  parameters:
+  - name: barlie.controllers.meilisearch.containers.main.image.repository
+    value: getmeili/meilisearch
+    forcestring: true
+  - name: barlie.controllers.meilisearch.containers.main.image.tag
+    value: v1.8.0
+    forcestring: true
+  - name: barlie.controllers.redis.containers.main.image.repository
+    value: redis
+    forcestring: true
+  - name: barlie.controllers.redis.containers.main.image.tag
+    value: 7.2.4
+    forcestring: true
+  - name: image.name
+    value: barassistant/salt-rim
+    forcestring: true
+  - name: image.tag
+    value: 2.12.0
+    forcestring: true
