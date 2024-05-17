@@ -21,7 +21,7 @@ spec:
 
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: actual=ghcr.io/actualbudget/actual-server:~24.x,babybuddy=ghcr.io/linuxserver/babybuddy:~2.4,meilisearch=getmeili/meilisearch:~v1.8.x,barlie-redis=redis:7.x,barlie-assistant=barassistant/server:~3.13,barlie-sr=barassistant/salt-rim:~2.12,changed=ghcr.io/dgtlmoon/changedetection.io:~0.45,mealie=ghcr.io/mealie-recipes/mealie:~v1.6,sabnzbd=ghcr.io/linuxserver/sabnzbd:~4.3,radarr=ghcr.io/linuxserver/radarr:~5.6,sonarr=ghcr.io/linuxserver/sonarr:~4.0,omada=mbentley/omada-controller:5.13,receipt-fe=noah231515/receipt-wrangler-desktop:latest,receipt-api=noah231515/receipt-wrangler-api:latest,receipt-db=mariadb:10.11.x,tautulli=ghcr.io/linuxserver/tautulli:2.13.x
+        argocd-image-updater.argoproj.io/image-list: actual=ghcr.io/actualbudget/actual-server:~24.x,babybuddy=ghcr.io/linuxserver/babybuddy:~2.4,meilisearch=getmeili/meilisearch:~v1.8.x,barlie-redis=redis:7.x,barlie-assistant=barassistant/server:~3.13,barlie-sr=barassistant/salt-rim:~2.12,changed=ghcr.io/dgtlmoon/changedetection.io:~0.45,mealie=ghcr.io/mealie-recipes/mealie:~v1.6,sabnzbd=ghcr.io/linuxserver/sabnzbd:~4.3,radarr=ghcr.io/linuxserver/radarr:~5.6,sonarr=ghcr.io/linuxserver/sonarr:~4.0,omada=mbentley/omada-controller:5.13,receipt-fe=noah231515/receipt-wrangler-desktop:latest,receipt-api=noah231515/receipt-wrangler-api:latest,receipt-db=mariadb:10.11.x,tautulli=ghcr.io/linuxserver/tautulli:~2.13
 
         argocd-image-updater.argoproj.io/actual.helm.image-name: actual.controllers.main.containers.main.image.repository
         argocd-image-updater.argoproj.io/actual.helm.image-tag: actual.controllers.main.containers.main.image.tag
@@ -57,9 +57,10 @@ spec:
         argocd-image-updater.argoproj.io/radarr.helm.image-tag: radarr.controllers.main.containers.main.image.tag
         # argocd-image-updater.argoproj.io/radarr.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
 
-        # argocd-image-updater.argoproj.io/omada.helm.image-name: omada.controllers.omada.containers.main.image.repository
-        # argocd-image-updater.argoproj.io/omada.helm.image-tag: omada.controllers.omada.containers.main.image.repository
-        # argocd-image-updater.argoproj.io/omada.update-strategy: digest
+        argocd-image-updater.argoproj.io/omada.helm.image-name: omada.controllers.omada.containers.main.image.repository
+        argocd-image-updater.argoproj.io/omada.helm.image-tag: omada.controllers.omada.containers.main.image.repository
+        argocd-image-updater.argoproj.io/omada.allow-tags: 5.13
+        argocd-image-updater.argoproj.io/omada.update-strategy: digest
 
         # argocd-image-updater.argoproj.io/receipt-fe.helm.image-name: receipt.controllers.frontend.containers.main.image.repository
         # argocd-image-updater.argoproj.io/receipt-fe.helm.image-tag: receipt.controllers.frontend.containers.main.image.repository
@@ -70,9 +71,8 @@ spec:
         # argocd-image-updater.argoproj.io/receipt-db.helm.image-name: receipt.controllers.db.containers.main.image.repository
         # argocd-image-updater.argoproj.io/receipt-db.helm.image-tag: receipt.controllers.db.containers.main.image.repository
 
-        # argocd-image-updater.argoproj.io/tautulli.helm.image-name: tautulli.controllers.main.containers.main.image.repository
-        # argocd-image-updater.argoproj.io/tautulli.helm.image-tag: tautulli.controllers.main.containers.main.image.tag
-        # argocd-image-updater.argoproj.io/tautulli.ignore-tags: version-v*,v*
+        argocd-image-updater.argoproj.io/tautulli.helm.image-name: tautulli.controllers.main.containers.main.image.repository
+        argocd-image-updater.argoproj.io/tautulli.helm.image-tag: tautulli.controllers.main.containers.main.image.tag
 
       finalizers:
         - resources-finalizer.argocd.argoproj.io
