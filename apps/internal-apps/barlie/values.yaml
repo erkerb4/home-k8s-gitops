@@ -24,7 +24,7 @@ barlie:
         main:
           image:
             repository: getmeili/meilisearch
-            tag: "v1.6"
+            tag: "v1.8.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -92,7 +92,7 @@ barlie:
         main:
           image:
             repository: barassistant/server
-            tag: "3.13.0"
+            tag: "3.14.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -252,7 +252,7 @@ barlie:
     meilidata:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ec-silver
+      storageClass: ec-gold
       accessMode: ReadWriteOnce
       size: "1Gi"
       advancedMounts:
