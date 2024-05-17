@@ -1,0 +1,14 @@
+helm:
+  parameters:
+  - name: image.name
+    value: barassistant/salt-rim
+    forcestring: true
+  - name: image.tag
+    value: "2.12"
+    forcestring: true
+  - name: barlie.controllers.redis.containers.main.image.repository
+    value: redis
+    forcestring: true
+  - name: barlie.controllers.redis.containers.main.image.tag
+    value: 7.2.4
+    forcestring: true
