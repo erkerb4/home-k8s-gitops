@@ -31,7 +31,7 @@ spec:
 
         argocd-image-updater.argoproj.io/meilisearch.helm.image-name: barlie.controllers.meilisearch.containers.main.image.repository
         argocd-image-updater.argoproj.io/meilisearch.helm.image-tag: barlie.controllers.meilisearch.containers.main.image.tag
-        argocd-image-updater.argoproj.io/meilisearch.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
+        # argocd-image-updater.argoproj.io/meilisearch.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
         argocd-image-updater.argoproj.io/meilisearch.ignore-tags: "v\d+\.\d+"
         argocd-image-updater.argoproj.io/barlie-redis.helm.image-name: barlie.controllers.redis.containers.main.image.repository
         argocd-image-updater.argoproj.io/barlie-redis.helm.image-tag: barlie.controllers.redis.containers.main.image.tag
