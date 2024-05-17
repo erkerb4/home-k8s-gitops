@@ -43,8 +43,8 @@ spec:
         argocd-image-updater.argoproj.io/changed.helm.image-name: changedetection.controllers.changedetection.containers.main.image.repository
         argocd-image-updater.argoproj.io/changed.helm.image-tag: changedetection.controllers.changedetection.containers.main.image.tag
 
-        # argocd-image-updater.argoproj.io/mealie.helm.image-name: mealie.controllers.mealie.containers.main.image.repository
-        # argocd-image-updater.argoproj.io/mealie.helm.image-tag: mealie.controllers.mealie.containers.main.image.tag
+        argocd-image-updater.argoproj.io/mealie.helm.image-name: mealie.controllers.mealie.containers.main.image.repository
+        argocd-image-updater.argoproj.io/mealie.helm.image-tag: mealie.controllers.mealie.containers.main.image.tag
 
         # argocd-image-updater.argoproj.io/sabnzbd.helm.image-name: sabnzbd.controllers.sabnzbd.containers.main.image.repository
         # argocd-image-updater.argoproj.io/sabnzbd.helm.image-tag: sabnzbd.controllers.sabnzbd.containers.main.image.tag
