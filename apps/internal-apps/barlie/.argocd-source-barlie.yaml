@@ -4,7 +4,7 @@ helm:
     value: barassistant/salt-rim
     forcestring: true
   - name: image.tag
-    value: 2.12.0
+    value: "2.12"
     forcestring: true
   - name: barlie.controllers.redis.containers.main.image.repository
     value: redis
