@@ -48,8 +48,8 @@ sabnzbd:
       containers:
         main:
           image:
-            repository: quay.io/linuxserver.io/sabnzbd
-            tag: "4.2.3"
+            repository: ghcr.io/linuxserver/sabnzbd
+            tag: "4.3.1"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -201,8 +201,8 @@ sonarr:
       containers:
         main:
           image:
-            repository: quay.io/linuxserver.io/sonarr
-            tag: "4.0.3"
+            repository: ghcr.io/linuxserver/sonarr
+            tag: "4.0.4"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -357,8 +357,8 @@ radarr:
       containers:
         main:
           image:
-            repository: quay.io/linuxserver.io/radarr
-            tag: "5.3.6"
+            repository: ghcr.io/linuxserver/radarr
+            tag: "5.6.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
