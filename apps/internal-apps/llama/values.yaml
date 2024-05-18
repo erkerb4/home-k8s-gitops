@@ -43,6 +43,7 @@ llama:
             TZ: "America/New_York"
             HSA_OVERRIDE_GFX_VERSION: "9.0.0"
             HCC_AMDGPU_TARGET: "gfx900"
+            LLAMA_CUDA_KQUANTS_ITER: 1
           probes:
             startup:
               enabled: true
