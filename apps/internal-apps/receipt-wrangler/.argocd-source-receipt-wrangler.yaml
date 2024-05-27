@@ -3,18 +3,18 @@ helm:
   - name: receipt.controllers.frontend.containers.main.image.repository
     value: noah231515/receipt-wrangler-desktop
     forcestring: true
-  - name: receipt.controllers.frontend.containers.main.image.repository
+  - name: receipt.controllers.frontend.containers.main.image.tag
     value: v4.1.0
     forcestring: true
   - name: receipt.controllers.api.containers.main.image.repository
     value: noah231515/receipt-wrangler-api
     forcestring: true
-  - name: receipt.controllers.api.containers.main.image.repository
+  - name: receipt.controllers.api.containers.main.image.tag
     value: v4.3.0
     forcestring: true
   - name: receipt.controllers.db.containers.main.image.repository
     value: mariadb
     forcestring: true
-  - name: receipt.controllers.db.containers.main.image.repository
+  - name: receipt.controllers.db.containers.main.image.tag
     value: 10.11.8
     forcestring: true
