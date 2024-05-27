@@ -67,11 +67,11 @@ spec:
         argocd-image-updater.argoproj.io/omada.update-strategy: digest
 
         argocd-image-updater.argoproj.io/receipt-fe.helm.image-name: receipt.controllers.frontend.containers.main.image.repository
-        argocd-image-updater.argoproj.io/receipt-fe.helm.image-tag: receipt.controllers.frontend.containers.main.image.repository
+        argocd-image-updater.argoproj.io/receipt-fe.helm.image-tag: receipt.controllers.frontend.containers.main.image.tag
         argocd-image-updater.argoproj.io/receipt-api.helm.image-name: receipt.controllers.api.containers.main.image.repository
-        argocd-image-updater.argoproj.io/receipt-api.helm.image-tag: receipt.controllers.api.containers.main.image.repository
+        argocd-image-updater.argoproj.io/receipt-api.helm.image-tag: receipt.controllers.api.containers.main.image.tag
         argocd-image-updater.argoproj.io/receipt-db.helm.image-name: receipt.controllers.db.containers.main.image.repository
-        argocd-image-updater.argoproj.io/receipt-db.helm.image-tag: receipt.controllers.db.containers.main.image.repository
+        argocd-image-updater.argoproj.io/receipt-db.helm.image-tag: receipt.controllers.db.containers.main.image.tag
 
         argocd-image-updater.argoproj.io/tautulli.helm.image-name: tautulli.controllers.main.containers.main.image.repository
         argocd-image-updater.argoproj.io/tautulli.helm.image-tag: tautulli.controllers.main.containers.main.image.tag
