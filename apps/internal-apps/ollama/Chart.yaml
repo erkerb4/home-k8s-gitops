@@ -1,0 +1,16 @@
+---
+apiVersion: v2
+description: A simple, powerful publishing platform that allows you to share your stories with the world
+name: ollama
+version: "1.0"
+keywords:
+  - llama
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://hub.docker.com/r/ollama/ollama
+  - https://github.com/ollama/ollama/tree/main/docs
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "3.1.0"
+    alias: ollama
