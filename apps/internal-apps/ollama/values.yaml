@@ -80,12 +80,12 @@ ollama:
               - ALL
           resources:
             limits:
-              cpu: "8"
-              memory: 12Gi
+              cpu: "14"
+              memory: 16Gi
               amd.com/gpu: 1
             requests:
-              cpu: "1"
-              memory: 2Gi
+              cpu: "2"
+              memory: 4Gi
               amd.com/gpu: 1
 
   service:
