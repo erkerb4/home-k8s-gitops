@@ -24,6 +24,7 @@ llama:
   controllers:
     llama:
       type: deployment
+      replicas: 0
       initContainers:
         model-init:
           image:

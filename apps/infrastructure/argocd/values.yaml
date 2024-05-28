@@ -644,6 +644,10 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: llama
         server: https://kubernetes.default.svc
+      - namespace: ollama
+        server: https://kubernetes.default.svc
+      - namespace: openwebui
+        server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'
