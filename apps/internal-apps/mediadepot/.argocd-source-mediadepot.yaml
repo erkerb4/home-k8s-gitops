@@ -1,0 +1,20 @@
+helm:
+  parameters:
+  - name: sabnzbd.controllers.sabnzbd.containers.main.image.repository
+    value: ghcr.io/linuxserver/sabnzbd
+    forcestring: true
+  - name: sabnzbd.controllers.sabnzbd.containers.main.image.tag
+    value: 4.3.2
+    forcestring: true
+  - name: radarr.controllers.main.containers.main.image.repository
+    value: ghcr.io/linuxserver/radarr
+    forcestring: true
+  - name: radarr.controllers.main.containers.main.image.tag
+    value: 5.6.0
+    forcestring: true
+  - name: sonarr.controllers.sonarr.containers.main.image.repository
+    value: ghcr.io/linuxserver/sonarr
+    forcestring: true
+  - name: sonarr.image.tag
+    value: 4.0.4
+    forcestring: true
