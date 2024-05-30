@@ -81,7 +81,7 @@ ollama:
           resources:
             limits:
               cpu: "14"
-              memory: 16Gi
+              memory: 18Gi
               amd.com/gpu: 1
             requests:
               cpu: "2"
@@ -126,7 +126,7 @@ ollama:
       type: persistentVolumeClaim
       storageClass: ec-silver-r1
       accessMode: ReadWriteOnce
-      size: "30Gi"
+      size: "75Gi"
       advancedMounts:
         ollama:
           main:
