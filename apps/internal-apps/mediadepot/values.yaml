@@ -317,8 +317,6 @@ sonarr:
                   cidr: 0.0.0.0/0
 
 radarr:
-  global:
-    fullnameOverride: radarr
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
@@ -379,8 +377,6 @@ radarr:
   service:
     app:
       controller: radarr
-      extraSelectorLabels:
-        application: radarr
       ports:
         http:
           enabled: true
