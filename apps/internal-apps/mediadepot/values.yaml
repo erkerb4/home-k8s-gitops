@@ -322,9 +322,7 @@ radarr:
     dnsConfig:
       options:
         - name: ndots
-          value: "2"
-    labels:
-      application: radarr
+          value: "3"
     securityContext:
       seccompProfile:
         type: RuntimeDefault
