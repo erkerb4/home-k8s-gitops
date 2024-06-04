@@ -6,7 +6,7 @@ sabnzbd:
     dnsConfig:
       options:
         - name: ndots
-          value: "2"
+          value: "3"
     securityContext:
       seccompProfile:
         type: RuntimeDefault
@@ -168,7 +168,7 @@ sonarr:
     dnsConfig:
       options:
         - name: ndots
-          value: "2"
+          value: "3"
     labels:
       application: sonarr
     securityContext:
@@ -317,6 +317,8 @@ sonarr:
                   cidr: 0.0.0.0/0
 
 radarr:
+  global:
+    fullnameOverride: radarr
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
