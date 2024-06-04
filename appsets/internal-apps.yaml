@@ -54,11 +54,11 @@ spec:
         argocd-image-updater.argoproj.io/sabnzbd.helm.image-tag: sabnzbd.controllers.sabnzbd.containers.main.image.tag
 
         argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.controllers.sonarr.containers.main.image.repository
-        argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.image.tag
+        argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.controllers.sonarr.containers.main.image.tag
         # argocd-image-updater.argoproj.io/sonarr.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
 
-        argocd-image-updater.argoproj.io/radarr.helm.image-name: radarr.controllers.main.containers.main.image.repository
-        argocd-image-updater.argoproj.io/radarr.helm.image-tag: radarr.controllers.main.containers.main.image.tag
+        argocd-image-updater.argoproj.io/radarr.helm.image-name: radarr.controllers.radarr.containers.main.image.repository
+        argocd-image-updater.argoproj.io/radarr.helm.image-tag: radarr.controllers.radarr.containers.main.image.tag
         # argocd-image-updater.argoproj.io/radarr.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
 
         argocd-image-updater.argoproj.io/omada.helm.image-name: omada.controllers.omada.containers.main.image.repository
