@@ -79,11 +79,11 @@ receipt:
           #   allowPrivilegeEscalation: false
           resources:
             limits:
-              cpu: "1"
-              memory: 768Mi
+              cpu: "4"
+              memory: 1024Mi
             requests:
-              cpu: 75m
-              memory: 128Mi
+              cpu: 100m
+              memory: 64Mi
     db:
       type: statefulset
       annotations:
