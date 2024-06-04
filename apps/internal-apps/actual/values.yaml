@@ -23,7 +23,7 @@ actual:
         main:
           image:
             repository: ghcr.io/actualbudget/actual-server
-            tag: "24.5.0"
+            tag: "24.6.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
