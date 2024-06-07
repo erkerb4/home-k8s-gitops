@@ -19,7 +19,7 @@ openwebui:
         main:
           image:
             repository: ghcr.io/open-webui/open-webui
-            tag: "main@sha256:052057d6fabdc379d7a6151b35d687aef6472c231455ba58e249d2c4e5702353"
+            tag: "main@sha256:7a443ce057d82071c1d469583748ddc29b933230918a910d06266daf10c6ff50"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
