@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/mealie-recipes/mealie
     forcestring: true
   - name: mealie.controllers.mealie.containers.main.image.tag
-    value: v1.9.0
+    value: v1.10.0
     forcestring: true
