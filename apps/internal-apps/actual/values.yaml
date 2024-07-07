@@ -4,7 +4,7 @@ actual:
     dnsConfig:
       options:
         - name: ndots
-          value: "2"
+          value: "3"
     labels:
       application: actual
     securityContext:
