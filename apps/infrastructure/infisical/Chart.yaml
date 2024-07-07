@@ -2,8 +2,8 @@ apiVersion: v2
 name: secrets-operator
 description: A Helm chart for Infisical secrets
 type: application
-version: 0.5.0
+version: 0.6.2
 dependencies:
 - name: secrets-operator
-  version: "0.5.0"
+  version: "0.6.2"
   repository: "@infisical"
