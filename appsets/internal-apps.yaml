@@ -73,8 +73,8 @@ spec:
         argocd-image-updater.argoproj.io/receipt-db.helm.image-name: receipt.controllers.db.containers.main.image.repository
         argocd-image-updater.argoproj.io/receipt-db.helm.image-tag: receipt.controllers.db.containers.main.image.tag
 
-        argocd-image-updater.argoproj.io/tautulli.helm.image-name: tautulli.controllers.main.containers.main.image.repository
-        argocd-image-updater.argoproj.io/tautulli.helm.image-tag: tautulli.controllers.main.containers.main.image.tag
+        argocd-image-updater.argoproj.io/tautulli.helm.image-name: tautulli.controllers.tautulli.containers.main.image.repository
+        argocd-image-updater.argoproj.io/tautulli.helm.image-tag: tautulli.controllers.tautulli.containers.main.image.tag
 
       finalizers:
         - resources-finalizer.argocd.argoproj.io
