@@ -1,11 +1,5 @@
 helm:
   parameters:
-  - name: receipt.controllers.frontend.containers.main.image.repository
-    value: noah231515/receipt-wrangler-desktop
-    forcestring: true
-  - name: receipt.controllers.frontend.containers.main.image.tag
-    value: v4.1.0
-    forcestring: true
   - name: receipt.controllers.api.containers.main.image.repository
     value: noah231515/receipt-wrangler-api
     forcestring: true
