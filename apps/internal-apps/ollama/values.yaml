@@ -28,7 +28,7 @@ ollama:
         main:
           image:
             repository: ollama/ollama
-            tag: "0.1.48-rocm"
+            tag: "0.2.6-rocm"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
