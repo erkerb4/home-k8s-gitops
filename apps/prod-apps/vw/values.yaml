@@ -32,7 +32,7 @@ vw:
           type: deployment
           image:
             repository: ghcr.io/dani-garcia/vaultwarden
-            tag: "1.30.5"
+            tag: "1.31.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
