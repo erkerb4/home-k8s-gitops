@@ -293,11 +293,11 @@ receipt:
             - path: /var/lib/mysql
 
   networkpolicies:
-    main:
-      enabled: false
+    receipt-wrangler:
+      enabled: true
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: barlie
+          app.kubernetes.io/name: receipt-wrangler
       policyTypes:
         - Ingress
         - Egress
@@ -308,14 +308,55 @@ receipt:
         egress:
           - to:
               - podSelector: {}
-          - to:
-              - namespaceSelector: {}
+    api:
+      enabled: true
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/component: api
+      policyTypes:
+        - Ingress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: traefik
                 podSelector:
                   matchLabels:
-                    k8s-app: kube-dns
-            ports:
-              - port: 53
-                protocol: UDP
+                    app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: ollama
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: ollama
+          - ports:
+            - port: 53
+              protocol: UDP
+            to:
+            - namespaceSelector: {}
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+    frontend:
+      enabled: true
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/component: frontend
+      policyTypes:
+        - Ingress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: traefik
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: traefik
+
 
 infisicalSecret:
   app-config-vars:
