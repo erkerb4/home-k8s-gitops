@@ -2,7 +2,7 @@
 apiVersion: v2
 description: Receipt Wrangler is an easy-to-use self-hosted receipt manager.
 name: receipt-wrangler
-version: "4.3.0"
+version: "5.1.0"
 keywords:
   - receipt-wrangler
 sources:
@@ -11,5 +11,5 @@ sources:
 dependencies:
   - name: app-template
     repository: "@bjws"
-    version: "3.1.0"
+    version: "3.3.2"
     alias: receipt

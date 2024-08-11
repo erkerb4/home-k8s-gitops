@@ -22,7 +22,7 @@ receipt:
         main:
           image:
             repository: noah231515/receipt-wrangler-desktop
-            tag: "v4.1.0"
+            tag: "v5.1.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -44,13 +44,13 @@ receipt:
       type: deployment
       annotations:
         secrets.infisical.com/auto-reload: "true"
-      initContainers:
-        copy-config:
-          image:
-            repository: "quay.io/prometheus/busybox"
-            tag: "latest"
-            pullPolicy: Always
-          command: ["sh", "-c", "cp /cm/config.prod.json /go/api/config/config.prod.json"]
+      # initContainers:
+      #   copy-config:
+      #     image:
+      #       repository: "quay.io/prometheus/busybox"
+      #       tag: "latest"
+      #       pullPolicy: Always
+      #     command: ["sh", "-c", "cp /cm/config.prod.json /go/api/config/config.prod.json"]
       containers:
         main:
           workingDir: "/go/api"
@@ -60,10 +60,38 @@ receipt:
           - "prod"
           image:
             repository: noah231515/receipt-wrangler-api
-            tag: "v4.3.0"
+            tag: "v5.1.0"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
+            ENCRYPTION_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: app-config-vars
+                  key: encryption_key
+            SECRET_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: app-config-vars
+                  key: secret_key
+            DB_HOST: receipt-wrangler-db
+            DB_PORT: 3306
+            DB_ENGINE: mariadb
+            DB_USER:
+              valueFrom:
+                secretKeyRef:
+                  name: db-config-vars
+                  key: db-user
+            DB_PASSWORD:
+              valueFrom:
+                secretKeyRef:
+                  name: db-config-vars
+                  key: db-password
+            DB_NAME:
+              valueFrom:
+                secretKeyRef:
+                  name: db-config-vars
+                  key: db
           probes:
             liveness:
               enabled: true
@@ -93,7 +121,7 @@ receipt:
         main:
           image:
             repository: mariadb
-            tag: "10.11.7"
+            tag: "10.11.8"
             pullPolicy: IfNotPresent
           args:
             - "--ignore_db_dirs=lost+found"
@@ -240,8 +268,8 @@ receipt:
         api:
           main:
             - path: /go/api/config
-          copy-config:
-            - path: /go/api/config
+          # copy-config:
+          #   - path: /go/api/config
     api-data:
       enabled: true
       type: persistentVolumeClaim
@@ -262,14 +290,14 @@ receipt:
         api:
           main:
             - path: /go/api/logs
-    api-config-prd-json:
-      enabled: true
-      type: secret
-      name: app-config-vars
-      advancedMounts:
-        api:
-          copy-config:
-            - path: /cm
+    # api-config-prd-json:
+    #   enabled: true
+    #   type: secret
+    #   name: app-config-vars
+    #   advancedMounts:
+    #     api:
+    #       copy-config:
+    #         - path: /cm
     db:
       enabled: true
       type: persistentVolumeClaim
