@@ -44,13 +44,6 @@ receipt:
       type: deployment
       annotations:
         secrets.infisical.com/auto-reload: "true"
-      # initContainers:
-      #   copy-config:
-      #     image:
-      #       repository: "quay.io/prometheus/busybox"
-      #       tag: "latest"
-      #       pullPolicy: Always
-      #     command: ["sh", "-c", "cp /cm/config.prod.json /go/api/config/config.prod.json"]
       containers:
         main:
           workingDir: "/go/api"
@@ -268,8 +261,6 @@ receipt:
         api:
           main:
             - path: /go/api/config
-          # copy-config:
-          #   - path: /go/api/config
     api-data:
       enabled: true
       type: persistentVolumeClaim
@@ -290,14 +281,6 @@ receipt:
         api:
           main:
             - path: /go/api/logs
-    # api-config-prd-json:
-    #   enabled: true
-    #   type: secret
-    #   name: app-config-vars
-    #   advancedMounts:
-    #     api:
-    #       copy-config:
-    #         - path: /cm
     db:
       enabled: true
       type: persistentVolumeClaim
