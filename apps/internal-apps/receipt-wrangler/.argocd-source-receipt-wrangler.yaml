@@ -16,5 +16,5 @@ helm:
     value: mariadb
     forcestring: true
   - name: receipt.controllers.db.containers.main.image.tag
-    value: 10.11.8
+    value: 10.11.9
     forcestring: true
