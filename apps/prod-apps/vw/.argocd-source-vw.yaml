@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: vw.controllers.main.containers.main.image.repository
+    value: ghcr.io/dani-garcia/vaultwarden
+    forcestring: true
+  - name: vw.controllers.main.containers.main.image.tag
+    value: 1.32.0
+    forcestring: true
