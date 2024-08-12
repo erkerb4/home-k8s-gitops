@@ -16,7 +16,7 @@ spec:
       annotations:
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: overseerr=ghcr.io/sct/overseerr:1.x,vw=ghcr.io/dani-garcia/vaultwarden:1.31.x
+        argocd-image-updater.argoproj.io/image-list: overseerr=ghcr.io/sct/overseerr:~1,vw=ghcr.io/dani-garcia/vaultwarden:~1.32
 
         # argocd-image-updater.argoproj.io/plex.helm.image-name: plex.controllers.main.containers.main.image.repository
         # argocd-image-updater.argoproj.io/plex.helm.image-tag: plex.controllers.main.containers.main.image.tag
