@@ -14,3 +14,4 @@ dependencies:
     repository: "@bjws"
     version: "3.1.0"
     alias: ollama
+    condition: ollama.deploy
