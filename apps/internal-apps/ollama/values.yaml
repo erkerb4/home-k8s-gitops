@@ -1,5 +1,5 @@
 ollama:
-  deploy: false
+  deploy: true
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
@@ -29,7 +29,7 @@ ollama:
         main:
           image:
             repository: ollama/ollama
-            tag: "0.3.2-rocm"
+            tag: "0.3.6-rocm"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
