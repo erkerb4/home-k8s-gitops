@@ -1,5 +1,11 @@
 helm:
   parameters:
+  - name: sabnzbd.controllers.sabnzbd.containers.main.image.repository
+    value: ghcr.io/linuxserver/sabnzbd
+    forcestring: true
+  - name: sabnzbd.controllers.sabnzbd.containers.main.image.tag
+    value: 4.3.3
+    forcestring: true
   - name: radarr.controllers.radarr.containers.main.image.repository
     value: ghcr.io/linuxserver/radarr
     forcestring: true
