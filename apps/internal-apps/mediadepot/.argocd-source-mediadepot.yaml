@@ -6,12 +6,6 @@ helm:
   - name: sabnzbd.controllers.sabnzbd.containers.main.image.tag
     value: 4.3.3
     forcestring: true
-  - name: radarr.controllers.radarr.containers.main.image.repository
-    value: ghcr.io/linuxserver/radarr
-    forcestring: true
-  - name: radarr.controllers.radarr.containers.main.image.tag
-    value: 5.7.0
-    forcestring: true
   - name: sonarr.controllers.sonarr.containers.main.image.repository
     value: ghcr.io/linuxserver/sonarr
     forcestring: true
