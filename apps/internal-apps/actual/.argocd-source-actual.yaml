@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/actualbudget/actual-server
     forcestring: true
   - name: actual.controllers.actual.containers.main.image.tag
-    value: 24.8.0
+    value: 24.9.0
     forcestring: true
