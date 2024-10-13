@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/linuxserver/tautulli
     forcestring: true
   - name: tautulli.controllers.tautulli.containers.main.image.tag
-    value: 2.14.5
+    value: 2.14.6
     forcestring: true
