@@ -116,7 +116,7 @@ plex:
   persistence:
     config:
       enabled: true
-      size: 20Gi
+      size: 30Gi
       accessMode: ReadWriteOnce
       storageClass: ec-gold
     transcode:
