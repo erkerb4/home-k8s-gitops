@@ -118,7 +118,7 @@ traefik:
       memory: "64Mi"
     limits:
       cpu: "250m"
-      memory: "160Mi"
+      memory: "192Mi"
 
   affinity:
     podAntiAffinity:
