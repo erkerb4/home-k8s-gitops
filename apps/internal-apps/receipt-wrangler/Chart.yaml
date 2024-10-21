@@ -13,3 +13,4 @@ dependencies:
     repository: "@bjws"
     version: "3.3.2"
     alias: receipt
+    condition: receipt.deploy
