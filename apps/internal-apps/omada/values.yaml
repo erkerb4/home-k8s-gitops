@@ -18,7 +18,7 @@ omada:
         main:
           image:
             repository: mbentley/omada-controller
-            tag: "5.13@sha256:f130a1c9c2c695de716b42d3c5fc5288faadf63af59b899069e826da22a16408"
+            tag: "5.14.32.2"
             pullPolicy: IfNotPresent
           env:
             TZ: America/New_York
