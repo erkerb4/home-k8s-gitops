@@ -18,8 +18,8 @@ openwebui:
       containers:
         main:
           image:
-            repository: ghcr.io/open-webui/open-webui
-            tag: "main@sha256:cecf06773cc0621dbe83c25fdeaf9c9bae33799cd7df14790a9b8ccf61b91764"
+            repository: backplane/open-webui
+            tag: "0.3.32"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
