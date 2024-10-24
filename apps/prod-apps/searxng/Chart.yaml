@@ -1,0 +1,13 @@
+apiVersion: v2
+name: searxng
+version: 1.0.0
+dependencies:
+  - name: app-template
+    version: 3.4.0
+    repository: "@bjws"
+    alias: searxng
+    condition: searxng.deploy
+  - name: redis
+    version: 19.6.1
+    repository: oci://registry-1.docker.io/bitnamicharts
+    condition: searxng.deploy

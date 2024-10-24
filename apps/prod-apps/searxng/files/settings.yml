@@ -1,0 +1,37 @@
+# see https://docs.searxng.org/admin/settings/settings.html#settings-use-default-settings
+use_default_settings: true
+
+general:
+  debug: false
+
+search:
+  safe_search: 0
+  autocomplete: google
+
+server:
+  limiter: false
+  image_proxy: true
+
+ui:
+  static_use_hash: true
+  infinite_scroll: true
+  query_in_title: true
+  center_alignment: false
+
+enabled_plugins:
+  - 'Hash plugin'
+  - 'Self Information'
+  - 'Tracker URL remover'
+  - 'Ahmia blacklist'
+  - 'Basic Calculator'
+  - 'Open Access DOI rewrite'
+
+engines:
+  - name: hoogle
+    disabled: true
+  - name: gentoo
+    disabled: true
+  - name: chefkoch
+    disabled: true
+  - name: soundcloud
+    inactive: true

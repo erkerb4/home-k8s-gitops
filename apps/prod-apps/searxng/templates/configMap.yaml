@@ -1,0 +1,11 @@
+{{- with .Values.searxng }}
+{{- if .deploy }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: searxng-config
+data:
+{{ tpl (($.Files.Glob "files/*").AsConfig) $ | indent 2 }}
+{{- end }}
+{{- end }}
