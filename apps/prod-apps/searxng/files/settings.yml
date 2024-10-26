@@ -2,7 +2,7 @@
 use_default_settings: true
 
 general:
-  debug: false
+  debug: true
 
 search:
   safe_search: 0
