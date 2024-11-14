@@ -47,7 +47,7 @@ searxng:
         main:
           image:
             repository: searxng/searxng
-            tag: 2024.10.23-b14d885f2
+            tag: 2024.11.14-abd9b271b
             pullPolicy: IfNotPresent
           env:
             SEARXNG_BASE_URL: https://search.xtr.pub
@@ -149,8 +149,8 @@ redis:
         cpu: 25m
         memory: 16Mi
       limits:
-        cpu: 100m
-        memory: 64Mi
+        cpu: 750m
+        memory: 128Mi
 
 infisicalSecret:
   app-config:
