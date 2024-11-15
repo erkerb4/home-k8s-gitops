@@ -1,17 +1,14 @@
 apiVersion: v2
-name: traefik
-description: A Traefik based Kubernetes ingress controller
+name: trivy-operator
+description: Keeps security report resources updated
 type: application
-version: 2.11.0
+version: 0.24.1
 keywords:
-  - traefik
-  - ingress
-home: https://traefik.io/
-sources:
-  - https://github.com/traefik/traefik
-  - https://github.com/traefik/traefik-helm-chart
-icon: https://raw.githubusercontent.com/traefik/traefik/v2.3/docs/content/assets/img/traefik.logo.png
+  - aquasecurity
+  - trivyoperator
+  - trivy
+home: https://github.com/aquasecurity/trivy-operator
 dependencies:
-  - name: traefik
-    version: "26.1.0"
-    repository: '@traefik'
+  - name: trivy-operator
+    version: "0.24.1"
+    repository: '@aqua'
