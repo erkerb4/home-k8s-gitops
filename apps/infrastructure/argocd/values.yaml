@@ -113,6 +113,10 @@ argo-cd:
         name: infisical
         url: https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts
         type: helm
+      aqua:
+        name: aqua
+        type: helm
+        url: https://aquasecurity.github.io/helm-charts/
 
   dex:
     enabled: false
@@ -506,6 +510,7 @@ argocd-apps:
       - 'https://bjw-s.github.io/helm-charts'
       - 'https://stakater.github.io/stakater-charts'
       - 'https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts'
+      - 'https://aquasecurity.github.io/helm-charts/'
       destinations:
       - namespace: argocd
         server: https://kubernetes.default.svc
@@ -531,6 +536,8 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: infisical
         server: https://kubernetes.default.svc
+      - namespace: trivy-operator
+        server: https://kubernetes.default.svc        
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'

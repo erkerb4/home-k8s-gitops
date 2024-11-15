@@ -1,0 +1,21 @@
+trivy-operator:
+  scanJobsConcurrentLimit: 9
+  useGCRServiceAccount: false
+  trivy:
+    ignoreUnfixed: false
+    # -- resources resource requests and limits for scan job containers
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100M
+        # ephemeralStorage: "2Gi"
+      limits:
+        cpu: 500m
+        memory: 500M
+    compliance:
+      cron: 0 2 * * *
+      specs:
+        - rke2-cis-1.24
+        - k8s-nsa-1.0
+        - k8s-pss-baseline-0.1
+        - k8s-pss-restricted-0.1
