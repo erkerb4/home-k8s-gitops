@@ -10,8 +10,8 @@ trivy-operator:
         memory: 100M
         # ephemeralStorage: "2Gi"
       limits:
-        cpu: 500m
-        memory: 500M
+        cpu: 750m
+        memory: 750M
     compliance:
       cron: 0 2 * * *
       specs:
