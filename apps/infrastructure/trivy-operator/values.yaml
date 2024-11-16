@@ -1,5 +1,5 @@
 trivy-operator:
-  scanJobsConcurrentLimit: 6
+  scanJobsConcurrentLimit: 3
   useGCRServiceAccount: false
   trivy:
     ignoreUnfixed: false
