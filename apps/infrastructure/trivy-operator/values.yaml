@@ -13,7 +13,7 @@ trivy-operator:
         cpu: 750m
         memory: 750M
     compliance:
-      cron: 0 2 * * *
+      cron: 0 2 * * */7
       specs:
         - rke2-cis-1.24
         - k8s-nsa-1.0
