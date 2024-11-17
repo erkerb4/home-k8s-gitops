@@ -1,4 +1,5 @@
 trivy-operator:
+  deploy: false
   scanJobsConcurrentLimit: 3
   useGCRServiceAccount: false
   trivy:
