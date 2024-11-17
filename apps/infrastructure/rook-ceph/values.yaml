@@ -1,11 +1,11 @@
 rook-ceph:
   resources:
     limits:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 750m
+      memory: 768Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 125m
+      memory: 256Mi
 rook-ceph-cluster:
   toolbox:
     enabled: true
