@@ -10,5 +10,5 @@ dependencies:
   version: "v1.13.10"
   repository: '@rook-release'
 - name: rook-ceph-cluster
-  version: "v1.13.7"
+  version: "v1.13.10"
   repository: '@rook-release'
