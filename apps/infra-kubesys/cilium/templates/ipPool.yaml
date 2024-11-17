@@ -5,8 +5,10 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: {{ $name }}
 spec:
-  cidrs:
-  - cidr: {{ .cidr | quote }}
+  {{ with .blocks }}
+  blocks:
+  {{ toYaml . | nindent 2}}
+  {{ end }}
   {{ with .selector }}
   {{ toYaml . | nindent 2 }}
   {{ end }}
