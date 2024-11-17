@@ -1,5 +1,5 @@
 cilium:
-  upgradeCompatibility: 1.15
+  upgradeCompatibility: "1.15"
   extraEnv:
     - name: TZ
       value: "America/New_York"
