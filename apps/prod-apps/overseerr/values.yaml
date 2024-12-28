@@ -116,3 +116,6 @@ overseerr:
                 podSelector:
                   matchLabels:
                     app.kubernetes.io/instance: plex
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
