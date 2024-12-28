@@ -299,6 +299,13 @@ sonarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: overseerr
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: overseerr
         egress:
           - ports:
             - port: 53
@@ -458,6 +465,13 @@ radarr:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: overseerr
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: overseerr
         egress:
           - ports:
             - port: 53
