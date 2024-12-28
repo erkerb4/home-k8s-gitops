@@ -313,6 +313,13 @@ sonarr:
                   matchLabels:
                     app.kubernetes.io/component: sabnzbd
           - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: plex
+              podSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: plex
+          - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
 
@@ -464,6 +471,13 @@ radarr:
               - podSelector:
                   matchLabels:
                     app.kubernetes.io/component: sabnzbd
+          - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: plex
+              podSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: plex
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
