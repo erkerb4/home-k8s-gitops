@@ -109,3 +109,10 @@ overseerr:
                 podSelector:
                   matchLabels:
                     app.kubernetes.io/instance: mediadepot
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: plex
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: plex
