@@ -102,3 +102,10 @@ overseerr:
               podSelector:
                 matchLabels:
                   k8s-app: kube-dns
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: mediadepot
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot
