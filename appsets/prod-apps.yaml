@@ -24,7 +24,7 @@ spec:
 
         argocd-image-updater.argoproj.io/overseerr.helm.image-name: overseerr.controllers.overseer.containers.main.image.repository
         argocd-image-updater.argoproj.io/overseerr.helm.image-tag: overseerr.controllers.overseer.containers.main.image.tag
-        argocd-image-updater.argoproj.io/overseerr.update-strategy: latest
+        argocd-image-updater.argoproj.io/overseerr.update-strategy: semver
         argocd-image-updater.argoproj.io/overseerr.helm.allow-tags: regexp:^v\d+\.\d+\.\d+-ls\d+$
         argocd-image-updater.argoproj.io/overseerr.ignore-tags: "develop-*"
 
