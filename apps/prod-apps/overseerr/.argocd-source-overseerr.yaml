@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: overseerr.controllers.overseer.containers.main.image.repository
+    value: ghcr.io/linuxserver/overseerr
+    forcestring: true
+  - name: overseerr.controllers.overseer.containers.main.image.tag
+    value: develop-version-c2d4c61fae2053157052f96e5de1cdb490ea704e
+    forcestring: true
