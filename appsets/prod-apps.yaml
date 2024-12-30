@@ -25,6 +25,7 @@ spec:
         argocd-image-updater.argoproj.io/overseerr.helm.image-name: overseerr.controllers.overseer.containers.main.image.repository
         argocd-image-updater.argoproj.io/overseerr.helm.image-tag: overseerr.controllers.overseer.containers.main.image.tag
         argocd-image-updater.argoproj.io/overseerr.update-strategy: semver
+        argocd-image-updater.argoproj.io/overseerr.helm.allow-tags: regexp:^v\d+\.\d+\.\d+-ls\d+$
 
         argocd-image-updater.argoproj.io/vw.helm.image-name: vw.controllers.main.containers.main.image.repository
         argocd-image-updater.argoproj.io/vw.helm.image-tag: vw.controllers.main.containers.main.image.tag
