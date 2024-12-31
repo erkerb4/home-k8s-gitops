@@ -50,7 +50,7 @@ plex:
           type: deployment
           image:
             repository: plexinc/pms-docker
-            tag: 1.41.1.9057-af5eaea7a
+            tag: 1.41.3.9314-a0bfb8370
             pullPolicy: IfNotPresent
           env:
             TZ: America/New_York
@@ -178,6 +178,13 @@ plex:
                 podSelector:
                   matchLabels:
                     app.kubernetes.io/instance: overseerr
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: kometa
+                podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: kometa
           - from:
               - namespaceSelector:
                   matchLabels:
