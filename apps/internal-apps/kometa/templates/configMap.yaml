@@ -1,0 +1,9 @@
+{{- if .Values.kometa.deploy }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kometa-app-configs
+  namespace: {{ .Release.Namespace }}
+data:
+{{ tpl ((.Files.Glob "files/*").AsConfig) $ | indent 2 }}
+{{- end }}

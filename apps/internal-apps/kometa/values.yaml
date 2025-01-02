@@ -1,0 +1,111 @@
+kometa:
+  deploy: true
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    securityContext:
+      runAsUser: 1234
+      fsGroup: 1234
+      fsGroupChangePolicy: "Always"
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    kometa:
+      type: cronjob
+      containers:
+        main:
+          image:
+            repository: kometateam/kometa
+            tag: v2.1.0
+          args:
+            - --run
+            - --read-only-config
+          env:
+            KOMETA_PLEXURL:
+              valueFrom:
+                secretKeyRef:
+                  name: app-config
+                  key: plex_url
+            KOMETA_PLEXTOKEN:
+              valueFrom:
+                secretKeyRef:
+                  name: app-config
+                  key: plex_token
+            KOMETA_TMDBAPIKEY:
+              valueFrom:
+                secretKeyRef:
+                  name: app-config
+                  key: tmdb_api_key
+          resources:
+            limits:
+              cpu: "1500m"
+              memory: 384Mi
+            requests:
+              cpu: "250m"
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+      cronjob:
+        suspend: false
+        concurrencyPolicy: Forbid
+        timeZone: America/New_York
+        schedule: "45 16-23 * * *"
+        ttlSecondsAfterFinished: 3600
+  persistence:
+    config:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 128Mi
+    kometa-app-configs:
+      enabled: true
+      type: configMap
+      name: kometa-app-configs
+      advancedMounts:
+        kometa:
+          main:
+            - path: /config/config.yml
+              subPath: config.yml
+            - path: /config/movies.yml
+              subPath: movies.yml
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: kometa
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - podSelector: {}
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: plex
+              podSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: plex
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+
+infisicalSecret:
+  app-config:
+    syncInterval: 120

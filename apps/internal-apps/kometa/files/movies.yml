@@ -1,0 +1,43 @@
+collections:
+  Christmas Movies:
+    sync_mode: sync
+    builder_level: movie
+    url_poster: https://raw.githubusercontent.com/Kometa-Team/Default-Images/refs/heads/master/seasonal/christmas.jpg
+    imdb_list:
+        - https://www.imdb.com/list/ls000096828
+        - https://www.imdb.com/list/ls025976544/
+        - https://www.imdb.com/list/ls003863000/
+        - https://www.imdb.com/list/ls027454200/
+        - https://www.imdb.com/list/ls027886673/
+        - https://www.imdb.com/list/ls097998599/
+        - https://www.imdb.com/list/ls000096828/
+    plex_search:
+      type: movie
+      sort_by: audience_rating.desc
+      limit: 1000
+      any:
+        title:
+          - christmas
+          - santa
+          - nutcracker
+    visible_home: range(11/20-12/31)
+  Family:
+    plex_search:
+      genre: Family
+    summary: A collection of family films.
+    sort_title: '*000'
+    collection_order: release
+    collection_mode: default
+  Animation Movies:
+    plex_search:
+      genre: Animation
+    summary: A collection of Animation films.
+    sort_title: '*000'
+    collection_order: release
+    collection_mode: default
+  Pixar:
+    imdb_list: https://www.imdb.com/list/ls087911008/
+    summary: A collection of Pixar movies
+    sort_title: '+000'
+    collection_order: release
+    collection_mode: default

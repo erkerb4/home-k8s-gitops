@@ -1,0 +1,17 @@
+---
+apiVersion: v2
+description: Powerful tool designed to give you complete control over your media libraries
+name: kometa
+version: "2.1.0"
+keywords:
+  - kometa
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://kometa.wiki/en/latest/
+  - https://github.com/Kometa-Team/Kometa
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "3.1.0"
+    alias: kometa
+    condition: kometa.deploy

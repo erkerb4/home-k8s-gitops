@@ -537,7 +537,9 @@ argocd-apps:
       - namespace: infisical
         server: https://kubernetes.default.svc
       - namespace: trivy-operator
-        server: https://kubernetes.default.svc        
+        server: https://kubernetes.default.svc  
+      - namespace: upgrade-controller
+        server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'
@@ -649,13 +651,11 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: barlie
         server: https://kubernetes.default.svc
-      - namespace: receipt-wrangler
-        server: https://kubernetes.default.svc
-      - namespace: llama
-        server: https://kubernetes.default.svc
       - namespace: ollama
         server: https://kubernetes.default.svc
       - namespace: openwebui
+        server: https://kubernetes.default.svc
+      - namespace: kometa
         server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'

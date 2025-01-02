@@ -1,0 +1,10 @@
+apiVersion: v2
+name: system-upgrade-controller
+description: A Helm chart for deploying system upgrade controller to automate Rancher Upgrades
+type: application
+home: https://github.com/rancher/system-upgrade-controller
+sources:
+  - https://github.com/rancher/system-upgrade-controller
+keywords:
+  - system-upgrade-controller
+version: 0.14.2
