@@ -1,5 +1,5 @@
 trivy-operator:
-  deploy: false
+  deploy: true
   scanJobsConcurrentLimit: 3
   useGCRServiceAccount: false
   trivy:
@@ -14,7 +14,7 @@ trivy-operator:
         cpu: 750m
         memory: 750M
     compliance:
-      cron: 0 2 * * */7
+      cron: 5 2 * * 0
       specs:
         - rke2-cis-1.24
         - k8s-nsa-1.0

@@ -2,7 +2,7 @@ apiVersion: v2
 name: trivy-operator
 description: Keeps security report resources updated
 type: application
-version: 0.24.1
+version: 0.23.0
 keywords:
   - aquasecurity
   - trivyoperator
@@ -10,6 +10,6 @@ keywords:
 home: https://github.com/aquasecurity/trivy-operator
 dependencies:
   - name: trivy-operator
-    version: "0.24.1"
+    version: "0.25.0"
     repository: '@aqua'
     condition: trivy-operator.deploy
