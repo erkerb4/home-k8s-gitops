@@ -1,0 +1,40 @@
+{{- range $name, $plan := $.Values.upgradePlans.specs }}
+---
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    rke2-upgrade: {{ $name }}
+spec:
+  concurrency: {{ default "1" $plan.concurrency}}
+  {{- with $plan.nodeSelectors }}
+  nodeSelector:
+    matchExpressions:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $plan.tolerations }}
+  tolerations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  serviceAccountName: {{ default "system-upgrade" $plan.serviceAccountName }}
+  cordon: {{ default "true" $plan.cordon }}
+  {{- with $plan.drain }}
+  drain:
+  {{- . | toYaml | nindent 4}}
+  {{- end }}
+  {{- with $plan.prepare }}
+  prepare:
+    args:
+  {{- toYaml .args | nindent 4 }}
+    image: {{ $.Values.upgradePlans.global.image }}
+  {{- end }}
+  upgrade:
+    image: {{ $.Values.upgradePlans.global.image }}
+  {{- if $.Values.upgradePlans.global.channel }}
+  channel: {{ $.Values.upgradePlans.global.channel }}
+  {{- else }}
+  version: {{ $.Values.upgradePlans.global.version }}
+  {{- end }}
+{{- end }}

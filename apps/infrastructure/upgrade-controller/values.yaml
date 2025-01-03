@@ -14,3 +14,40 @@ configMap:
     SYSTEM_UPGRADE_JOB_PRIVILEGED: "true"
     SYSTEM_UPGRADE_JOB_TTL_SECONDS_AFTER_FINISH: "900"
     SYSTEM_UPGRADE_PLAN_POLLING_INTERVAL: "15m"
+
+upgradePlans:
+  global:
+    image: rancher/rke2-upgrade
+    ## If channel is configured, version is ignored.
+    ## if channel is not set, version must be configured
+    channel: https://update.rke2.io/v1-release/channels/v1.29
+    # version: v1.29.11-rke2r1
+  specs:
+    control-plane:
+      nodeSelectors:
+        - key: node-role.kubernetes.io/control-plane
+          operator: In
+          values: ["true"]
+      tolerations:
+        - key: "CriticalAddonsOnly"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+      # drain:
+      #   force: true
+    agent:
+      nodeSelectors:
+        - key: beta.kubernetes.io/os
+          operator: In
+          values: ["linux"]
+        - key: rke2-upgrade
+          operator: Exists
+        - key: rke2-upgrade
+          operator: NotIn
+          values: ["disabled", "false"]
+      prepare:
+        args:
+        - prepare
+        - control-plane #must match the name of the control-plane plan
+      # drain:
+      #   force: true
