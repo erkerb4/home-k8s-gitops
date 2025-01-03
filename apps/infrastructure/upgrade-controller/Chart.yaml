@@ -5,6 +5,7 @@ type: application
 home: https://github.com/rancher/system-upgrade-controller
 sources:
   - https://github.com/rancher/system-upgrade-controller
+  - https://docs.rke2.io/upgrades/automated_upgrade
 keywords:
   - system-upgrade-controller
 version: 0.14.2
