@@ -1,7 +1,18 @@
 trivy-operator:
   deploy: true
-  scanJobsConcurrentLimit: 3
-  useGCRServiceAccount: false
+  operator:
+    scanJobsConcurrentLimit: 3
+    scanJobsRetryDelay: 60s
+    batchDeleteLimit: 5
+  trivyOperator:
+    useGCRServiceAccount: false
+    scanJobAffinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                vulnerabilityReport.scanner: Trivy
+            topologyKey: kubernetes.io/hostname
   trivy:
     ignoreUnfixed: false
     # -- resources resource requests and limits for scan job containers
