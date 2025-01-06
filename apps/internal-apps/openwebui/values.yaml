@@ -19,7 +19,7 @@ openwebui:
         main:
           image:
             repository: backplane/open-webui
-            tag: "0.3.32"
+            tag: "0.5.3"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -85,7 +85,7 @@ openwebui:
       type: persistentVolumeClaim
       storageClass: ec-gold
       accessMode: ReadWriteOnce
-      size: "1Gi"
+      size: "2Gi"
       advancedMounts:
         openwebui:
           main:
