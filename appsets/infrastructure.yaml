@@ -21,7 +21,7 @@ spec:
 
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: cf=cloudflare/cloudflared:2024.x
+        argocd-image-updater.argoproj.io/image-list: cf=cloudflare/cloudflared:2025.x
 
         argocd-image-updater.argoproj.io/cf.helm.image-name: cloudflare-tunnel.controllers.main.containers.main.image.repository
         argocd-image-updater.argoproj.io/cf.helm.image-tag: cloudflare-tunnel.controllers.main.containers.main.image.tag
