@@ -1,5 +1,5 @@
 trivy-operator:
-  deploy: true
+  deploy: false
   operator:
     scanJobsConcurrentLimit: 3
     scanJobsRetryDelay: 60s
