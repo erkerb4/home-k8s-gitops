@@ -1,7 +1,0 @@
-apiVersion: v2
-name: external-snapshotter
-description: The CSI snapshotter is part of Kubernetes implementation of Container Storage Interface (CSI).
-type: application
-home: https://github.com/kubernetes-csi/external-snapshotter/
-kubeVersion: ">= 1.20.0"
-version: 6.1.0
