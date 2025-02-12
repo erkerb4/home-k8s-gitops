@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/linuxserver/overseerr
     forcestring: true
   - name: overseerr.controllers.overseer.containers.main.image.tag
-    value: latest@sha256:637ba966bc1f4c349c3f3ab3d269639f679b3f69f409ee7ac776c468cf508b07
+    value: latest@sha256:27199845ef4d29206c942e60169b3cac574d22ffdc3e61902006a33b812f6644
     forcestring: true
