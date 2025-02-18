@@ -1,6 +1,6 @@
 deployment:
   controller:
-    image: rancher/system-upgrade-controller:v0.14.2
+    image: rancher/system-upgrade-controller:v0.15.0
 
 configMap:
   controllerEnv:
