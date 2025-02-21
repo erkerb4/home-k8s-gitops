@@ -525,13 +525,13 @@ readarr:
       type: deployment
       annotations:
         secrets.infisical.com/auto-reload: "true"
-      # initContainers:
-      #   copy-config:
-      #     image:
-      #       repository: "quay.io/prometheus/busybox"
-      #       tag: "latest"
-      #       pullPolicy: Always
-      #     command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"]
+      initContainers:
+        copy-config:
+          image:
+            repository: "quay.io/prometheus/busybox"
+            tag: "latest"
+            pullPolicy: Always
+          command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"]
       containers:
         main:
           image:
@@ -595,14 +595,14 @@ readarr:
       existingClaim: "mediadepot-downloads"
       globalMounts:
         - path: /downloads
-    # cm-config:
-    #   enabled: true
-    #   type: custom
-    #   volumeSpec:
-    #     secret:
-    #       secretName: readarr-config
-    #   globalMounts:
-    #     - path: /cm
+    cm-config:
+      enabled: true
+      type: custom
+      volumeSpec:
+        secret:
+          secretName: readarr-config
+      globalMounts:
+        - path: /cm
     books:
       enabled: true
       type: custom
@@ -610,6 +610,43 @@ readarr:
         nfs:
           server: 192.168.30.20
           path: /volume1/entertainment/reading
+  networkpolicies:
+    main:
+      enabled: true
+      controller: readarr
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: mediadepot
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - ports:
+            - port: 53
+              protocol: UDP
+            to:
+            - namespaceSelector: {}
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+          - to:
+              - podSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: sabnzbd
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+
 
 backupTargets:
   &target backblaze-palebluedot:
@@ -678,6 +715,8 @@ infisicalSecret:
   sonarr-config:
     syncInterval: 120
   radarr-config:
+    syncInterval: 120
+  readarr-config:
     syncInterval: 120
   *target:
     syncInterval: 120
