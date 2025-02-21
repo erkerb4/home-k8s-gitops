@@ -496,6 +496,120 @@ radarr:
               - ipBlock:
                   cidr: 0.0.0.0/0
 
+readarr:
+  global:
+    fullnameOverride: readarr
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 25
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - sabnzbd
+            topologyKey: kubernetes.io/hostname
+  controllers:
+    readarr:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      # initContainers:
+      #   copy-config:
+      #     image:
+      #       repository: "quay.io/prometheus/busybox"
+      #       tag: "latest"
+      #       pullPolicy: Always
+      #     command: ["sh", "-c", "cp /cm/config.xml /config/config.xml && chown 911:911  /config/config.xml"]
+      containers:
+        main:
+          image:
+            repository: ghcr.io/linuxserver/readarr
+            tag: "develop-version-0.4.10.2734"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 125m
+              memory: 256Mi
+  service:
+    app:
+      controller: readarr
+      ports:
+        http:
+          enabled: true
+          port: 8787
+          primary: true
+          protocol: HTTP
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: mediadepot.xtr.pub
+          paths:
+            - path: /books
+              pathType: Prefix
+              service:
+                identifier: app
+                port: http
+      tls:
+      - hosts:
+        - mediadepot.xtr.pub
+  persistence:
+    config:
+      enabled: true
+      type: persistentVolumeClaim
+      accessMode: ReadWriteOnce
+      size: 1Gi
+      storageClass: ec-silver
+      globalMounts:
+        - path: /config
+    downloads:
+      enabled: true
+      type: persistentVolumeClaim
+      existingClaim: "mediadepot-downloads"
+      globalMounts:
+        - path: /downloads
+    # cm-config:
+    #   enabled: true
+    #   type: custom
+    #   volumeSpec:
+    #     secret:
+    #       secretName: readarr-config
+    #   globalMounts:
+    #     - path: /cm
+    books:
+      enabled: true
+      type: custom
+      volumeSpec:
+        nfs:
+          server: 192.168.30.20
+          path: /volume1/entertainment/reading
 
 backupTargets:
   &target backblaze-palebluedot:
