@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-http
+  annotations:
+    traefik.ingress.kubernetes.io/service.nativelb: "true"
+    traefik.ingress.kubernetes.io/service.serversscheme: http
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+spec:
+  ports:
+    - name: http
+      port: 9001
+      targetPort: 9001
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: minio-http
+  labels:
+    kubernetes.io/service-name: minio-http
+addressType: IPv4
+ports:
+  - name: http
+    appProtocol: http
+    port: 9001
+endpoints:
+  - addresses:
+      - "192.168.30.20"
+    conditions:
+      ready: true
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: le-prod
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: minio.xtr.pub
+    http:
+      paths:
+      - backend:
+          service:
+            name: minio-http
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - minio.xtr.pub
+    secretName: tls-secret-minio
