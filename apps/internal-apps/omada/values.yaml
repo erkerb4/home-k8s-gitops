@@ -12,11 +12,11 @@ omada:
   controllers:
     omada:
       type: deployment
+      replicas: 0
       annotations:
         secrets.infisical.com/auto-reload: "true"
       containers:
         main:
-          replicas: 0
           image:
             repository: mbentley/omada-controller
             tag: "5.14.32.2"
