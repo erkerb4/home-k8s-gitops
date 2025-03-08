@@ -16,6 +16,7 @@ omada:
         secrets.infisical.com/auto-reload: "true"
       containers:
         main:
+          replicas: 0
           image:
             repository: mbentley/omada-controller
             tag: "5.14.32.2"
@@ -157,50 +158,50 @@ backupTargets:
         name: *target
     thresholdCapacity: 5Gi
 
-backupPlan:
-  omada:
-    backupTarget: *target
-    backupPlanFlags:
-      skipImageBackup: true
-    policies:
-      retention-policy:
-        type: Retention
-        spec:
-          cleanupConfig:
-            backupDays: 2
-          default: false
-          retentionConfig:
-            dayOfWeek: Sunday
-            weekly: 1
-            latest: 2
-      fullbackup-policy:
-        type: Schedule
-        spec:
-          default: false
-          scheduleConfig:
-            schedule:
-            - 10 5 * 1/3 *
-      incremental-policy:
-        type: Schedule
-        spec:
-          default: false
-          scheduleConfig:
-            schedule:
-            - 15 5 * * *
-    excludeResources:
-      gvkSelector:
-      - groupVersionKind:
-          group: secrets.infisical.com
-          kind: InfisicalSecret
-          version: v1alpha1
-      labelSelector:
-      - matchExpressions:
-        - key: tvk-skip-object
-          operator: In
-          values:
-          - "true"
+# backupPlan:
+#   omada:
+#     backupTarget: *target
+#     backupPlanFlags:
+#       skipImageBackup: true
+#     policies:
+#       retention-policy:
+#         type: Retention
+#         spec:
+#           cleanupConfig:
+#             backupDays: 2
+#           default: false
+#           retentionConfig:
+#             dayOfWeek: Sunday
+#             weekly: 1
+#             latest: 2
+#       fullbackup-policy:
+#         type: Schedule
+#         spec:
+#           default: false
+#           scheduleConfig:
+#             schedule:
+#             - 10 5 * 1/3 *
+#       incremental-policy:
+#         type: Schedule
+#         spec:
+#           default: false
+#           scheduleConfig:
+#             schedule:
+#             - 15 5 * * *
+#     excludeResources:
+#       gvkSelector:
+#       - groupVersionKind:
+#           group: secrets.infisical.com
+#           kind: InfisicalSecret
+#           version: v1alpha1
+#       labelSelector:
+#       - matchExpressions:
+#         - key: tvk-skip-object
+#           operator: In
+#           values:
+#           - "true"
 
-infisicalSecret:
-  *target:
-    syncInterval: 900
-    secretsPath: global
+# infisicalSecret:
+#   *target:
+#     syncInterval: 900
+#     secretsPath: global
