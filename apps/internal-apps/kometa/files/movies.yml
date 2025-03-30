@@ -41,29 +41,3 @@ collections:
     sort_title: '+000'
     collection_order: release
     collection_mode: default
-  # Fast & Furious Collection:
-  #   template: {name: IMDb Series, IMDbList: ls068290878 }
-  #   url_poster: https://theposterdb.com/api/assets/47254
-  #   sort_by: release_date.desc
-  #   collection_order: custom
-  #   summary: All movies in the Fast & Furious Universe.
-  # Indiana Jones Franchise:
-  #   template: {name: IMDb Series, IMDbList: ls538364160 }
-  #   url_poster: https://theposterdb.com/api/assets/11385
-  #   sort_by: release_date.desc
-  #   collection_order: custom
-  #   summary: All movies in the Indiana Jones Universe.
-  # Mission Impossible Collection:
-  #   template: {name: IMDb Series, IMDbList: ls066600640 }
-  #   url_poster: https://theposterdb.com/api/assets/6475
-  #   sort_by: release_date.desc
-  #   collection_order: custom
-  #   name: "Mission: Impossible Franchise"
-  #   name_mapping: Mission Impossible
-  #   summary: "All movies in the Mission: Impossible Universe."
-  # James Bond Franchise:
-  #   template: {name: IMDb Series, IMDbList: ls006405458 }
-  #   url_poster: https://theposterdb.com/api/assets/75315
-  #   sort_by: release_date.desc
-  #   collection_order: custom
-  #   summary: "All movies from the James Bond franchise"
