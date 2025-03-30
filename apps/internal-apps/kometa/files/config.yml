@@ -7,6 +7,10 @@ libraries:
         template_variables:
           sep_style: blue 
           use_other: false
+          include: 
+          - G
+          - PG
+          - PG-13
       # - default: studio
       #   template_variables:
       #     use_separator: false
