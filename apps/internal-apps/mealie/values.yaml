@@ -130,7 +130,7 @@ mealie:
       accessMode: ReadWriteOnce
       size: "2Gi"
       globalMounts:
-        - path: /var/www/nltk_data/
+        - path: /nltk_data
 
   networkpolicies:
     main:
