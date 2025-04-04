@@ -123,6 +123,14 @@ mealie:
       size: "2Gi"
       globalMounts:
         - path: /app/data
+    nltk:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "2Gi"
+      globalMounts:
+        - path: /var/www/nltk_data/
 
   networkpolicies:
     main:
