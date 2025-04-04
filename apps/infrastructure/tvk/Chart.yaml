@@ -6,9 +6,9 @@ icon: https://www.trilio.io/wp-content/uploads/2021/01/Trilio-2020-logo-RGB-gray
 name: k8s-triliovault-operator
 sources:
 - https://github.com/trilioData/k8s-triliovault-operator
-version: 4.0.5
+version: 5.0.2
 dependencies:
   - name: k8s-triliovault-operator
-    version: "4.0.5"
+    version: "5.0.2"
     repository: '@triliovault-operator'
     condition: k8s-triliovault-operator.deploy
