@@ -1,4 +1,5 @@
 omada:
+  deploy: false
   global:
     fullnameOverride: omada-controller
   defaultPodOptions:
@@ -146,17 +147,17 @@ omada:
       globalMounts:
         - path: /opt/tplink/EAPController/logs
 
-backupTargets:
-  &target backblaze-palebluedot:
-    type: ObjectStore
-    vendor: Other
-    objectStoreCredentials:
-      url: https://s3.us-west-000.backblazeb2.com
-      bucketName: palebluedot-tvk
-      region: us-west-000
-      credentialSecret:
-        name: *target
-    thresholdCapacity: 5Gi
+# backupTargets:
+#   &target backblaze-palebluedot:
+#     type: ObjectStore
+#     vendor: Other
+#     objectStoreCredentials:
+#       url: https://s3.us-west-000.backblazeb2.com
+#       bucketName: palebluedot-tvk
+#       region: us-west-000
+#       credentialSecret:
+#         name: *target
+#     thresholdCapacity: 5Gi
 
 # backupPlan:
 #   omada:
