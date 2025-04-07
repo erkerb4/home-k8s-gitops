@@ -1,0 +1,5 @@
+apiVersion: v2
+name: external-snapshotter
+description: Sidecar container that watches Kubernetes Snapshot CRD objects and triggers CreateSnapshot/DeleteSnapshot against a CSI endpoint. 
+type: application
+version: 1.0
