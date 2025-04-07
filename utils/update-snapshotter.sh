@@ -14,7 +14,7 @@ root_dir=$(git rev-parse --show-toplevel)
 
 ## Repo
 github_project=kubernetes-csi/external-snapshotter
-desired_release=v6.2.1
+desired_release=v8.2.1
 url=https://raw.githubusercontent.com/${github_project}/${desired_release}
 
 ## Get the desired volume snapshot classes
