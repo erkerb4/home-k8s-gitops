@@ -10,7 +10,7 @@ helm:
     value: redis
     forcestring: true
   - name: barlie.controllers.redis.containers.main.image.tag
-    value: 7.2.7
+    value: 7.2.8
     forcestring: true
   - name: barlie.controllers.assistant.containers.main.image.repository
     value: barassistant/server
