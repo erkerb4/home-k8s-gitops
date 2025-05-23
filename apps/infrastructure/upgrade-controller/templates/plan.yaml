@@ -8,6 +8,7 @@ metadata:
   labels:
     rke2-upgrade: {{ $name }}
 spec:
+  postCompleteDelay: {{ default "7m30s" $plan.postCompleteDelay }}
   concurrency: {{ default "1" $plan.concurrency}}
   {{- with $plan.nodeSelectors }}
   nodeSelector:
@@ -37,4 +38,8 @@ spec:
   {{- else }}
   version: {{ $.Values.upgradePlans.global.version }}
   {{- end }}
+  {{- with $plan.window }}
+  window:
+    {{- toYaml . | nindent 4}}
+  {{- end}}
 {{- end }}

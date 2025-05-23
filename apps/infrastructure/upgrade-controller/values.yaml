@@ -4,7 +4,7 @@ deployment:
 
 configMap:
   controllerEnv:
-    SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE: "rancher/kubectl:v1.31.6"
+    SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE: "rancher/kubectl:v1.32.5"
     SYSTEM_UPGRADE_CONTROLLER_DEBUG: "false"
     SYSTEM_UPGRADE_CONTROLLER_THREADS: "2"
     SYSTEM_UPGRADE_CONTROLLER_LEADER_ELECT: "true"
@@ -20,7 +20,7 @@ upgradePlans:
     image: rancher/rke2-upgrade
     ## If channel is configured, version is ignored.
     ## if channel is not set, version must be configured
-    channel: https://update.rke2.io/v1-release/channels/v1.31
+    channel: https://update.rke2.io/v1-release/channels/v1.32
     # version: v1.29.11-rke2r1
   specs:
     control-plane:
@@ -35,6 +35,15 @@ upgradePlans:
           effect: "NoSchedule"
       # drain:
       #   force: true
+      window:
+        days:
+          - "monday"
+          - "tuesday"
+          - "wednesday"
+          - "thursday"
+        startTime: "17:00"
+        endTime: "19:00"
+        timeZone: "America/New_York"
     agent:
       nodeSelectors:
         - key: beta.kubernetes.io/os
@@ -51,3 +60,12 @@ upgradePlans:
         - control-plane #must match the name of the control-plane plan
       # drain:
       #   force: true
+      window:
+        days:
+          - "monday"
+          - "tuesday"
+          - "wednesday"
+          - "thursday"
+        startTime: "22:00"
+        endTime: "23:00"
+        timeZone: "America/New_York"
