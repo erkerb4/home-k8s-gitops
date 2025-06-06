@@ -19,7 +19,7 @@ openwebui:
         main:
           image:
             repository: backplane/open-webui
-            tag: "0.6.9"
+            tag: "0.6.13"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
