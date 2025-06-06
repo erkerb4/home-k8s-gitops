@@ -1,8 +1,0 @@
-helm:
-  parameters:
-  - name: actual.controllers.actual.containers.main.image.repository
-    value: ghcr.io/actualbudget/actual-server
-    forcestring: true
-  - name: actual.controllers.actual.containers.main.image.tag
-    value: 25.4.0
-    forcestring: true

@@ -21,7 +21,7 @@ spec:
 
         argocd-image-updater.argoproj.io/write-back-method: git
         argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: actual=ghcr.io/actualbudget/actual-server:~25.x,babybuddy=ghcr.io/linuxserver/babybuddy:~2.4,meilisearch=getmeili/meilisearch:~v1.8.x,barlie-redis=redis:~7.2,barlie-assistant=barassistant/server:~3.14,barlie-sr=barassistant/salt-rim:~2.12,changed=ghcr.io/dgtlmoon/changedetection.io:~0.45,mealie=ghcr.io/mealie-recipes/mealie:~v2,sabnzbd=ghcr.io/linuxserver/sabnzbd:latest,radarr=ghcr.io/linuxserver/radarr:latest,sonarr=ghcr.io/linuxserver/sonarr:latest,omada=mbentley/omada-controller:5.13,tautulli=ghcr.io/linuxserver/tautulli:latest
+        argocd-image-updater.argoproj.io/image-list: actual=ghcr.io/actualbudget/actual:~25.x,babybuddy=ghcr.io/linuxserver/babybuddy:~2.4,meilisearch=getmeili/meilisearch:~v1.8.x,barlie-redis=redis:~7.2,barlie-assistant=barassistant/server:~3.14,barlie-sr=barassistant/salt-rim:~2.12,changed=ghcr.io/dgtlmoon/changedetection.io:~0.45,mealie=ghcr.io/mealie-recipes/mealie:~v2,sabnzbd=ghcr.io/linuxserver/sabnzbd:latest,radarr=ghcr.io/linuxserver/radarr:latest,sonarr=ghcr.io/linuxserver/sonarr:latest,omada=mbentley/omada-controller:5.13,tautulli=ghcr.io/linuxserver/tautulli:latest
 
         argocd-image-updater.argoproj.io/actual.helm.image-name: actual.controllers.actual.containers.main.image.repository
         argocd-image-updater.argoproj.io/actual.helm.image-tag: actual.controllers.actual.containers.main.image.tag
