@@ -103,7 +103,7 @@ argo-cd:
         type: helm
       bjws:
         name: bjws
-        url: https://bjw-s.github.io/helm-charts
+        url: https://bjw-s-labs.github.io/helm-charts
         type: helm
       stakater:
         name: stakater
@@ -507,7 +507,7 @@ argocd-apps:
       - 'http://charts.k8strilio.net/trilio-stable/k8s-triliovault'
       - 'https://weaveworks.github.io/kured'
       - 'https://charts.jetstack.io'
-      - 'https://bjw-s.github.io/helm-charts'
+      - 'https://bjw-s-labs.github.io/helm-charts'
       - 'https://stakater.github.io/stakater-charts'
       - 'https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts'
       - 'https://aquasecurity.github.io/helm-charts/'
@@ -601,7 +601,7 @@ argocd-apps:
       - 'git@github.com:erkerb4/home-k8s-gitops.git'
       - 'https://k8s-at-home.com/charts/'
       - 'https://charts.bitnami.com/bitnami'
-      - 'https://bjw-s.github.io/helm-charts'
+      - 'https://bjw-s-labs.github.io/helm-charts'
       - 'oci://registry-1.docker.io/bitnamicharts'
       destinations:
       - namespace: plex
@@ -633,7 +633,7 @@ argocd-apps:
       sourceRepos:
       - 'git@github.com:erkerb4/home-k8s-gitops.git'
       - 'https://k8s-at-home.com/charts/'
-      - 'https://bjw-s.github.io/helm-charts'
+      - 'https://bjw-s-labs.github.io/helm-charts'
       destinations:
       - namespace: babybuddy
         server: https://kubernetes.default.svc
