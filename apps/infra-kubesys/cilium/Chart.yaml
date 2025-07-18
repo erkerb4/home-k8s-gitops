@@ -1,6 +1,6 @@
 apiVersion: v2
 name: cilium
-version: 1.16.10
+version: 1.16.12
 description: eBPF-based Networking, Security, and Observability
 keywords:
   - BPF
@@ -14,5 +14,5 @@ sources:
   - https://github.com/cilium/cilium
 dependencies:
   - name: cilium
-    version: "1.16.10"
+    version: "1.16.12"
     repository: '@cilium'
