@@ -9,7 +9,7 @@ metadata:
     traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
 spec:
   ports:
-    - name: http
+    - name: web-ui
       port: 9001
       targetPort: 9001
 ---
@@ -21,7 +21,7 @@ metadata:
     kubernetes.io/service-name: minio-http
 addressType: IPv4
 ports:
-  - name: http
+  - name: web-ui
     appProtocol: http
     port: 9001
 endpoints:
@@ -47,7 +47,7 @@ spec:
           service:
             name: minio-http
             port:
-              name: http
+              name: web-ui
         path: /
         pathType: Prefix
   tls:
