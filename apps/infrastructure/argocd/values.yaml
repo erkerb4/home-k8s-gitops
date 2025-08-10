@@ -657,6 +657,8 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: kometa
         server: https://kubernetes.default.svc
+      - namespace: donetick
+        server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'
