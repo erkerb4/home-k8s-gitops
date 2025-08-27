@@ -52,9 +52,11 @@ traefik:
       port: 8000
       exposedPort: 80
       protocol: TCP
-      # redirectTo:
-      #   port: websecure
-      #   priority: 10
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
     websecure:
       port: 8443
       exposedPort: 443
@@ -62,7 +64,8 @@ traefik:
       tls:
         options: traefik-tls13@kubernetescrd
       http3:
-        enabled: false
+        enabled: true
+        advertisedPort: 443
       forwardedHeaders:
         trustedIPs:
           - 172.30.0.0/20
@@ -73,17 +76,16 @@ traefik:
 
     webext:
       port: 8843
-      exposedPort: 8443
       protocol: TCP
+      exposedPort: 8443
+      expose:
+        default: true
       tls:
+        enabled: true
         options: traefik-tls13@kubernetescrd
       http3:
-        enabled: false
-      forwardedHeaders:
-        trustedIPs:
-          - 172.30.0.0/20
-          - 172.30.16.0/23
-          - 192.168.30.0/26
+        enabled: true
+        advertisedPort: 8443
       middlewares:
         - traefik-security-headers@kubernetescrd
 
