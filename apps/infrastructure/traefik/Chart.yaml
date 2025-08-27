@@ -2,7 +2,7 @@ apiVersion: v2
 name: traefik
 description: A Traefik based Kubernetes ingress controller
 type: application
-version: 2.11.0
+version: 3.0.4
 keywords:
   - traefik
   - ingress
@@ -13,5 +13,5 @@ sources:
 icon: https://raw.githubusercontent.com/traefik/traefik/v2.3/docs/content/assets/img/traefik.logo.png
 dependencies:
   - name: traefik
-    version: "26.1.0"
+    version: "29.0.1"
     repository: '@traefik'

@@ -2,6 +2,7 @@ traefik:
   fullnameOverride: traefik
   logs:
     general:
+      # -- DEBUG, PANIC, FATAL, ERROR, WARN, and INFO.
       level: ERROR
     access:
       enabled: true
@@ -10,9 +11,10 @@ traefik:
     enabled: true
     isDefaultClass: true
 
-  rollingUpdate:
-    maxUnavailable: 1
-    maxSurge: 3
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 3
 
   providers:
     kubernetesIngress:
@@ -44,12 +46,10 @@ traefik:
   ports:
     traefik:
       port: 9000
-      expose: false
       exposedPort: 9000
       protocol: TCP
     web:
       port: 8000
-      expose: true
       exposedPort: 80
       protocol: TCP
       redirectTo:
@@ -57,7 +57,6 @@ traefik:
         priority: 10
     websecure:
       port: 8443
-      expose: true
       exposedPort: 443
       protocol: TCP
       tls:
@@ -74,12 +73,14 @@ traefik:
 
     metrics:
       port: 9100
-      expose: true
+      expose:
+        default: true
       exposedPort: 9100
       protocol: TCP
     plex:
       port: 32400
-      expose: true
+      expose:
+        default: true
       exposedPort: 32400
       protocol: TCP
 
