@@ -511,6 +511,7 @@ argocd-apps:
       - 'https://stakater.github.io/stakater-charts'
       - 'https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts'
       - 'https://aquasecurity.github.io/helm-charts/'
+      - 'https://charts.goauthentik.io'
       destinations:
       - namespace: argocd
         server: https://kubernetes.default.svc
@@ -539,6 +540,8 @@ argocd-apps:
       - namespace: trivy-operator
         server: https://kubernetes.default.svc  
       - namespace: upgrade-controller
+        server: https://kubernetes.default.svc
+      - namespace: authentik
         server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
