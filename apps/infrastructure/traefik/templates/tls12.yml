@@ -1,8 +1,8 @@
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: TLSOption
 metadata:
   name: tls12
-
+  namespace: {{ .Release.Namespace }}
 spec:
   minVersion: VersionTLS12
   cipherSuites:
