@@ -1,4 +1,5 @@
 barlie:
+  deploy: false
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
@@ -347,6 +348,6 @@ barlie:
               - ipBlock:
                   cidr: 0.0.0.0/0
 
-infisicalSecret:
-  config-vars:
-    syncInterval: 900
+# infisicalSecret:
+#   config-vars:
+#     syncInterval: 900

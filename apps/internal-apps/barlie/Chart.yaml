@@ -13,3 +13,4 @@ dependencies:
     repository: "@bjws"
     version: "3.1.0"
     alias: barlie
+    condition: barlie.deploy 
