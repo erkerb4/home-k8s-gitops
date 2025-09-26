@@ -16,5 +16,5 @@ helm:
     value: ghcr.io/linuxserver/sonarr
     forcestring: true
   - name: sonarr.controllers.sonarr.containers.main.image.tag
-    value: latest@sha256:bb50bac26881613af15deb4df891e4a7cb09e3333aec20a0522cb188fb22b11d
+    value: latest@sha256:328d322af2bb8d7211a9c43a26ff5e658ba3e6f47a695e8fb9ff806bfeab0f04
     forcestring: true
