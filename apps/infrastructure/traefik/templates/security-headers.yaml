@@ -12,7 +12,6 @@ spec:
     accessControlMaxAge: 100
     addVaryHeader: true
     browserXssFilter: true
-    contentTypeNosniff: true
     customFrameOptionsValue: SAMEORIGIN
     forceSTSHeader: true
     frameDeny: true
