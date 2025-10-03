@@ -4,5 +4,5 @@ helm:
     value: donetick/donetick
     forcestring: true
   - name: donetick.controllers.donetick.containers.main.image.tag
-    value: v0.1.62
+    value: v0.1.64
     forcestring: true
