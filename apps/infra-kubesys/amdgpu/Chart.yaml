@@ -15,6 +15,6 @@ kubeVersion: ">= 1.18.0"
 version: 0.2.0
 dependencies:
   - name: node-feature-discovery
-    version: "0.16.4"
+    version: "0.17.3"
     repository: "https://kubernetes-sigs.github.io/node-feature-discovery/charts"
     condition: nfd.enabled
