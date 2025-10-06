@@ -18,10 +18,10 @@ ollama:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
           - matchExpressions:
-            - key: kubernetes.io/hostname
+            - key: amd.cpu.model
               operator: In
               values:
-              - "cirrus"
+              - "5750ge"
   controllers:
     ollama:
       type: deployment
