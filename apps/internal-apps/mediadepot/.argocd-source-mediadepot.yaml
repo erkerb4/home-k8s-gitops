@@ -4,7 +4,7 @@ helm:
     value: ghcr.io/linuxserver/sabnzbd
     forcestring: true
   - name: sabnzbd.controllers.sabnzbd.containers.main.image.tag
-    value: latest@sha256:b425e5f48e13aabb7c6d9e37579629925ad44f77ae0d841edfd776399457f671
+    value: latest@sha256:9011bb04b95417fe6345e48c98f9880188f5825402623a0201d29d1c300eea67
     forcestring: true
   - name: radarr.controllers.radarr.containers.main.image.repository
     value: ghcr.io/linuxserver/radarr
