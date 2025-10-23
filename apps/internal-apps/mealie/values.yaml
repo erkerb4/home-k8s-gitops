@@ -37,6 +37,9 @@ mealie:
             OPENAI_BASE_URL: "http://192.168.11.40:11434/v1"
             OPENAI_MODEL: "gemma3:4b"
             OPENAI_API_KEY: "ollama"
+            TOKEN_TIME: 12
+            ALLOW_PASSWORD_LOGIN: "false"
+            SECURITY_MAX_LOGIN_ATTEMPTS: "3"
             BASE_URL:
               valueFrom:
                 secretKeyRef:
@@ -44,6 +47,8 @@ mealie:
                   key: base_url
             OIDC_GROUPS_CLAIM: mealie-user
             OIDC_AUTH_ENABLED: "true"
+            OIDC_AUTO_REDIRECT: "true"
+            OIDC_REMEMBER_ME: "true"
             OIDC_PROVIDER_NAME: "BayLabs"
             OIDC_REMEMBER_ME: "true"
             OIDC_CONFIGURATION_URL:
