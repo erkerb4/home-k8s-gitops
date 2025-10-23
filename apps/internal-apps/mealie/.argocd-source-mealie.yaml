@@ -1,8 +1,0 @@
-helm:
-  parameters:
-  - name: mealie.controllers.mealie.containers.main.image.repository
-    value: ghcr.io/mealie-recipes/mealie
-    forcestring: true
-  - name: mealie.controllers.mealie.containers.main.image.tag
-    value: v2.8.0
-    forcestring: true
