@@ -37,7 +37,11 @@ mealie:
             OPENAI_BASE_URL: "http://192.168.11.40:11434/v1"
             OPENAI_MODEL: "gemma3:4b"
             OPENAI_API_KEY: "ollama"
-            BASE_URL: "https://mealie.xtr.pub"
+            BASE_URL:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: base_url
             OIDC_GROUPS_CLAIM: mealie-user
             OIDC_AUTH_ENABLED: "true"
             OIDC_PROVIDER_NAME: "BayLabs"
