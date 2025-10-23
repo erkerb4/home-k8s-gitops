@@ -25,25 +25,38 @@ mealie:
         main:
           image:
             repository: ghcr.io/mealie-recipes/mealie
-            tag: "v2.2.0"
+            tag: "v3.3.2"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
-            ALLOW_SIGNUP: true
+            ALLOW_SIGNUP: false
             PUID: 8123
             PGID: 8123
-            MAX_WORKERS: 1
-            WEB_CONCURRENCY: 1
-            # OPENAI_BASE_URL: "http://ollama.ollama:11434/v1"
-            # OPENAI_MODEL: "llama3.1:8b-instruct-q4_0"
-            # OPENAI_API_KEY: "ollama"
-            OPENAI_MODEL: gpt-4o
-            OPENAI_API_KEY:
+            MAX_WORKERS: 3
+            WEB_CONCURRENCY: 2
+            OPENAI_BASE_URL: "http://192.168.11.40:11434/v1"
+            OPENAI_MODEL: "gemma3:4b"
+            OPENAI_API_KEY: "ollama"
+            BASE_URL: "https://mealie.xtr.pub"
+            OIDC_GROUPS_CLAIM: mealie-user
+            OIDC_AUTH_ENABLED: "true"
+            OIDC_PROVIDER_NAME: "BayLabs"
+            OIDC_REMEMBER_ME: "true"
+            OIDC_CONFIGURATION_URL:
               valueFrom:
                 secretKeyRef:
                   name: config-vars
-                  key: openai_api_key
-            BASE_URL: "https://mealie.xtr.pub"
+                  key: oidc_url
+            OIDC_CLIENT_ID:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: oidc_client_id
+            OIDC_CLIENT_SECRET:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: oidc_client_secret
             SMTP_HOST:
               valueFrom:
                 secretKeyRef:
