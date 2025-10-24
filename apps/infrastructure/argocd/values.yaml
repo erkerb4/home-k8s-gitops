@@ -117,7 +117,10 @@ argo-cd:
         name: aqua
         type: helm
         url: https://aquasecurity.github.io/helm-charts/
-
+      valkey:
+        name: valkey
+        type: helm
+        url: https://valkey.io/valkey-helm/
   dex:
     enabled: false
 
