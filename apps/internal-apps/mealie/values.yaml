@@ -40,11 +40,7 @@ mealie:
             TOKEN_TIME: 12
             ALLOW_PASSWORD_LOGIN: "false"
             SECURITY_MAX_LOGIN_ATTEMPTS: "3"
-            BASE_URL:
-              valueFrom:
-                secretKeyRef:
-                  name: config-vars
-                  key: base_url
+            BASE_URL: "https://meals.baylabs.dev"
             OIDC_GROUPS_CLAIM: mealie-user
             OIDC_AUTH_ENABLED: "true"
             OIDC_AUTO_REDIRECT: "true"
@@ -124,7 +120,7 @@ mealie:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
-        - host: mealie.xtr.pub
+        - host: meals.baylabs.dev
           paths:
             - path: /
               pathType: ImplementationSpecific
@@ -133,7 +129,7 @@ mealie:
                 port: http
       tls:
       - hosts:
-        - mealie.xtr.pub
+        - meals.baylabs.dev
         secretName: tls-secret
   persistence:
     config:
