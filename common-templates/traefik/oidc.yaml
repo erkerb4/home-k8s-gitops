@@ -1,0 +1,66 @@
+{{- with $.Values.oidcMiddleware }}
+{{- $secretDef := printf "oidc-%s" $.Release.Namespace }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oidc-{{ $.Release.Namespace }}
+  namespace: traefik
+  annotations:
+    argocd.argoproj.io/sync-wave: "-4"
+spec:
+  plugin:
+    traefikoidc:
+      logLevel: {{ .logLevel | default "info" | quote }}
+      enablePKCE: {{ .pkce | default true | quote }}
+      providerURL: urn:k8s:secret:{{ .secretName | default $secretDef }}:issuer
+      clientID: urn:k8s:secret:{{ .secretName | default $secretDef }}:client_id
+      clientSecret: urn:k8s:secret:{{ .secretName | default $secretDef }}:client_secret
+      cookieDomain: urn:k8s:secret:{{ .secretName | default $secretDef }}:cookie_domain
+      sessionEncryptionKey: urn:k8s:secret:{{ .secretName | default $secretDef }}:session_key
+      callbackURL: {{ .callbackURL | default "/oauth2/callback" | quote }}
+      logoutURL: {{ .logoutURL | default "/oauth2/logout" | quote }}
+      {{- with .scopes }}
+      scopes:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .groups }}
+      allowedRolesAndGroups:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .securityHeaders }}
+      securityHeaders:
+        enabled: true
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: secrets.infisical.com/v1alpha1
+kind: InfisicalSecret
+metadata:
+  name: oidc-{{ $.Release.Namespace }}
+  namespace: traefik
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+{{- with .annotations }}
+{{ toYaml . | nindent 4 }}
+{{- end }}
+{{- with .labels }}
+  labels:
+{{ toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  hostAPI: https://infisical.xtr.pub/api
+  resyncInterval: 900
+  authentication:
+    serviceToken:
+      serviceTokenSecretReference:
+        secretName: service-token
+        secretNamespace: infisical
+      secretsScope:
+        envSlug: home
+        secretsPath: /{{ $.Release.Namespace }}/{{ $secretDef }}
+  managedSecretReference:
+    creationPolicy: Owner
+    secretName: {{ $secretDef }}
+    secretNamespace: traefik
+{{- end }}
