@@ -7,7 +7,7 @@ dependencies:
     repository: "@bjws"
     alias: searxng
     condition: searxng.deploy
-  - name: redis
-    version: 19.6.1
-    repository: oci://registry-1.docker.io/bitnamicharts
+  - name: valkey
+    version: 0.7.6
+    repository: "@valkey"
     condition: searxng.deploy

@@ -47,11 +47,11 @@ searxng:
         main:
           image:
             repository: searxng/searxng
-            tag: 2024.11.14-abd9b271b
+            tag: 2025.10.23-e363db970
             pullPolicy: IfNotPresent
           env:
             SEARXNG_BASE_URL: https://search.xtr.pub
-            SEARXNG_REDIS_URL: redis://redis-master:6379/0
+            SEARXNG_REDIS_URL: redis://redis:6379/0
             SEARXNG_SECRET:
               valueFrom:
                 secretKeyRef:
@@ -117,6 +117,7 @@ searxng:
         cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+        traefik.ingress.kubernetes.io/router.middlewares: traefik-oidc-searxng@kubernetescrd
   persistence:
     data:
       enabled: true
@@ -136,22 +137,27 @@ searxng:
           copy-configs:
             - path: /config-files
 
-redis:
+valkey:
   fullnameOverride: redis
-  architecture: standalone
   auth:
     enabled: false
-  pdb:
-    create: false
-  master:
-    resources:
-      requests:
-        cpu: 25m
-        memory: 16Mi
-      limits:
-        cpu: 750m
-        memory: 128Mi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 32Mi
+    limits:
+      cpu: 750m
+      memory: 128Mi
 
 infisicalSecret:
   app-config:
     syncInterval: 900
+
+oidcMiddleware:
+  groups:
+    - searxng
+  scopes:
+    - offline_access
+    - groups
+  securityHeaders:
+    profile: strict
