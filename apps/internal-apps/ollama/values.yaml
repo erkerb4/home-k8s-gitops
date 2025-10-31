@@ -1,5 +1,5 @@
 ollama:
-  deploy: true
+  deploy: false
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
