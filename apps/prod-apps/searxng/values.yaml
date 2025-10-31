@@ -50,7 +50,7 @@ searxng:
             tag: 2025.10.23-e363db970
             pullPolicy: IfNotPresent
           env:
-            SEARXNG_BASE_URL: https://search.xtr.pub
+            SEARXNG_BASE_URL: https://search.baylabs.dev
             SEARXNG_REDIS_URL: redis://redis:6379/0
             SEARXNG_SECRET:
               valueFrom:
@@ -136,6 +136,42 @@ searxng:
         searxng:
           copy-configs:
             - path: /config-files
+  networkpolicies:
+    main:
+      enabled: true
+      controller: main
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: searxng
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - podSelector: {}
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - podSelector: {}
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+
 
 valkey:
   fullnameOverride: redis
@@ -148,16 +184,11 @@ valkey:
     limits:
       cpu: 750m
       memory: 128Mi
+  networkPolicy:
+    ingress:
+    - from:
+        - podSelector: {}
 
 infisicalSecret:
   app-config:
     syncInterval: 900
-
-oidcMiddleware:
-  groups:
-    - searxng
-  scopes:
-    - offline_access
-    - groups
-  securityHeaders:
-    profile: strict
