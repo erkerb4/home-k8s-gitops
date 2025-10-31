@@ -15,6 +15,9 @@ traefik:
       fail2ban:
         moduleName: "github.com/tomMoulard/fail2ban"
         version: "v0.8.7"
+      bouncer:
+        moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
+        version: "v1.4.5"
   ingressClass:
     enabled: true
     isDefaultClass: true
