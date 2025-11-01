@@ -117,7 +117,7 @@ mealie:
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: le-prod
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.entrypoints: webext
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
       hosts:
         - host: meals.baylabs.dev
@@ -177,13 +177,6 @@ mealie:
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
-          - to:
-              - namespaceSelector:
-                  matchLabels:
-                    kubernetes.io/metadata.name: ollama
-                podSelector:
-                  matchLabels:
-                     app.kubernetes.io/name: ollama
 
 infisicalSecret:
   config-vars:
