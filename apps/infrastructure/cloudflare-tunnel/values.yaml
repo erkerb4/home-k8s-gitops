@@ -3,7 +3,7 @@ cloudflare-tunnel:
     fullnameOverride: cloudflared
   defaultPodOptions:
     automountServiceAccountToken: false
-    dnsPolicy: "Default"
+    dnsPolicy: "ClusterFirst"
     labels:
       application: cloudflared
     securityContext:
@@ -49,7 +49,12 @@ cloudflare-tunnel:
               name: cloudflare-tunnel-token
           probes:
             liveness:
-              enabled: false
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /ready
+                  port: 2000
             readiness:
               enabled: false
             startup:
@@ -82,7 +87,7 @@ cloudflare-tunnel:
 
   networkpolicies:
     main:
-      enabled: true
+      enabled: false
       controller: main
       podSelector:
         matchLabels:
