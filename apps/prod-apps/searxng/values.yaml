@@ -117,7 +117,6 @@ searxng:
         cert-manager.io/cluster-issuer: le-prod
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
         traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
-        traefik.ingress.kubernetes.io/router.middlewares: traefik-oidc-searxng@kubernetescrd
   persistence:
     data:
       enabled: true
