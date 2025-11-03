@@ -11,7 +11,7 @@ spec:
     - {}
   egress:
     - icmps:
-        - fields:
+      - fields:
         - family: IPv4
             type: 8
     - toEndpoints:
