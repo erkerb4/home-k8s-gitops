@@ -107,12 +107,6 @@ cloudflare-tunnel:
               - port: 8443
               - port: 443
           - to:
-              - namespaceSelector:
-                  matchLabels:
-                    kubernetes.io/metadata.name: plex
-            ports:
-              - port: 32400
-          - to:
               - ipBlock:
                   cidr: 192.168.30.20/32
             ports:
