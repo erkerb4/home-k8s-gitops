@@ -13,7 +13,7 @@ spec:
     - icmps:
       - fields:
         - family: IPv4
-            type: 8
+          type: 8
     - toEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: kube-system
