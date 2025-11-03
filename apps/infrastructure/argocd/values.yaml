@@ -606,9 +606,8 @@ argocd-apps:
       sourceRepos:
       - 'git@github.com:erkerb4/home-k8s-gitops.git'
       - 'https://k8s-at-home.com/charts/'
-      - 'https://charts.bitnami.com/bitnami'
       - 'https://bjw-s-labs.github.io/helm-charts'
-      - 'oci://registry-1.docker.io/bitnamicharts'
+      - 'https://valkey.io/valkey-helm/'
       destinations:
       - namespace: plex
         server: https://kubernetes.default.svc
