@@ -121,6 +121,11 @@ argo-cd:
         name: valkey
         type: helm
         url: https://valkey.io/valkey-helm/
+      dragonfly:
+        name: dragonfly
+        type: helm
+        url: ghcr.io/dragonflydb/dragonfly/helm/dragonfly
+        enableOCI: "true"
   dex:
     enabled: false
 
