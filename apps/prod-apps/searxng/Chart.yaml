@@ -10,4 +10,8 @@ dependencies:
   - name: valkey
     version: 0.7.6
     repository: "@valkey"
-    condition: searxng.deploy
+    condition: valkey.deploy
+  - name: dragonfly
+    version: "v1.35.0"
+    repository: "oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly"
+    condition: dragonfly.deploy

@@ -24,6 +24,7 @@ searxng:
       runAsNonRoot: true
       runAsUser: 977
       fsGroup: 977
+      fsGroupChangePolicy: Always
       seccompProfile:
         type: RuntimeDefault
   controllers:
@@ -47,11 +48,11 @@ searxng:
         main:
           image:
             repository: searxng/searxng
-            tag: 2025.10.23-e363db970
+            tag: 2025.11.24-5fcee9bc3
             pullPolicy: IfNotPresent
           env:
             SEARXNG_BASE_URL: https://search.baylabs.dev
-            SEARXNG_REDIS_URL: redis://redis:6379/0
+            SEARXNG_VALKEY_URL: redis://dragonfly:6379/0
             SEARXNG_SECRET:
               valueFrom:
                 secretKeyRef:
@@ -63,7 +64,7 @@ searxng:
               memory: 2Gi
             requests:
               cpu: 250m
-              memory: 1Gi
+              memory: 512Mi
           probes:
             liveness: &lr-probe
               enabled: true
@@ -173,6 +174,7 @@ searxng:
 
 
 valkey:
+  deploy: false
   fullnameOverride: redis
   auth:
     enabled: false
@@ -187,6 +189,33 @@ valkey:
     ingress:
     - from:
         - podSelector: {}
+
+dragonfly:
+  deploy: true
+  fullnameOverride: dragonfly
+  storage:
+    enabled: true
+    storageClassName: "ec-gold"
+    requests: 128Mi
+  extraArgs:
+    - --dbfilename=my-dump-{timestamp}
+    - --snapshot_cron=0 18 * * *
+  podSecurityContext:
+    fsGroup: 2000
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+  resources:
+    requests:
+      cpu: 125m
+      memory: 256Mi
+    limits:
+      cpu: 750m
+      memory: 384Mi
 
 infisicalSecret:
   app-config:
