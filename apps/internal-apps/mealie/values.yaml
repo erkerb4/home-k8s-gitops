@@ -35,9 +35,11 @@ mealie:
             MAX_WORKERS: 3
             WEB_CONCURRENCY: 2
             OPENAI_BASE_URL: "http://192.168.11.40:11434/v1"
+            OPENAI_ENABLE_IMAGE_SERVICES: "true"
+            OPENAI_CUSTOM_PARAMS: '{"max_tokens": 4096, "temperature": 0.5}'
             OPENAI_MODEL: "gemma3:12b"
             OPENAI_API_KEY: "ollama"
-            TOKEN_TIME: 12
+            TOKEN_TIME: 504
             ALLOW_PASSWORD_LOGIN: "false"
             SECURITY_MAX_LOGIN_ATTEMPTS: "3"
             BASE_URL: "https://meals.baylabs.dev"
