@@ -48,7 +48,7 @@ searxng:
         main:
           image:
             repository: searxng/searxng
-            tag: 2025.11.24-5fcee9bc3
+            tag: 2025.12.4-8c631b92c
             pullPolicy: IfNotPresent
           env:
             SEARXNG_BASE_URL: https://search.baylabs.dev
