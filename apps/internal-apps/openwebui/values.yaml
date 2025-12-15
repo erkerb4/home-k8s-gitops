@@ -19,14 +19,14 @@ openwebui:
         main:
           image:
             repository: backplane/open-webui
-            tag: "0.6.38"
+            tag: "0.6.41"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
             WEBUI_AUTH: "false"
             WEBUI_URL: "https://chatgpt.xtr.pub"
-            ENABLE_LITELLM: "false"
             OLLAMA_BASE_URL: "http://192.168.11.40:11434"
+            OPENAI_API_BASE_URL: "http://192.168.11.40:8080/v1"
           probes:
             liveness:
               enabled: true
