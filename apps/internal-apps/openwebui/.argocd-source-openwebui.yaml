@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: openwebui.controllers.openwebui.containers.main.image.repository
+    value: backplane/open-webui
+    forcestring: true
+  - name: openwebui.controllers.openwebui.containers.main.image.tag
+    value: 0.6.43
+    forcestring: true
