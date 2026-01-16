@@ -1,5 +1,5 @@
 rook-ceph:
- csi:
+  csi:
     provisionerTolerations:
       - key: workload
         value: thor
