@@ -1,4 +1,14 @@
 rook-ceph:
+  provisionerTolerations:
+    - key: workload
+      value: thor
+      operator: Equal
+      effect: NoSchedule
+  pluginTolerations:
+    - key: workload
+      value: thor
+      operator: Equal
+      effect: NoSchedule
   resources:
     limits:
       cpu: 1250m

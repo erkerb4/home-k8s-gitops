@@ -1,5 +1,11 @@
 cilium:
   upgradeCompatibility: "1.15"
+  tolerations:
+  - operator: Exists
+  - key: workload
+    value: thor
+    operator: Equal
+    effect: NoSchedule
   extraEnv:
     - name: TZ
       value: "America/New_York"
