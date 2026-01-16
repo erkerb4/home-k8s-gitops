@@ -21,6 +21,7 @@ rook-ceph-cluster:
   toolbox:
     enabled: true
   cephClusterSpec:
+    continueUpgradeAfterChecksEvenIfNotHealthy: true
     dashboard:
       ssl: false
     crashCollector:
