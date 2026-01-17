@@ -19,15 +19,31 @@ gpu:
         operator: "Equal"
         effect: "NoSchedule"
   deviceConfig:
-    devicePlugin:
-      devicePluginTolerations:
-      - effect: NoSchedule
-        key: workload
-        operator: Equal
-        value: thor
-    metricsExporter:
-      tolerations:
-      - effect: NoSchedule
-        key: workload
-        operator: Equal
-        value: thor
+    spec:
+      driver:
+        enable: false
+      devicePlugin:
+        devicePluginTolerations:
+        - effect: NoSchedule
+          key: workload
+          operator: Equal
+          value: thor
+      metricsExporter:
+        tolerations:
+        - effect: NoSchedule
+          key: workload
+          operator: Equal
+          value: thor
+      testRunner:
+        tolerations:
+        - effect: NoSchedule
+          key: workload
+          operator: Equal
+          value: thor
+      configManager:
+        enabled: false
+        configManagerTolerations:
+        - effect: NoSchedule
+          key: workload
+          operator: Equal
+          value: thor
