@@ -126,6 +126,10 @@ argo-cd:
         type: helm
         url: ghcr.io/dragonflydb/dragonfly/helm/dragonfly
         enableOCI: "true"
+      rocm:
+        name: rocm
+        type: helm
+        url: https://rocm.github.io/gpu-operator
   dex:
     enabled: false
 
@@ -520,6 +524,7 @@ argocd-apps:
       - 'https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts'
       - 'https://aquasecurity.github.io/helm-charts/'
       - 'https://charts.goauthentik.io'
+      - 'https://rocm.github.io/gpu-operator'
       destinations:
       - namespace: argocd
         server: https://kubernetes.default.svc
@@ -549,7 +554,7 @@ argocd-apps:
         server: https://kubernetes.default.svc  
       - namespace: upgrade-controller
         server: https://kubernetes.default.svc
-      - namespace: authentik
+      - namespace: amd-gpu
         server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
@@ -567,7 +572,6 @@ argocd-apps:
       description: Critical/Sensetive deployments that support cluster functionality
       sourceRepos:
       - 'git@github.com:erkerb4/home-k8s-gitops.git'
-      - 'https://bitnami-labs.github.io/sealed-secrets'
       - 'https://helm.cilium.io'
       destinations:
       - namespace: kube-system

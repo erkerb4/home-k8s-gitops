@@ -1,0 +1,33 @@
+gpu:
+  deploy: true
+  node-feature-discovery:
+    fullnameOverride: nfd
+    worker:
+      tolerations:
+      - key: "amd-dcm"
+        operator: "Equal"
+        value: "up"
+        effect: "NoExecute"
+      - key: "workload"
+        value: "thor"
+        operator: "Equal"
+        effect: "NoSchedule"
+    topologyUpdater:
+      tolerations:
+      - key: "workload"
+        value: "thor"
+        operator: "Equal"
+        effect: "NoSchedule"
+  deviceConfig:
+    devicePlugin:
+      devicePluginTolerations:
+      - effect: NoSchedule
+        key: workload
+        operator: Equal
+        value: thor
+    metricsExporter:
+      tolerations:
+      - effect: NoSchedule
+        key: workload
+        operator: Equal
+        value: thor
