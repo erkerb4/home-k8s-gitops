@@ -1,5 +1,5 @@
 ollama:
-  deploy: false
+  deploy: trufalsee
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
@@ -13,15 +13,11 @@ ollama:
       # runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: amd.cpu.model
-              operator: In
-              values:
-              - "5750ge"
+    tolerations:
+      - key: "workload"
+        value: "thor"
+        operator: "Equal"
+        effect: "NoSchedule"
   controllers:
     ollama:
       type: deployment
@@ -29,13 +25,13 @@ ollama:
         main:
           image:
             repository: ollama/ollama
-            tag: "0.12.3-rocm"
+            tag: "0.14.2-rocm"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
-            HSA_OVERRIDE_GFX_VERSION: "9.0.0"
+            # HSA_OVERRIDE_GFX_VERSION: "9.0.0"
             HIP_VISIBLE_DEVICES: "0"
-            HCC_AMDGPU_TARGET: "gfx900"
+            # HCC_AMDGPU_TARGET: "gfx900"
             HSA_ENABLE_SDMA: "0"
           probes:
             startup:
@@ -83,7 +79,7 @@ ollama:
           resources:
             limits:
               cpu: "14"
-              memory: 18Gi
+              memory: 32Gi
               amd.com/gpu: 1
             requests:
               cpu: "2"
@@ -125,10 +121,9 @@ ollama:
   persistence:
     data:
       enabled: true
-      type: persistentVolumeClaim
-      storageClass: ec-silver-r1
-      accessMode: ReadWriteOnce
-      size: "75Gi"
+      type: hostPath
+      hostPath: "/mnt/data/ollama"
+      hostPathType: DirectoryOrCreate
       advancedMounts:
         ollama:
           main:
