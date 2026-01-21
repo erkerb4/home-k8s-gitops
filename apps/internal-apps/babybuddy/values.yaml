@@ -21,7 +21,7 @@ babybuddy:
         main:
           image:
             repository: ghcr.io/linuxserver/babybuddy
-            tag: "2.4.0"
+            tag: "2.7.1"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
