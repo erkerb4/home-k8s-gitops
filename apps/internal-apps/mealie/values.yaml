@@ -34,9 +34,9 @@ mealie:
             PGID: 8123
             MAX_WORKERS: 3
             WEB_CONCURRENCY: 2
-            OPENAI_BASE_URL: "http://192.168.11.40:11434/v1"
+            OPENAI_BASE_URL: "http://ollama.ollama:11434/v1"
             OPENAI_ENABLE_IMAGE_SERVICES: "true"
-            OPENAI_CUSTOM_PARAMS: '{"max_tokens": 4096, "temperature": 0.5}'
+            OPENAI_CUSTOM_PARAMS: '{"max_tokens": 8192, "temperature": 0.5}'
             OPENAI_MODEL: "gemma3:12b"
             OPENAI_API_KEY: "ollama"
             TOKEN_TIME: 504
