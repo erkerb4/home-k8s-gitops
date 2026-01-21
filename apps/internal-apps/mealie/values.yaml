@@ -167,6 +167,13 @@ mealie:
                 podSelector:
                   matchLabels:
                      app.kubernetes.io/name: traefik
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: ollama
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: ollama
         egress:
           - to:
               - namespaceSelector: {}
