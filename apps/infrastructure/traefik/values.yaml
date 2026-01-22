@@ -112,6 +112,12 @@ traefik:
         default: true
       exposedPort: 32400
       protocol: TCP
+    whisper:
+      port: 10300
+      expose:
+        default: true
+      exposedPort: 10300
+      protocol: TCP
 
   podDisruptionBudget:
     enabled: true
@@ -144,11 +150,11 @@ traefik:
 
   resources:
     requests:
-      cpu: "100m"
-      memory: "64Mi"
+      cpu: "125m"
+      memory: "256Mi"
     limits:
-      cpu: "250m"
-      memory: "192Mi"
+      cpu: "750m"
+      memory: "512Mi"
 
   affinity:
     podAntiAffinity:

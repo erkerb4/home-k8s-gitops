@@ -25,7 +25,7 @@ openwebui:
             TZ: "America/New_York"
             WEBUI_AUTH: "false"
             WEBUI_URL: "https://chatgpt.xtr.pub"
-            OLLAMA_BASE_URL: "https:/ollama.xtr.pub"
+            OLLAMA_BASE_URL: "https://ollama.xtr.pub"
             OPENAI_API_BASE_URL: "http://192.168.11.40:8080/v1"
           probes:
             liveness:
