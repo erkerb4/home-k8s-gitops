@@ -25,7 +25,8 @@ babybuddy:
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
-            CSRF_TRUSTED_ORIGINS: "https://baby.xtr.pub"
+            CSRF_TRUSTED_ORIGINS: "http://127.0.0.1:8000,https://baby.xtr.pub"
+            SECURE_PROXY_SSL_HEADER: "True"
           resources:
             limits:
               cpu: "2000m"
