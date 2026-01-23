@@ -118,6 +118,12 @@ traefik:
         default: true
       exposedPort: 10300
       protocol: TCP
+    piper:
+      port: 10200
+      expose:
+        default: true
+      exposedPort: 10200
+      protocol: TCP
 
   podDisruptionBudget:
     enabled: true
