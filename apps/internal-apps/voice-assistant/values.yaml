@@ -1,0 +1,158 @@
+voice:
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+              - "thor"
+    tolerations:
+      - key: "workload"
+        value: "thor"
+        operator: "Equal"
+        effect: "NoSchedule"
+  controllers:
+    whisper:
+      type: deployment
+      containers:
+        main:
+          nameOverride: whisper
+          image:
+            repository: lscr.io/linuxserver/faster-whisper
+            tag: "3.0.2"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            PUID: "1000"
+            PGID: "1000"
+            WHISPER_MODEL: "turbo"
+            WHISPER_BEAM: "1"
+            WHISPER_LANG: "en"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          # securityContext:
+          #   capabilities:
+          #     drop:
+          #     - ALL
+            # readOnlyRootFilesystem: true
+          # resources:
+          #   limits:
+          #     cpu: "1"
+          #     memory: 768Mi
+          #   requests:
+          #     cpu: 500m
+          #     memory: 256Mi
+    piper:
+      type: deployment
+      containers:
+        main:
+          nameOverride: piper
+          image:
+            repository: lscr.io/linuxserver/piper
+            tag: "2.1.2"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            PUID: "1000"
+            PGID: "1000"
+            PIPER_VOICE: "en_US-reza_ibrahim-medium"
+            PIPER_LENGTH: "0.7"
+            PIPER_NOISE: "0.667"
+            PIPER_NOISEW: "0.333"
+            PIPER_SPEAKER: "0"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+  service:
+    whisper:
+      controller: whisper
+      primary: true
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 10300
+          protocol: HTTP
+    piper:
+      controller: piper
+      primary: true
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 10200
+          protocol: HTTP
+  ingress:
+    main:
+      enabled: false
+  persistence:
+    config-whisper:
+      enabled: true
+      type: hostPath
+      hostPath: "/mnt/data/whisper"
+      hostPathType: DirectoryOrCreate
+      advancedMounts:
+        whisper:
+          main:
+            - path: /config
+            - path: /app
+            - path: /defaults
+            - path: /run/whisper-temp
+    config-piper:
+      enabled: true
+      type: hostPath
+      hostPath: "/mnt/data/piper"
+      hostPathType: DirectoryOrCreate
+      advancedMounts:
+        piper:
+          main:
+            - path: /config
+
+  networkpolicies:
+    main:
+      enabled: false
+      controller: voice
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          # - to:
+          #     - ipBlock:
+          #         cidr: 0.0.0.0/0

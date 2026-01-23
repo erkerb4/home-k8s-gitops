@@ -658,8 +658,6 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: changedetection
         server: https://kubernetes.default.svc
-      - namespace: omada
-        server: https://kubernetes.default.svc
       - namespace: actual
         server: https://kubernetes.default.svc
       - namespace: mealie
@@ -673,6 +671,8 @@ argocd-apps:
       - namespace: kometa
         server: https://kubernetes.default.svc
       - namespace: donetick
+        server: https://kubernetes.default.svc
+      - namespace: voice-assistant
         server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'

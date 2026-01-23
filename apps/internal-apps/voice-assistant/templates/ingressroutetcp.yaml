@@ -1,0 +1,26 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: whisper-tcp
+spec:
+  entryPoints:
+    - whisper
+  routes:
+  - match: HostSNI(`*`)
+    services:
+    - name: voice-assistant-whisper
+      port: 10300
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: piper-tcp
+spec:
+  entryPoints:
+    - piper
+  routes:
+  - match: HostSNI(`*`)
+    services:
+    - name: voice-assistant-piper
+      port: 10200

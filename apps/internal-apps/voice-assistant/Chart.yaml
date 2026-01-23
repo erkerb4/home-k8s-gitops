@@ -1,0 +1,15 @@
+---
+apiVersion: v2
+description: Deployment of Whisper and Piper to use with HA
+name: voice-assistant
+version: "1.0.0"
+keywords:
+  - whisper
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/openai/whisper
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "4.1.2"
+    alias: voice
