@@ -36,7 +36,7 @@ voice:
             TZ: "America/New_York"
             PUID: "1000"
             PGID: "1000"
-            WHISPER_MODEL: "medium.en"
+            WHISPER_MODEL: "small.en"
             WHISPER_BEAM: "1"
             WHISPER_LANG: "en"
           probes:
