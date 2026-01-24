@@ -25,7 +25,7 @@ ollama:
         main:
           image:
             repository: ollama/ollama
-            tag: "0.14.2-rocm"
+            tag: "0.15.0-rocm"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -33,6 +33,7 @@ ollama:
             HIP_VISIBLE_DEVICES: "0"
             # HCC_AMDGPU_TARGET: "gfx900"
             HSA_ENABLE_SDMA: "0"
+            OLLAMA_KEEP_ALIVE: "4h"
           probes:
             startup:
               enabled: true
