@@ -1,0 +1,14 @@
+helm:
+  parameters:
+  - name: voice.controllers.whisper.containers.main.image.repository
+    value: lscr.io/linuxserver/faster-whisper
+    forcestring: true
+  - name: voice.controllers.whisper.containers.main.image.tag
+    value: 3.0.2
+    forcestring: true
+  - name: voice.controllers.piper.containers.main.image.repository
+    value: lscr.io/linuxserver/piper
+    forcestring: true
+  - name: voice.controllers.piper.containers.main.image.tag
+    value: 2.2.0
+    forcestring: true
