@@ -10,5 +10,5 @@ helm:
     value: lscr.io/linuxserver/piper
     forcestring: true
   - name: voice.controllers.piper.containers.main.image.tag
-    value: 2.2.0
+    value: 2.2.1
     forcestring: true
