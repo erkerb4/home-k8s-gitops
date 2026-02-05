@@ -74,9 +74,6 @@ traefik:
       protocol: TCP
       tls:
         options: traefik-tls13@kubernetescrd
-      http3:
-        enabled: false
-        advertisedPort: 443
       forwardedHeaders:
         trustedIPs:
           - 172.30.0.0/20
