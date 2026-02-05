@@ -44,6 +44,10 @@ babybuddy:
   service:
     app:
       controller: babybuddy
+      annotations:
+        traefik.ingress.kubernetes.io/service.passhostheader: "true"
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+        traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
       ports:
         http:
           enabled: true

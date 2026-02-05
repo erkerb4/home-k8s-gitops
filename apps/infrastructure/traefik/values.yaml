@@ -75,7 +75,7 @@ traefik:
       tls:
         options: traefik-tls13@kubernetescrd
       http3:
-        enabled: true
+        enabled: false
         advertisedPort: 443
       forwardedHeaders:
         trustedIPs:
@@ -84,7 +84,6 @@ traefik:
           - 192.168.30.0/26
       middlewares:
         - traefik-security-headers@kubernetescrd
-
     webext:
       port: 8843
       protocol: TCP
