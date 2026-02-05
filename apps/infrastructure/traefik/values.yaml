@@ -72,6 +72,8 @@ traefik:
       port: 8443
       exposedPort: 443
       protocol: TCP
+      expose:
+        default: true
       tls:
         options: traefik-tls13@kubernetescrd
       forwardedHeaders:
