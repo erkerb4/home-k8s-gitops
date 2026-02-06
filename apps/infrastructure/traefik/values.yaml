@@ -5,7 +5,7 @@ traefik:
       # -- DEBUG, PANIC, FATAL, ERROR, WARN, and INFO.
       level: ERROR
     access:
-      enabled: true
+      enabled: false
       format: json
   experimental:
     plugins:
@@ -69,15 +69,15 @@ traefik:
           scheme: https
           permanent: true
     websecure:
+      asDefault: true
+      certResolver: "le-prod"
       tls:
-        enabled: true
         options: traefik-tls13@kubernetescrd
       forwardedHeaders:
         trustedIPs:
           - 172.30.0.0/20
           - 172.30.16.0/23
           - 192.168.30.0/26
-        insecure: false
       middlewares:
         - traefik-security-headers@kubernetescrd
     webext:
