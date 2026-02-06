@@ -69,18 +69,15 @@ traefik:
           scheme: https
           permanent: true
     websecure:
-      port: 8443
-      exposedPort: 443
-      protocol: TCP
-      expose:
-        default: true
       tls:
+        enabled: true
         options: traefik-tls13@kubernetescrd
       forwardedHeaders:
         trustedIPs:
           - 172.30.0.0/20
           - 172.30.16.0/23
           - 192.168.30.0/26
+        insecure: false
       middlewares:
         - traefik-security-headers@kubernetescrd
     webext:
