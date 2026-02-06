@@ -69,7 +69,6 @@ traefik:
           scheme: https
           permanent: true
     websecure:
-      asDefault: true
       certResolver: "le-prod"
       tls:
         options: traefik-tls13@kubernetescrd
