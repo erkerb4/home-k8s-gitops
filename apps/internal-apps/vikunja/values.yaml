@@ -1,4 +1,4 @@
-donetick:
+vikunja:
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
@@ -6,36 +6,35 @@ donetick:
         - name: ndots
           value: "3"
     labels:
-      application: donetick
+      application: vikunja
     securityContext:
-      runAsUser: 65534
-      fsGroup: 65534
+      runAsUser: 2468
+      fsGroup: 2468
       fsGroupChangePolicy: "Always"
       runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
   controllers:
-    donetick:
+    vikunja:
       type: deployment
       annotations:
         secrets.infisical.com/auto-reload: "true"
-      initContainers:
-        copy-config:
-          image:
-            repository: "quay.io/prometheus/busybox"
-            tag: "latest"
-            pullPolicy: Always
-          command: ["sh", "-c", "if [[ ! -f '/config/selfhosted.yaml' ]]; then cp /app/config/selfhosted.yaml /config/selfhosted.yaml && chown 65534:65534 /config/selfhosted.yaml && echo 'Configuration set'; else echo 'Configuration exists, nothing to do';fi"]
       containers:
         main:
           image:
-            repository: donetick/donetick
-            tag: "v0.1.53"
+            repository: vikunja/vikunja
+            tag: "1.0.0"
             pullPolicy: IfNotPresent
           env:
-            TZ: "America/New_York"
-            DT_ENV: "selfhosted"
-            DT_SQLITE_PATH: "/donetick-data/donetick.db"
+            ## ALL OPTIONS:
+            ## https://vikunja.io/docs/config-options/
+            VIKUNJA_SERVICE_TIMEZONE: "America/New_York"
+            VIKUNJA_SERVICE_PUBLICURL: "https://todo.xtr.pub"
+            VIKUNJA_DATABASE_TYPE: "sqlite"
+            VIKUNJA_DATABASE_PATH: /db/vikunja.db
+            VIKUNJA_SERVICE_MAXITEMSPERPAGE: 50
+            # CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG.
+            VIKUNJA_LOG_LEVEL: "INFO"
           probes:
             liveness:
               enabled: true
@@ -58,7 +57,7 @@ donetick:
               memory: 256Mi
   service:
     app:
-      controller: donetick
+      controller: vikunja
       annotations:
         traefik.ingress.kubernetes.io/service.serversscheme: http
         traefik.ingress.kubernetes.io/service.passhostheader: "true"
@@ -66,7 +65,7 @@ donetick:
         http:
           enabled: true
           primary: true
-          port: 2021
+          port: 3456
           protocol: HTTP
   ingress:
     main:
@@ -88,37 +87,22 @@ donetick:
         - todo.xtr.pub
         secretName: tls-secret
   persistence:
-    config:
-      enabled: true
-      type: persistentVolumeClaim
-      storageClass: ec-gold
-      accessMode: ReadWriteOnce
-      size: "512Mi"
-      globalMounts:
-        - path: /config
     data:
       enabled: true
       type: persistentVolumeClaim
       storageClass: ec-gold
       accessMode: ReadWriteOnce
-      size: "512Mi"
+      size: "1Gi"
       advancedMounts:
-        donetick:
+        vikunja:
           main:
-            - path: /donetick-data
-    app-config:
-      enabled: true
-      type: custom
-      volumeSpec:
-        secret:
-          secretName: app-config
-      globalMounts:
-        - path: /app/config
+            - path: /app/vikunja/files
+            - path: /db
 
   networkpolicies:
     main:
       enabled: false
-      controller: donetick
+      controller: vikunja
       policyTypes:
         - Ingress
         - Egress
@@ -144,6 +128,6 @@ donetick:
           #     - ipBlock:
           #         cidr: 0.0.0.0/0
 
-infisicalSecret:
-  app-config:
-    syncInterval: 120
+# infisicalSecret:
+#   app-config:
+#     syncInterval: 120

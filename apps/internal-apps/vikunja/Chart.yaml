@@ -1,0 +1,15 @@
+---
+apiVersion: v2
+description: an open-source, user-friendly app for managing tasks and chores, featuring customizable options to help you and others stay organized
+name: vikunja
+version: "1.0.0"
+keywords:
+  - tasks
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/go-vikunja/vikunja
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "4.1.2"
+    alias: vikunja
