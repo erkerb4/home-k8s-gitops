@@ -670,7 +670,7 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: kometa
         server: https://kubernetes.default.svc
-      - namespace: donetick
+      - namespace: vikunja
         server: https://kubernetes.default.svc
       - namespace: voice-assistant
         server: https://kubernetes.default.svc
