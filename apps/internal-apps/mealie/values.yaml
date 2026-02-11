@@ -37,7 +37,7 @@ mealie:
             OPENAI_BASE_URL: "https://ollama.xtr.pub/v1"
             OPENAI_ENABLE_IMAGE_SERVICES: "true"
             OPENAI_CUSTOM_PARAMS: '{"max_tokens": 8192, "temperature": 0.5}'
-            OPENAI_MODEL: "gemma3:12b"
+            OPENAI_MODEL: "gemma3:4b-it-q8_0"
             OPENAI_API_KEY: "ollama"
             TOKEN_TIME: 504
             ALLOW_PASSWORD_LOGIN: "false"
