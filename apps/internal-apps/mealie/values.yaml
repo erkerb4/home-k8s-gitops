@@ -37,7 +37,7 @@ mealie:
             OPENAI_BASE_URL: "https://ollama.xtr.pub/v1"
             OPENAI_ENABLE_IMAGE_SERVICES: "true"
             OPENAI_CUSTOM_PARAMS: '{"max_tokens": 8192, "temperature": 0.5}'
-            OPENAI_MODEL: "gemma3:4b-it-q8_0"
+            OPENAI_MODEL: "qwen3-vl:8b-instruct-q8_0"
             OPENAI_API_KEY: "ollama"
             TOKEN_TIME: 504
             ALLOW_PASSWORD_LOGIN: "false"
@@ -176,6 +176,13 @@ mealie:
             ports:
               - port: 53
                 protocol: UDP
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
