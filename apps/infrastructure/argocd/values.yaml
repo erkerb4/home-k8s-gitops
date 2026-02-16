@@ -39,6 +39,7 @@ argo-cd:
     params:
       create: true
       annotations: {}
+      reposerver.allow.oob.symlinks: "true"
       # -- Number of application status processors
       controller.status.processors: 20
       # -- Number of application operation processors
