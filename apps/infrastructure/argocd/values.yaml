@@ -628,7 +628,7 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: overseerr
         server: https://kubernetes.default.svc
-      - namespace: vw
+      - namespace: vaultwarden
         server: https://kubernetes.default.svc
       - namespace: searxng
         server: https://kubernetes.default.svc
