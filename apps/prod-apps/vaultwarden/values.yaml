@@ -1,0 +1,206 @@
+vw:
+  global:
+    fullnameOverride: vaultwarden
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    labels:
+      application: vaultwarden
+    securityContext:
+      runAsUser: 1001
+      fsGroup: 1001
+      fsGroupChangePolicy: "OnRootMismatch"
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/instance
+              operator: In
+              values:
+              - vaultwarden-db
+          topologyKey: kubernetes.io/hostname
+  controllers:
+    main:
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          nameOverride: vaultwarden
+          type: deployment
+          image:
+            repository: ghcr.io/dani-garcia/vaultwarden
+            tag: "1.35.3"
+            pullPolicy: IfNotPresent
+          env:
+            #Vars from: https://github.com/dani-garcia/vaultwarden/blob/main/.env.template
+            TZ: "America/New_York"
+            LOG_LEVEL: "info"
+            DATA_FOLDER: data
+            SIGNUPS_ALLOWED: "false"
+            SHOW_PASSWORD_HINT: "false"
+            ENABLE_WEBSOCKET: "false"
+            DISABLE_ICON_DOWNLOAD: "true"
+            IP_HEADER: "X-FORWARDED-FOR"
+          envFrom:
+            - secretRef:
+                name: config-vars
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+          resources:
+            limits:
+              cpu: "1"
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 96Mi
+
+  service:
+    main:
+      nameOverride: vaultwarden
+      extraSelectorLabels:
+        application: vaultwarden
+      ports:
+        http:
+          enabled: true
+          port: 8080
+          primary: true
+          protocol: HTTP
+
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: vw.xtr.pub
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                name: main
+                port: http
+      tls:
+      - hosts:
+        - vw.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    config:
+      enabled: false
+    vw-data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "96Mi"
+      globalMounts:
+        - path: /data
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: main
+      podSelector:
+        matchLabels:
+          application: vaultwarden
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - ports:
+            - port: 587
+              protocol: TCP
+            to:
+            - ipBlock:
+                cidr: 0.0.0.0/0
+
+
+# backupTargets:
+#   &target backblaze-palebluedot:
+#     type: ObjectStore
+#     vendor: Other
+#     objectStoreCredentials:
+#       url: https://s3.us-west-000.backblazeb2.com
+#       bucketName: palebluedot-tvk
+#       region: us-west-000
+#       credentialSecret:
+#         name: *target
+#     thresholdCapacity: 25Gi
+
+# backupPlan:
+#   vw:
+#     backupTarget: *target
+#     backupPlanFlags:
+#       skipImageBackup: true
+#     policies:
+#       retention-policy:
+#         type: Retention
+#         spec:
+#           cleanupConfig:
+#             backupDays: 2
+#           default: false
+#           retentionConfig:
+#             dayOfWeek: Sunday
+#             weekly: 1
+#             latest: 10
+#       fullbackup-policy:
+#         type: Schedule
+#         spec:
+#           default: false
+#           scheduleConfig:
+#             schedule:
+#             - 10 4 * 1/3 *
+#       incremental-policy:
+#         type: Schedule
+#         spec:
+#           default: false
+#           scheduleConfig:
+#             schedule:
+#             - 15 4 * * *
+#     excludeResources:
+#       labelSelector:
+#       - matchExpressions:
+#         - key: tvk-skip-object
+#           operator: In
+#           values:
+#           - "true"
+
+infisicalSecret:
+  config-vars:
+    syncInterval: 0
+  # *target:
+  #   syncInterval: 900
+  #   secretsPath: global
