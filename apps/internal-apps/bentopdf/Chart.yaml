@@ -1,0 +1,15 @@
+---
+apiVersion: v2
+description: an open-source, user-friendly pdf toolkit
+name: bentopdf
+version: "2.2.1"
+keywords:
+  - tasks
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/alam00000/bentopdf
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "4.1.2"
+    alias: bentopdf

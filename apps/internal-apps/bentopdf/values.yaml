@@ -1,0 +1,103 @@
+bentopdf:
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    labels:
+      application: bentopdf
+    securityContext:
+      # runAsUser: 3478
+      # fsGroup: 3478
+      # fsGroupChangePolicy: "Always"
+      # runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    bentopdf:
+      type: deployment
+      containers:
+        main:
+          image:
+            repository: ghcr.io/alam00000/bentopdf-simple
+            tag: "2.3.1"
+            pullPolicy: IfNotPresent
+          env:
+            VITE_BRAND_NAMEL: "BayLabs PDF"
+            PUID: "3478"
+            PGID: "3478"
+            VITE_CORS_PROXY_URL: "https://pdf.xtr.pub,https://pdf.baylabs.dev"
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+          resources:
+            limits:
+              cpu: "2"
+              memory: 768Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+  service:
+    app:
+      controller: bentopdf
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+        traefik.ingress.kubernetes.io/service.passhostheader: "true"
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 8080
+          protocol: HTTP
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: pdf.xtr.pub
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              service:
+                identifier: app
+                port: http
+      tls:
+      - hosts:
+        - pdf.xtr.pub
+        secretName: tls-secret
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: bentopdf
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
