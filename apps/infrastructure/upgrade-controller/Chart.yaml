@@ -8,4 +8,4 @@ sources:
   - https://docs.rke2.io/upgrades/automated_upgrade
 keywords:
   - system-upgrade-controller
-version: 0.14.2
+version: 0.19.0
