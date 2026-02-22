@@ -23,6 +23,9 @@ linkwarden:
             pullPolicy: IfNotPresent
           env:
             NEXTAUTH_URL: "https://pocket.xtr.pub/api/v1/auth"
+            BASE_URL: "https://pocket.xtr.pub"
+            NEXT_PUBLIC_EMAIL_PROVIDER: "true"
+            EMAIL_FROM: "no-reply@baylabs.dev"
             NEXT_PUBLIC_OLLAMA_ENDPOINT_URL: "https://ollama.xtr.pub"
             OLLAMA_MODEL: "qwen3:8b-q8_0"
             DATABASE_URL: "file:/data/data/db.sqlite"
@@ -37,6 +40,11 @@ linkwarden:
                 secretKeyRef:
                   name: config-vars
                   key: MEILI_MASTER_KEY
+            EMAIL_SERVER:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: EMAIL_SERVER
           probes:
             liveness:
               enabled: true
