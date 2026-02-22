@@ -165,7 +165,7 @@ linkwarden:
       advancedMounts:
         linkwarden:
           main:
-            - path: /data
+            - path: /data/data
     meilidata:
       enabled: true
       type: persistentVolumeClaim
