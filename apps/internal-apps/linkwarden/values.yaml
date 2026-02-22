@@ -28,7 +28,7 @@ linkwarden:
             EMAIL_FROM: "no-reply@baylabs.dev"
             NEXT_PUBLIC_OLLAMA_ENDPOINT_URL: "https://ollama.xtr.pub"
             OLLAMA_MODEL: "qwen3:8b-q8_0"
-            DATABASE_URL: "file:/data/data/db.sqlite"
+            DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
             NEXTAUTH_SECRET:
               valueFrom:
@@ -146,16 +146,26 @@ linkwarden:
         secretName: tls-secret
 
   persistence:
-    data:
+    sqlite:
       enabled: true
       type: persistentVolumeClaim
-      storageClass: ec-silver
+      storageClass: ec-gold
       accessMode: ReadWriteOnce
       size: "1Gi"
       advancedMounts:
         linkwarden:
           main:
-            - path: /data/data
+            - path: /sqlite
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "10Gi"
+      advancedMounts:
+        linkwarden:
+          main:
+            - path: /data
     meilidata:
       enabled: true
       type: persistentVolumeClaim
