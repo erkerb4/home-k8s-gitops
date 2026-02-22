@@ -212,8 +212,8 @@ linkwarden:
         - Egress
       rules:
         ingress:
-          - fromEndpoints:
-            - {}
+        - from:
+            - podSelector: {}
         egress: []
 
 infisicalSecret:
