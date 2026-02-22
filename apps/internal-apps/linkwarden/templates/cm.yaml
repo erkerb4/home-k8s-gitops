@@ -1,0 +1,26 @@
+apiVersion: v1
+data:
+  entrypoint: |-
+    #!/bin/sh
+
+    set -eu
+
+    cd packages/prisma
+    # replace incompatible array type to JSON
+    sed -i'' -E 's/String\[\][[:space:]]+@default\(\[\]\)/Json @default("[]")/g' schema.prisma
+    sed -i'' -E 's/Int\[\][[:space:]]+@default\(\[\]\)/Json @default("[]")/g' schema.prisma
+    # change to provider to sqlite
+    sed -i'' -E 's/"postgresql"/"sqlite"/g' schema.prisma
+
+    rm -rf migrations
+
+    yarn prisma migrate deploy
+    yarn prisma db push
+
+    cd /data
+    # run the service https://github.com/linkwarden/linkwarden/blob/7cec177ef086ffe7932c0b5ef5cf645c043caf8a/Dockerfile#L59
+    exec yarn concurrently:start
+kind: ConfigMap
+metadata:
+  name: entrypoint
+  namespace: {{ .Release.Namespace }}

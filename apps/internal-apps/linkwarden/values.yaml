@@ -1,0 +1,215 @@
+linkwarden:
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    securityContext:
+      seccompProfile:
+        type: RuntimeDefault
+  controllers:
+    linkwarden:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          command: ["/bin/sh"]
+          args: ["/entrypoint.sh"]
+          image:
+            repository: ghcr.io/linkwarden/linkwarden
+            tag: "v2.13.5"
+            pullPolicy: IfNotPresent
+          env:
+            NEXTAUTH_URL: "https://pocket.xtr.pub/api/v1/auth"
+            NEXT_PUBLIC_OLLAMA_ENDPOINT_URL: "https://ollama.xtr.pub"
+            OLLAMA_MODEL: "llama3.1:8b-instruct-q8_0"
+            DATABASE_URL: "file:/data/data/db.sqlite"
+            MEILI_HOST: "http://linkwarden-meilisearch:7700"
+            NEXTAUTH_SECRET:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: NEXTAUTH_SECRET
+            MEILI_MASTER_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: MEILI_MASTER_KEY
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+          resources:
+            limits:
+              cpu: "2"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+    meilisearch:
+      type: deployment
+      annotations:
+        secrets.infisical.com/auto-reload: "true"
+      containers:
+        main:
+          image:
+            repository: getmeili/meilisearch
+            tag: "v1.35.1"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+            MEILI_MASTER_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: MEILI_MASTER_KEY
+            MEILI_ENV: production
+          probes:
+            liveness:
+              enabled: true
+            readiness:
+              enabled: true
+            startup:
+              enabled: true
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            allowPrivilegeEscalation: false
+          resources:
+            limits:
+              cpu: "1"
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+
+  service:
+    app:
+      controller: linkwarden
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+        traefik.ingress.kubernetes.io/service.passhostheader: "true"
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 3000
+          protocol: HTTP
+    meilisearch:
+      controller: meilisearch
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 7700
+          protocol: HTTP
+
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: pocket.xtr.pub
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              service:
+                identifier: app
+                port: http
+      tls:
+      - hosts:
+        - pocket.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+      advancedMounts:
+        linkwarden:
+          main:
+            - path: /data/data
+    meilidata:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-gold
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+      advancedMounts:
+        meilisearch:
+          main:
+            - path: /meili_data
+    entrypoint:
+      enabled: true
+      type: configMap
+      name: entrypoint
+      advancedMounts:
+        linkwarden:
+          main:
+            - path: /entrypoint.sh
+              subPath: entrypoint
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: linkwarden
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+    meili:
+      enabled: true
+      controller: meilisearch
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+        - fromEndpoints:
+            - {}
+        egress:
+          - {}
+
+infisicalSecret:
+  config-vars:
+    syncInterval: 120

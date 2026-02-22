@@ -1,0 +1,16 @@
+---
+apiVersion: v2
+description: an open-source, user-friendly pdf toolkit
+name: linkwarden
+version: "2.2.1"
+keywords:
+  - tasks
+sources:
+  - https://github.com/bjw-s/helm-charts
+  - https://github.com/linkwarden/linkwarden
+  - https://docs.linkwarden.app/
+dependencies:
+  - name: app-template
+    repository: "@bjws"
+    version: "4.1.2"
+    alias: linkwarden

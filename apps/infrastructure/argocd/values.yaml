@@ -677,6 +677,8 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: bentopdf
         server: https://kubernetes.default.svc
+      - namespace: linkwarden
+        server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'
