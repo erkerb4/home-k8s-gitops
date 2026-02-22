@@ -186,6 +186,8 @@ linkwarden:
                      app.kubernetes.io/name: traefik
         egress:
           - to:
+              - podSelector: {}
+          - to:
               - namespaceSelector: {}
                 podSelector:
                   matchLabels:
@@ -212,8 +214,7 @@ linkwarden:
         ingress:
           - fromEndpoints:
             - {}
-        egress:
-          - {}
+        egress: []
 
 infisicalSecret:
   config-vars:
