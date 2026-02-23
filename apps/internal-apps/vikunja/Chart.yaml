@@ -13,7 +13,7 @@ dependencies:
     repository: "@bjws"
     version: "4.1.2"
     alias: vikunja
-  - name: dragonfly
-    version: "v1.36.0"
-    repository: oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly
-    condition: dragonfly.deploy
+  # - name: dragonfly
+  #   version: "v1.36.0"
+  #   repository: oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly
+  #   condition: dragonfly.deploy
