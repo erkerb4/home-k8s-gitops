@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.name
+    value: vikunja/vikunja
+    forcestring: true
+  - name: image.tag
+    value: 1.1.0
+    forcestring: true
