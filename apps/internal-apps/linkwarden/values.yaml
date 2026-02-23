@@ -222,6 +222,7 @@ linkwarden:
                   cidr: 0.0.0.0/0
             ports:
               - port: 443
+              - port: 587
     meili:
       enabled: true
       controller: meilisearch
