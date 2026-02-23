@@ -6,3 +6,6 @@ helm:
   - name: image.tag
     value: 1.1.0
     forcestring: true
+  - name: vikunja.controllers.vikunja.containers.main.image.repository
+    value: 1.1.0
+    forcestring: true
