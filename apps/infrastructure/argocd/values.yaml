@@ -650,6 +650,7 @@ argocd-apps:
       - 'git@github.com:erkerb4/home-k8s-gitops.git'
       - 'https://k8s-at-home.com/charts/'
       - 'https://bjw-s-labs.github.io/helm-charts'
+      - 'oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly'
       destinations:
       - namespace: babybuddy
         server: https://kubernetes.default.svc
