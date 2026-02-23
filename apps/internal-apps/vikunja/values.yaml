@@ -33,6 +33,10 @@ vikunja:
             VIKUNJA_DATABASE_TYPE: "sqlite"
             VIKUNJA_DATABASE_PATH: /db/vikunja.db
             VIKUNJA_SERVICE_MAXITEMSPERPAGE: 50
+            VIKUNJA_REDIS_ENABLED: 1
+            VIKUNJA_REDIS_HOST: 'dragonfly:6379'
+            VIKUNJA_CACHE_ENABLED: 1
+            VIKUNJA_CACHE_TYPE: redis
             # CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG.
             VIKUNJA_LOG_LEVEL: "INFO"
           probes:
@@ -127,6 +131,33 @@ vikunja:
           # - to:
           #     - ipBlock:
           #         cidr: 0.0.0.0/0
+
+dragonfly:
+  deploy: true
+  fullnameOverride: dragonfly
+  storage:
+    enabled: true
+    storageClassName: "ec-gold"
+    requests: 128Mi
+  extraArgs:
+    - --dbfilename=my-dump-{timestamp}
+    - --snapshot_cron=0 18 * * *
+  podSecurityContext:
+    fsGroup: 2000
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1000
+  resources:
+    requests:
+      cpu: 125m
+      memory: 256Mi
+    limits:
+      cpu: 750m
+      memory: 384Mi
 
 # infisicalSecret:
 #   app-config:
