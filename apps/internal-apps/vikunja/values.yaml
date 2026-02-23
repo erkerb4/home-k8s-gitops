@@ -33,10 +33,10 @@ vikunja:
             VIKUNJA_DATABASE_TYPE: "sqlite"
             VIKUNJA_DATABASE_PATH: /db/vikunja.db
             VIKUNJA_SERVICE_MAXITEMSPERPAGE: 50
-            VIKUNJA_REDIS_ENABLED: 1
-            VIKUNJA_REDIS_HOST: 'dragonfly:6379'
-            VIKUNJA_CACHE_ENABLED: 1
-            VIKUNJA_CACHE_TYPE: redis
+            # VIKUNJA_REDIS_ENABLED: 1
+            # VIKUNJA_REDIS_HOST: 'dragonfly:6379'
+            # VIKUNJA_CACHE_ENABLED: 1
+            # VIKUNJA_CACHE_TYPE: redis
             # CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG.
             VIKUNJA_LOG_LEVEL: "INFO"
           probes:
@@ -133,7 +133,7 @@ vikunja:
           #         cidr: 0.0.0.0/0
 
 dragonfly:
-  deploy: true
+  deploy: false
   fullnameOverride: dragonfly
   storage:
     enabled: true
