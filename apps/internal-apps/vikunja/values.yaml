@@ -102,6 +102,16 @@ vikunja:
           main:
             - path: /app/vikunja/files
             - path: /db
+    app-config:
+      enabled: true
+      type: custom
+      volumeSpec:
+        secret:
+          secretName: app-config
+      advancedMounts:
+        vikunja:
+          main:
+          - path: /etc/vikunja
 
   networkpolicies:
     main:
@@ -159,6 +169,6 @@ dragonfly:
       cpu: 750m
       memory: 384Mi
 
-# infisicalSecret:
-#   app-config:
-#     syncInterval: 120
+infisicalSecret:
+  app-config:
+    syncInterval: 120

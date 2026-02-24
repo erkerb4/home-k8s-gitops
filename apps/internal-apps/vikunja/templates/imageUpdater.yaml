@@ -1,0 +1,22 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: vikunja
+  namespace: argocd
+spec:
+  namespace: argocd
+  writeBackConfig:
+    method: "git"
+    gitConfig:
+      branch: main:image-updater-{{.SHA256}}
+  applicationRefs:
+    - namePattern: "vikunja"
+      commonUpdateSettings:
+        updateStrategy: "semver"
+      images:
+        - alias: "vikunja"
+          imageName: "vikunja/vikunja:1.x"
+          manifestTargets:
+            helm:
+              name: "vikunja.controllers.vikunja.containers.main.image.repository"
+              tag: "vikunja.controllers.vikunja.containers.main.image.tag"
