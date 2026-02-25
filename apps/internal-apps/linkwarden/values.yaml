@@ -34,6 +34,7 @@ linkwarden:
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
             NEXT_PUBLIC_KEYCLOAK_ENABLED: "true"
+            NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
           probes:
             liveness:
               enabled: true
