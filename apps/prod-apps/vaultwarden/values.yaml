@@ -204,3 +204,12 @@ infisicalSecret:
   # *target:
   #   syncInterval: 900
   #   secretsPath: global
+
+imageUpdater:
+  images:
+  - alias: "vaultwarden"
+    imageName: "ghcr.io/dani-garcia/vaultwarden:1.x"
+    manifestTargets:
+      helm:
+        name: "vw.controllers.main.containers.main.image.repository"
+        tag: "vw.controllers.main.containers.main.image.tag"

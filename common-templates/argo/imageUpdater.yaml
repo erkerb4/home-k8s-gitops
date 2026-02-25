@@ -1,0 +1,22 @@
+{{- with $.Values.imageUpdater }}
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: argocd
+spec:
+  namespace: argocd
+  writeBackConfig:
+    method: "git"
+    gitConfig:
+      branch: main:image-updater-{{.SHA256}}
+  applicationRefs:
+    - namePattern: "{{ $.Release.Name }}"
+      commonUpdateSettings:
+        updateStrategy: {{ .commonUpdateStrategy | default "semver" }}
+    {{- with .images }}
+      images:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+
+{{- end }}

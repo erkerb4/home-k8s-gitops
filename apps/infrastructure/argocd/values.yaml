@@ -575,6 +575,8 @@ argocd-apps:
       - 'git@github.com:erkerb4/home-k8s-gitops.git'
       - 'https://helm.cilium.io'
       destinations:
+      - namespace: argocd
+        server: https://kubernetes.default.svc
       - namespace: kube-system
         server: https://kubernetes.default.svc
       clusterResourceWhitelist:
@@ -620,6 +622,8 @@ argocd-apps:
       - 'https://valkey.io/valkey-helm/'
       - 'oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly'
       destinations:
+      - namespace: argocd
+        server: https://kubernetes.default.svc
       - namespace: plex
         server: https://kubernetes.default.svc
       - namespace: ffk
@@ -651,8 +655,10 @@ argocd-apps:
       - 'https://k8s-at-home.com/charts/'
       - 'https://bjw-s-labs.github.io/helm-charts'
       - 'oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly'
-      - 'https://ghcr.io/dragonflydb/dragonfly/helm/dragonfly'
+      - 'ghcr.io/dragonflydb/dragonfly/helm/dragonfly'
       destinations:
+      - namespace: argocd
+        server: https://kubernetes.default.svc
       - namespace: babybuddy
         server: https://kubernetes.default.svc
       - namespace: mediadepot

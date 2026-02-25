@@ -172,3 +172,12 @@ dragonfly:
 infisicalSecret:
   app-config:
     syncInterval: 120
+
+imageUpdater:
+  images:
+  - alias: "vikunja"
+    imageName: "vikunja/vikunja:1.x"
+    manifestTargets:
+      helm:
+        name: "vikunja.controllers.vikunja.containers.main.image.repository"
+        tag: "vikunja.controllers.vikunja.containers.main.image.tag"
