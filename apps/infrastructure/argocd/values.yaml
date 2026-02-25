@@ -719,6 +719,7 @@ argocd-image-updater:
         ping: yes
         credentials: secret:argocd/image-updater-registry-configs#dockerio
       - name: GHCR
+        prefix: ghcr
         api_url: https://ghcr.io
         ping: no
         credentials: secret:argocd/image-updater-registry-configs#ghcrio
