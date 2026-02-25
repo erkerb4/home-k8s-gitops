@@ -3,13 +3,13 @@ apiVersion: argocd-image-updater.argoproj.io/v1alpha1
 kind: ImageUpdater
 metadata:
   name: {{ $.Release.Name }}
-  namespace: argocd
+  namespace: {{ $.Release.Namespace }}
 spec:
   namespace: argocd
   writeBackConfig:
     method: "git"
     gitConfig:
-      branch: main:image-updater-{{.SHA256}}
+      branch: main:image-updater-{{ `{{ .SHA256 }}` }}
   applicationRefs:
     - namePattern: "{{ $.Release.Name }}"
       commonUpdateSettings:

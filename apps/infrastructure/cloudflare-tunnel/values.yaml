@@ -138,3 +138,12 @@ cloudflare-tunnel:
 infisicalSecret:
   cloudflare-tunnel-token:
     syncInterval: 300
+
+imageUpdater:
+  images:
+  - alias: "cloudflared"
+    imageName: "cloudflare/cloudflared:2026"
+    manifestTargets:
+      helm:
+        name: "cloudflare-tunnel.controllers.main.containers.main.image.repository"
+        tag: "cloudflare-tunnel.controllers.main.containers.main.image.tag"
