@@ -737,7 +737,15 @@ imageUpdater:
     imageName: "ghcr.io/linuxserver/sonarr:latest"
     commonUpdateSettings:
       updateStrategy: "digest"
+    manifestTargets:
+      helm:
+        name: "sonarr.controllers.sonarr.containers.main.image.repository"
+        tag: "sonarr.controllers.sonarr.containers.main.image.tag"
   - alias: "radarr"
     imageName: "ghcr.io/linuxserver/radarr:latest"
     commonUpdateSettings:
       updateStrategy: "digest"
+    manifestTargets:
+      helm:
+        name: "radarr.controllers.radarr.containers.main.image.repository"
+        tag: "radarr.controllers.radarr.containers.main.image.tag"
