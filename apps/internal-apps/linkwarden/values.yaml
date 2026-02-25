@@ -33,21 +33,7 @@ linkwarden:
             OLLAMA_MODEL: "qwen3:8b-q8_0"
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
-            # NEXTAUTH_SECRET:
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: config-vars
-            #       key: NEXTAUTH_SECRET
-            # MEILI_MASTER_KEY:
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: config-vars
-            #       key: MEILI_MASTER_KEY
-            # EMAIL_SERVER:
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: config-vars
-            #       key: EMAIL_SERVER
+            NEXT_PUBLIC_KEYCLOAK_ENABLED: "true"
           probes:
             liveness:
               enabled: true
