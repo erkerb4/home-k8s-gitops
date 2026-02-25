@@ -4,7 +4,7 @@ helm:
     value: ghcr.io/linuxserver/sabnzbd
     forcestring: true
   - name: sabnzbd.controllers.sabnzbd.containers.main.image.tag
-    value: unstable-version-5.0.0Beta1
+    value: amd64-unstable-version-5.0.0Beta1
     forcestring: true
   - name: radarr.controllers.radarr.containers.main.image.repository
     value: ghcr.io/linuxserver/radarr
