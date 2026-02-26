@@ -4,5 +4,5 @@ helm:
     value: plexinc/pms-docker
     forcestring: true
   - name: plex.controllers.main.containers.main.image.tag
-    value: 1.43.0.10492-121068a07-amd64
+    value: 1.15.4.994-107756f7e
     forcestring: true
