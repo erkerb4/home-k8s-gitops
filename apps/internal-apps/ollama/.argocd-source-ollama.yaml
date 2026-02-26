@@ -1,11 +1,5 @@
 helm:
   parameters:
-  - name: plex.controllers.main.containers.main.image.repository
-    value: ollama/ollama
-    forcestring: true
-  - name: plex.controllers.main.containers.main.image.tag
-    value: 0.17.0-rocm
-    forcestring: true
   - name: ollama.controllers.ollama.containers.main.image.repository
     value: ollama/ollama
     forcestring: true
