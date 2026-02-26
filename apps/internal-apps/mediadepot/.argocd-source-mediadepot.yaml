@@ -10,13 +10,13 @@ helm:
     value: ghcr.io/linuxserver/radarr
     forcestring: true
   - name: radarr.controllers.radarr.containers.main.image.tag
-    value: latest@sha256:6d3e68474ea146f995af98d3fb2cb1a14e2e4457ddaf035aa5426889e2f9249c
+    value: 6.1.1-nightly
     forcestring: true
   - name: sonarr.controllers.sonarr.containers.main.image.repository
     value: ghcr.io/linuxserver/sonarr
     forcestring: true
   - name: sonarr.controllers.sonarr.containers.main.image.tag
-    value: latest@sha256:37be832b78548e3f55f69c45b50e3b14d18df1b6def2a4994258217e67efb1a1
+    value: 4.0.16.2944-ls303
     forcestring: true
   - name: image.name
     value: ghcr.io/linuxserver/radarr
