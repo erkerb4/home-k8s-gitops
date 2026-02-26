@@ -273,3 +273,15 @@ infisicalSecret:
   *target:
     syncInterval: 900
     secretsPath: global
+
+imageUpdater:
+  images:
+  - alias: "plex"
+    imageName: "plexinc/pms-docker:1.x"
+    commonUpdateSettings:
+      updateStrategy: "newest-build"
+      ignoreTags: ["latest", "plex-user-test" ]
+    manifestTargets:
+      helm:
+        name: "plex.controllers.main.containers.main.image.repository"
+        tag: "plex.controllers.main.containers.main.image.tag"
