@@ -169,6 +169,7 @@ imageUpdater:
     imageName: "ollama/ollama:0.x"
     commonUpdateSettings:
       updateStrategy: "newest-build"
+      allowTags: regexp:^\d+\.\d+\.\d+-rocm$
       ignoreTags: ["latest", "*-rc", "*-rc*", "*-rc-*" ]
     manifestTargets:
       helm:
