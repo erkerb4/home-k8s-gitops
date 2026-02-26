@@ -728,23 +728,25 @@ imageUpdater:
     imageName: "ghcr.io/linuxserver/sabnzbd:4.x"
     commonUpdateSettings:
       updateStrategy: "newest-build"
-      ignoreTags: ["dev","nightly", "unstable"]
+      ignoreTags: ["dev", "latest", "nightly", "nightly-*", "*-nightly" , "unstable", "unstable-*", "*-unstable", "amd64-*", "version-*" ]
     manifestTargets:
       helm:
         name: "sabnzbd.controllers.sabnzbd.containers.main.image.repository"
         tag: "sabnzbd.controllers.sabnzbd.containers.main.image.tag"
   - alias: "sonarr"
-    imageName: "ghcr.io/linuxserver/sonarr:latest"
+    imageName: "ghcr.io/linuxserver/sonarr:4.x"
     commonUpdateSettings:
-      updateStrategy: "digest"
+      updateStrategy: "newest-build"
+      ignoreTags: ["dev", "latest", "nightly", "nightly-*", "*-nightly", "unstable", "unstable-*", "*-unstable", "amd64-*", "version-*" ]
     manifestTargets:
       helm:
         name: "sonarr.controllers.sonarr.containers.main.image.repository"
         tag: "sonarr.controllers.sonarr.containers.main.image.tag"
   - alias: "radarr"
-    imageName: "ghcr.io/linuxserver/radarr:latest"
+    imageName: "ghcr.io/linuxserver/radarr:6.x"
     commonUpdateSettings:
-      updateStrategy: "digest"
+      updateStrategy: "newest-build"
+      ignoreTags: ["dev", "latest", "nightly", "nightly-*", "*-nightly", "unstable", "unstable-*", "*-unstable", "amd64-*", "version-*" ]
     manifestTargets:
       helm:
         name: "radarr.controllers.radarr.containers.main.image.repository"
