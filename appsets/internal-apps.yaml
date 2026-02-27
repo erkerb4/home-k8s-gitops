@@ -18,58 +18,6 @@ spec:
         notifications.argoproj.io/subscribe.on-health-degraded.slack: argo
         notifications.argoproj.io/subscribe.on-sync-failed.slack: argo
         notifications.argoproj.io/subscribe.on-sync-succeeded.slack: argo
-
-        argocd-image-updater.argoproj.io/write-back-method: git
-        argocd-image-updater.argoproj.io/git-branch: main:image-updater-{{.SHA256}}
-        argocd-image-updater.argoproj.io/image-list: linky=ghcr.io/linkwarden/linkwarden:~2,bentopdf=ghcr.io/alam00000/bentopdf-simple:~2,actual=ghcr.io/actualbudget/actual:~26.x,babybuddy=ghcr.io/linuxserver/babybuddy:~2,linky-meilisearch=getmeili/meilisearch:~v1,barlie-redis=redis:~7.2,barlie-assistant=barassistant/server:~3.14,barlie-sr=barassistant/salt-rim:~2.12,changed=ghcr.io/dgtlmoon/changedetection.io:~0.45,mealie=ghcr.io/mealie-recipes/mealie:~v3,sabnzbd=ghcr.io/linuxserver/sabnzbd:latest,radarr=ghcr.io/linuxserver/radarr:latest,sonarr=ghcr.io/linuxserver/sonarr:latest,tautulli=ghcr.io/linuxserver/tautulli:latest,donetick=donetick/donetick:~v0.1,openwebui=backplane/open-webui:~0,whisper=lscr.io/linuxserver/faster-whisper:~3,piper=lscr.io/linuxserver/piper:~2
-
-        argocd-image-updater.argoproj.io/actual.helm.image-name: actual.controllers.actual.containers.main.image.repository
-        argocd-image-updater.argoproj.io/actual.helm.image-tag: actual.controllers.actual.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/babybuddy.helm.image-name: babybuddy.controllers.babybuddy.containers.main.image.repository
-        argocd-image-updater.argoproj.io/babybuddy.helm.image-tag: babybuddy.controllers.babybuddy.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/linky-meili.helm.image-name: linkwarden.controllers.meilisearch.containers.main.image.repository
-        argocd-image-updater.argoproj.io/linky-meili.helm.image-tag: linkwarden.controllers.meilisearch.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/changed.helm.image-name: changedetection.controllers.changedetection.containers.main.image.repository
-        argocd-image-updater.argoproj.io/changed.helm.image-tag: changedetection.controllers.changedetection.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/mealie.helm.image-name: mealie.controllers.mealie.containers.main.image.repository
-        argocd-image-updater.argoproj.io/mealie.helm.image-tag: mealie.controllers.mealie.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/sabnzbd.helm.image-name: sabnzbd.controllers.sabnzbd.containers.main.image.repository
-        argocd-image-updater.argoproj.io/sabnzbd.helm.image-tag: sabnzbd.controllers.sabnzbd.containers.main.image.tag
-        argocd-image-updater.argoproj.io/sabnzbd.update-strategy: digest
-
-        argocd-image-updater.argoproj.io/sonarr.helm.image-name: sonarr.controllers.sonarr.containers.main.image.repository
-        argocd-image-updater.argoproj.io/sonarr.helm.image-tag: sonarr.controllers.sonarr.containers.main.image.tag
-        argocd-image-updater.argoproj.io/sonarr.update-strategy: digest
-        # argocd-image-updater.argoproj.io/sonarr.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
-
-        argocd-image-updater.argoproj.io/radarr.helm.image-name: radarr.controllers.radarr.containers.main.image.repository
-        argocd-image-updater.argoproj.io/radarr.helm.image-tag: radarr.controllers.radarr.containers.main.image.tag
-        argocd-image-updater.argoproj.io/radarr.update-strategy: digest
-        # argocd-image-updater.argoproj.io/radarr.helm.allow-tags: regexp:^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)$
-
-        argocd-image-updater.argoproj.io/tautulli.helm.image-name: tautulli.controllers.tautulli.containers.main.image.repository
-        argocd-image-updater.argoproj.io/tautulli.helm.image-tag: tautulli.controllers.tautulli.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/openwebui.helm.image-name: openwebui.controllers.openwebui.containers.main.image.repository
-        argocd-image-updater.argoproj.io/openwebui.helm.image-tag: openwebui.controllers.openwebui.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/whisper.helm.image-name: voice.controllers.whisper.containers.main.image.repository
-        argocd-image-updater.argoproj.io/whisper.helm.image-tag: voice.controllers.whisper.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/piper.helm.image-name: voice.controllers.piper.containers.main.image.repository
-        argocd-image-updater.argoproj.io/piper.helm.image-tag: voice.controllers.piper.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/bentopdf.helm.image-name: bentopdf.controllers.bentopdf.containers.main.image.repository
-        argocd-image-updater.argoproj.io/bentopdf.helm.image-tag: bentopdf.controllers.bentopdf.containers.main.image.tag
-
-        argocd-image-updater.argoproj.io/linky.helm.image-name: linkwarden.controllers.linkwarden.containers.main.image.repository
-        argocd-image-updater.argoproj.io/linky.helm.image-tag: linkwarden.controllers.linkwarden.containers.main.image.tag
-
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:
