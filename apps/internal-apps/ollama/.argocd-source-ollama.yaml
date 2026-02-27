@@ -4,5 +4,5 @@ helm:
     value: ollama/ollama
     forcestring: true
   - name: ollama.controllers.ollama.containers.main.image.tag
-    value: 0.17.2-rocm
+    value: 0.17.3-rocm
     forcestring: true
