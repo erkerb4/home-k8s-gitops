@@ -228,3 +228,18 @@ linkwarden:
 infisicalSecret:
   config-vars:
     syncInterval: 120
+
+imageUpdater:
+  images:
+  - alias: "linkwarden"
+    imageName: "ghcr.io/linkwarden/linkwarden:v2.x"
+    manifestTargets:
+      helm:
+        name: "linkwarden.controllers.linkwarden.containers.main.image.repository"
+        tag: "linkwarden.controllers.linkwarden.containers.main.image.tag"
+  - alias: "meili"
+    imageName: "getmeili/meilisearch:v1.x"
+    manifestTargets:
+      helm:
+        name: "meilisearch.controllers.meilisearch.containers.main.image.repository"
+        tag: "meilisearch.controllers.meilisearch.containers.main.image.tag"

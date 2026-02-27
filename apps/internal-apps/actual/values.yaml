@@ -119,3 +119,12 @@ actual:
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
+
+imageUpdater:
+  images:
+  - alias: "actual"
+    imageName: "ghcr.io/actualbudget/actual:26.x"
+    manifestTargets:
+      helm:
+        name: "actual.controllers.actual.containers.main.image.repository"
+        tag: "actual.controllers.actual.containers.main.image.tag"

@@ -123,3 +123,12 @@ openwebui:
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
+
+imageUpdater:
+  images:
+  - alias: "openwebui"
+    imageName: "backplane/open-webui:0.x"
+    manifestTargets:
+      helm:
+        name: "openwebui.controllers.openwebui.containers.main.image.repository"
+        tag: "openwebui.controllers.openwebui.containers.main.image.tag"

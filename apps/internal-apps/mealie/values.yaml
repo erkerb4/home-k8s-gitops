@@ -190,3 +190,12 @@ mealie:
 infisicalSecret:
   config-vars:
     syncInterval: 900
+
+imageUpdater:
+  images:
+  - alias: "openwebui"
+    imageName: "ghcr.io/mealie-recipes/mealie:3.x"
+    manifestTargets:
+      helm:
+        name: "mealie.controllers.mealie.containers.main.image.repository"
+        tag: "mealie.controllers.mealie.containers.main.image.tag"

@@ -100,3 +100,15 @@ babybuddy:
                   matchLabels:
                      app.kubernetes.io/name: traefik
         egress: []
+
+imageUpdater:
+  images:
+  - alias: "babybuddy"
+    imageName: "ghcr.io/linuxserver/babybuddy:v2.x"
+    commonUpdateSettings:
+      updateStrategy: "newest-build"
+      ignoreTags: ["dev", "latest", "nightly", "nightly-*", "*-nightly" , "unstable", "unstable-*", "*-unstable", "amd64-*", "version-*" ]
+    manifestTargets:
+      helm:
+        name: "babybuddy.controllers.babybuddy.containers.main.image.repository"
+        tag: "babybuddy.controllers.babybuddy.containers.main.image.tag"

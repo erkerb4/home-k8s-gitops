@@ -101,3 +101,12 @@ bentopdf:
                 podSelector:
                   matchLabels:
                     k8s-app: kube-dns
+
+imageUpdater:
+  images:
+  - alias: "pdf"
+    imageName: "ghcr.io/alam00000/bentopdf-simple:2.x"
+    manifestTargets:
+      helm:
+        name: "bentopdf.controllers.bentopdf.containers.main.image.repository"
+        tag: "bentopdf.controllers.bentopdf.containers.main.image.tag"
