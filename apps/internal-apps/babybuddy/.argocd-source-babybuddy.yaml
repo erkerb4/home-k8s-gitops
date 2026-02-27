@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/linuxserver/babybuddy
     forcestring: true
   - name: babybuddy.controllers.babybuddy.containers.main.image.tag
-    value: 2.7.1
+    value: v2.7.1-ls222
     forcestring: true
