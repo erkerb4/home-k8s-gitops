@@ -1,4 +1,7 @@
 argo-cd:
+  crds:
+    annotations:
+      argocd.argoproj.io/sync-options: ServerSideApply=true
   global:
     domain: argocd.xtr.pub
     logging:
@@ -700,7 +703,7 @@ argocd-image-updater:
     value: "America/New_York"
   extraArgs:
   - --interval
-  - 30m
+  - 90m
   config:
     applicationsAPIKind: ""
     # Described in detail here https://argocd-image-updater.readthedocs.io/en/stable/install/running/#flags
