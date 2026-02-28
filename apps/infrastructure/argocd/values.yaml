@@ -698,6 +698,9 @@ argocd-image-updater:
   extraEnv:
   - name: TZ
     value: "America/New_York"
+  extraArgs:
+  - --interval
+  - 30m
   config:
     applicationsAPIKind: ""
     # Described in detail here https://argocd-image-updater.readthedocs.io/en/stable/install/running/#flags
