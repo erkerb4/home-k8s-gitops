@@ -1,0 +1,14 @@
+helm:
+  parameters:
+  - name: linkwarden.controllers.linkwarden.containers.main.image.repository
+    value: ghcr.io/linkwarden/linkwarden
+    forcestring: true
+  - name: linkwarden.controllers.linkwarden.containers.main.image.tag
+    value: v2.13.5
+    forcestring: true
+  - name: meilisearch.controllers.meilisearch.containers.main.image.repository
+    value: getmeili/meilisearch
+    forcestring: true
+  - name: meilisearch.controllers.meilisearch.containers.main.image.tag
+    value: v1.36.0
+    forcestring: true
