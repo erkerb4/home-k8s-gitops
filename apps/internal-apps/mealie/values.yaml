@@ -194,7 +194,7 @@ infisicalSecret:
 imageUpdater:
   images:
   - alias: "openwebui"
-    imageName: "ghcr.io/mealie-recipes/mealie:3.x"
+    imageName: "ghcr.io/mealie-recipes/mealie:v3.x"
     manifestTargets:
       helm:
         name: "mealie.controllers.mealie.containers.main.image.repository"
