@@ -110,7 +110,7 @@ imageUpdater:
     imageName: "ghcr.io/linuxserver/tautulli:2.x"
     commonUpdateSettings:
       updateStrategy: "newest-build"
-      ignoreTags: ["dev", "latest", "nightly", "nightly-*", "*-nightly" , "unstable", "unstable-*", "*-unstable", "amd64-*", "version-*" ]
+      ignoreTags: ["dev", "develop*", "latest", "nightly*", "*-nightly" , "unstable*", "*-unstable", "amd64-*", "version-*" ]
     manifestTargets:
       helm:
         name: "tautulli.controllers.tautulli.containers.main.image.repository"
