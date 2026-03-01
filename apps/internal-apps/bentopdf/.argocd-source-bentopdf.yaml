@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/alam00000/bentopdf-simple
     forcestring: true
   - name: bentopdf.controllers.bentopdf.containers.main.image.tag
-    value: v2.3.3
+    value: v2.4.0
     forcestring: true
