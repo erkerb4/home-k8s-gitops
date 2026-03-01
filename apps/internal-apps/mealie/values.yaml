@@ -193,7 +193,7 @@ infisicalSecret:
 
 imageUpdater:
   images:
-  - alias: "mealie"
+  - alias: "meals"
     imageName: "ghcr.io/mealie-recipes/mealie:v3.x"
     manifestTargets:
       helm:
