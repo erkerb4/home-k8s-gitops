@@ -39,6 +39,11 @@ vikunja:
             # VIKUNJA_CACHE_TYPE: redis
             # CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG.
             VIKUNJA_LOG_LEVEL: "INFO"
+            VIKUNJA_MAILER_ENABLED: "true"
+            VIKUNJA_MAILER_FROMEMAIL: "noreply-todo@baylabs.dev"
+          envFrom:
+          - secretRef:
+              name: app-env-config
           probes:
             liveness:
               enabled: true
@@ -171,6 +176,8 @@ dragonfly:
 
 infisicalSecret:
   app-config:
+    syncInterval: 120
+  app-env-config:
     syncInterval: 120
 
 imageUpdater:
