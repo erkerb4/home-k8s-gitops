@@ -30,7 +30,7 @@ linkwarden:
             NEXT_PUBLIC_EMAIL_PROVIDER: "true"
             EMAIL_FROM: "no-reply@baylabs.dev"
             NEXT_PUBLIC_OLLAMA_ENDPOINT_URL: "https://ollama.xtr.pub"
-            OLLAMA_MODEL: "qwen3:8b-q8_0"
+            OLLAMA_MODEL: "qwen3.5:9b-q8_0"
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
             NEXT_PUBLIC_KEYCLOAK_ENABLED: "true"
