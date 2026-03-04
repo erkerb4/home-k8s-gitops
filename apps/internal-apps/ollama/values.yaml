@@ -35,6 +35,7 @@ ollama:
             HIP_VISIBLE_DEVICES: "0"
             OLLAMA_KEEP_ALIVE: "4h"
             OLLAMA_NEW_ENGINE: true
+            OLLAMA_KV_CACHE_TYPE: "q8_0"
           probes:
             startup:
               enabled: true
