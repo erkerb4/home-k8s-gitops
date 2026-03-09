@@ -10,5 +10,5 @@ helm:
     value: getmeili/meilisearch
     forcestring: true
   - name: meilisearch.controllers.meilisearch.containers.main.image.tag
-    value: v1.37.0
+    value: v1.38.0
     forcestring: true
