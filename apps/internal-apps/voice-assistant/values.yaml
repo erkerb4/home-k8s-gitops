@@ -25,9 +25,9 @@ voice:
   controllers:
     whisper:
       type: deployment
+      replicas: 0
       containers:
         main:
-          replicas: 0
           nameOverride: whisper
           image:
             repository: lscr.io/linuxserver/faster-whisper
