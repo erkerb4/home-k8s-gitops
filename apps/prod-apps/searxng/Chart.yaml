@@ -13,5 +13,4 @@ dependencies:
   #   condition: valkey.deploy
   - name: dragonfly
     version: "v1.37.0"
-    repository: oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly
     condition: dragonfly.deploy
