@@ -7,11 +7,11 @@ dependencies:
     repository: "@bjws"
     alias: searxng
     condition: searxng.deploy
-  - name: valkey
-    version: 0.7.6
-    repository: "@valkey"
-    condition: valkey.deploy
+  # - name: valkey
+  #   version: 0.7.6
+  #   repository: "@valkey"
+  #   condition: valkey.deploy
   - name: dragonfly
-    version: "v1.35.1"
+    version: "v1.37.0"
     repository: oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly
     condition: dragonfly.deploy
