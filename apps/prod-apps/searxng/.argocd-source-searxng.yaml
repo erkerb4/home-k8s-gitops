@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: searxng.controllers.searxng.containers.main.image.repository
+    value: searxng/searxng
+    forcestring: true
+  - name: searxng.controllers.searxng.containers.main.image.tag
+    value: latest
+    forcestring: true
