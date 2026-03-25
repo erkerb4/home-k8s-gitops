@@ -225,6 +225,9 @@ imageUpdater:
   images:
   - alias: "searxng"
     imageName: "searxng/searxng:2026.x"
+    commonUpdateSettings:
+      ignoreTags: ["latest"]
+      updateStrategy: newest-build
     manifestTargets:
       helm:
         name: "searxng.controllers.searxng.containers.main.image.repository"
