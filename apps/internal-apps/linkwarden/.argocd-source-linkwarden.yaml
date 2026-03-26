@@ -4,7 +4,7 @@ helm:
     value: ghcr.io/linkwarden/linkwarden
     forcestring: true
   - name: linkwarden.controllers.linkwarden.containers.main.image.tag
-    value: v2.13.5
+    value: v2.14.0
     forcestring: true
   - name: meilisearch.controllers.meilisearch.containers.main.image.repository
     value: getmeili/meilisearch
