@@ -35,3 +35,15 @@ engines:
     disabled: true
   - name: soundcloud
     inactive: true
+
+suspended_times: 
+  # Engine suspension time after error (in seconds; set to 0 to disable) 
+  # For error "Access denied" and "HTTP error [402, 403]" 
+  SearxEngineAccessDenied: 120
+  # For error "CAPTCHA" 
+  SearxEngineCaptcha: 1800
+  # For error "Too many request" and "HTTP error 429" 
+  SearxEngineTooManyRequests: 1800
+  # Cloudflare CAPTCHA 
+  cf_SearxEngineCaptcha: 1296000
+  cf_SearxEngineAccessDenied: 86400
