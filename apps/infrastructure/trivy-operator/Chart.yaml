@@ -10,6 +10,6 @@ keywords:
 home: https://github.com/aquasecurity/trivy-operator
 dependencies:
   - name: trivy-operator
-    version: "0.25.0"
+    version: "0.32.1"
     repository: '@aqua'
     condition: trivy-operator.deploy

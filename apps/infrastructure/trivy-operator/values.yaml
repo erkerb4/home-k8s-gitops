@@ -2,8 +2,14 @@ trivy-operator:
   deploy: false
   operator:
     scanJobsConcurrentLimit: 3
-    scanJobsRetryDelay: 60s
     batchDeleteLimit: 5
+    scanJobsRetryDelay: 90s
+    scanJobTTL: "24h"
+    scanSecretTTL: "24h"
+    sbomGenerationEnabled: false
+    clusterComplianceEnabled: false
+    configAuditScannerEnabled: false
+    infraAssessmentScannerEnabled: false
   trivyOperator:
     useGCRServiceAccount: false
     scanJobAffinity:
@@ -15,19 +21,14 @@ trivy-operator:
             topologyKey: kubernetes.io/hostname
   trivy:
     ignoreUnfixed: false
+    timeout: "10m0s"
     # -- resources resource requests and limits for scan job containers
     resources:
       requests:
         cpu: 100m
-        memory: 100M
-        # ephemeralStorage: "2Gi"
+        memory: 128M
+        ephemeralStorage: "512Mi"
       limits:
-        cpu: 750m
-        memory: 750M
-    compliance:
-      cron: 5 2 * * 0
-      specs:
-        - rke2-cis-1.24
-        - k8s-nsa-1.0
-        - k8s-pss-baseline-0.1
-        - k8s-pss-restricted-0.1
+        cpu: 4000m
+        memory: 1500M
+        ephemeralStorage: "512Mi"
