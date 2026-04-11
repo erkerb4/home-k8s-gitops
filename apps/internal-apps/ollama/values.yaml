@@ -81,11 +81,9 @@ ollama:
               - ALL
           resources:
             limits:
-              cpu: "14"
               memory: 32Gi
               amd.com/gpu: 1
             requests:
-              cpu: "2"
               memory: 4Gi
               amd.com/gpu: 1
 

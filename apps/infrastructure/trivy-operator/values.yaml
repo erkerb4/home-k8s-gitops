@@ -1,15 +1,15 @@
 trivy-operator:
-  deploy: false
+  deploy: true
+  excludeNamespaces: "tvk"
   operator:
     scanJobsConcurrentLimit: 3
     batchDeleteLimit: 5
-    scanJobsRetryDelay: 90s
-    scanJobTTL: "24h"
-    scanSecretTTL: "24h"
-    sbomGenerationEnabled: false
-    clusterComplianceEnabled: false
+    scanJobsRetryDelay: 120s
     configAuditScannerEnabled: false
+    rbacAssessmentScannerEnabled: false
     infraAssessmentScannerEnabled: false
+    clusterComplianceEnabled: false
+    sbomGenerationEnabled: false
   trivyOperator:
     useGCRServiceAccount: false
     scanJobAffinity:
@@ -20,6 +20,8 @@ trivy-operator:
                 vulnerabilityReport.scanner: Trivy
             topologyKey: kubernetes.io/hostname
   trivy:
+    severity: UNKNOWN,MEDIUM,HIGH,CRITICAL
+    slow: true
     ignoreUnfixed: false
     timeout: "10m0s"
     # -- resources resource requests and limits for scan job containers
@@ -32,3 +34,14 @@ trivy-operator:
         cpu: 4000m
         memory: 1500M
         ephemeralStorage: "512Mi"
+    server:
+      # -- resources set trivy-server resource
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+          ephemeralStorage: "256Mi"
+        limits:
+          cpu: 2
+          memory: 1Gi
+          ephemeralStorage: "256Mi"
