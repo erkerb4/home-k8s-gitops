@@ -231,17 +231,17 @@ backupPlan:
     backupTarget: *target
     backupPlanFlags:
       skipImageBackup: true
-    policies:
-      retention-policy:
-        type: Retention
-        spec:
-          cleanupConfig:
-            backupDays: 2
-          default: false
-          retentionConfig:
-            dayOfWeek: Sunday
-            weekly: 1
-            latest: 7
+    # policies:
+      # retention-policy:
+      #   type: Retention
+      #   spec:
+      #     cleanupConfig:
+      #       days: 1
+      #     default: false
+      #     retentionConfig:
+      #       dayOfWeek: Sunday
+      #       weekly: 1
+      #       latest: 7
       # fullbackup-policy:
       #   type: Schedule
       #   spec:
@@ -278,6 +278,7 @@ backupPlan:
           operator: In
           values:
           - "true"
+
   plex-minio:
     backupTarget: *targetMinio
     backupPlanFlags:
@@ -287,7 +288,7 @@ backupPlan:
         type: Retention
         spec:
           cleanupConfig:
-            backupDays: 2
+            days: 14
           default: false
           retentionConfig:
             dayOfWeek: Sunday
