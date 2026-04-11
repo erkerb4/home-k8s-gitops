@@ -227,58 +227,6 @@ backupTargets:
     thresholdCapacity: 150Gi
 
 backupPlan:
-  plex:
-    backupTarget: *target
-    backupPlanFlags:
-      skipImageBackup: true
-    # policies:
-      # retention-policy:
-      #   type: Retention
-      #   spec:
-      #     cleanupConfig:
-      #       days: 1
-      #     default: false
-      #     retentionConfig:
-      #       dayOfWeek: Sunday
-      #       weekly: 1
-      #       latest: 7
-      # fullbackup-policy:
-      #   type: Schedule
-      #   spec:
-      #     default: false
-      #     scheduleConfig:
-      #       schedule:
-      #       - 25 4 * 1/3 *
-      # incremental-policy:
-      #   type: Schedule
-      #   spec:
-      #     default: false
-      #     scheduleConfig:
-      #       schedule:
-      #       - 30 4 * * *
-    excludeResources:
-      gvkSelector:
-      - groupVersionKind:
-          kind: PersistentVolume
-          version: v1
-        objects:
-        - pvc-60082df2-ac85-4864-ac81-d43833b64685
-      - groupVersionKind:
-          kind: PersistentVolumeClaim
-          version: v1
-        objects:
-        - plex-transcode
-      - groupVersionKind:
-          group: secrets.infisical.com
-          kind: InfisicalSecret
-          version: v1alpha1
-      labelSelector:
-      - matchExpressions:
-        - key: tvk-skip-object
-          operator: In
-          values:
-          - "true"
-
   plex-minio:
     backupTarget: *targetMinio
     backupPlanFlags:
@@ -333,9 +281,6 @@ backupPlan:
 
 
 infisicalSecret:
-  *target:
-    syncInterval: 900
-    secretsPath: global
   *targetMinio:
     syncInterval: 900
     
