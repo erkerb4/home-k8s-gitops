@@ -27,6 +27,7 @@ ffk:
   controllers:
     ghost:
       type: deployment
+      replicas: 0
       annotations:
         secrets.infisical.com/auto-reload: "true"
       containers:
@@ -241,6 +242,7 @@ ffk-db:
       annotations:
         secrets.infisical.com/auto-reload: "true"
       type: statefulset
+      replicas: 0
       strategy: OnDelete
       containers:
         main:

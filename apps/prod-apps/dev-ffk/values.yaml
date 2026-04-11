@@ -26,6 +26,7 @@ ffk:
         main:
           nameOverride: ghost
           type: deployment
+          replicas: 0
           annotations:
             reloader.stakater.com/auto: "true"
           image:
@@ -240,6 +241,7 @@ devffk-db:
       annotations:
         secrets.infisical.com/auto-reload: "true"
       type: statefulset
+      replicas: 0
       strategy: OnDelete
       containers:
         main:
