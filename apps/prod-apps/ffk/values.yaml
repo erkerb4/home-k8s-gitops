@@ -388,31 +388,31 @@ backupPlan:
     backupTarget: *target
     backupPlanFlags:
       skipImageBackup: true
-    policies:
-      retention-policy:
-        type: Retention
-        spec:
-          cleanupConfig:
-            backupDays: 2
-          default: false
-          retentionConfig:
-            dayOfWeek: Sunday
-            weekly: 1
-            latest: 12
-      fullbackup-policy:
-        type: Schedule
-        spec:
-          default: false
-          scheduleConfig:
-            schedule:
-            - 55 4 * 1/3 *
-      incremental-policy:
-        type: Schedule
-        spec:
-          default: false
-          scheduleConfig:
-            schedule:
-            - 0 5 * * *
+    # policies:
+    #   retention-policy:
+    #     type: Retention
+    #     spec:
+    #       cleanupConfig:
+    #         backupDays: 2
+    #       default: false
+    #       retentionConfig:
+    #         dayOfWeek: Sunday
+    #         weekly: 1
+    #         latest: 12
+    #   fullbackup-policy:
+    #     type: Schedule
+    #     spec:
+    #       default: false
+    #       scheduleConfig:
+    #         schedule:
+    #         - 55 4 * 1/3 *
+    #   incremental-policy:
+    #     type: Schedule
+    #     spec:
+    #       default: false
+    #       scheduleConfig:
+    #         schedule:
+    #         - 0 5 * * *
     excludeResources:
       labelSelector:
       - matchExpressions:
