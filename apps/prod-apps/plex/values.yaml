@@ -219,7 +219,7 @@ backupTargets:
     type: ObjectStore
     vendor: Other
     objectStoreCredentials:
-      url: https://minio.xtr.pub
+      url: https://s3.xtr.pub
       bucketName: plex-backups
       region: us-east-1
       credentialSecret:
