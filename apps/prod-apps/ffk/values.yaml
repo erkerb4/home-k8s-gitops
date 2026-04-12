@@ -385,11 +385,11 @@ backupTargets:
         name: *target
     thresholdCapacity: 25Gi
 
-backupPlan:
-  ffk:
-    backupTarget: *target
-    backupPlanFlags:
-      skipImageBackup: true
+# backupPlan:
+#   ffk:
+#     backupTarget: *target
+#     backupPlanFlags:
+#       skipImageBackup: true
     # policies:
     #   retention-policy:
     #     type: Retention
@@ -415,13 +415,13 @@ backupPlan:
     #       scheduleConfig:
     #         schedule:
     #         - 0 5 * * *
-    excludeResources:
-      labelSelector:
-      - matchExpressions:
-        - key: tvk-skip-object
-          operator: In
-          values:
-          - "true"
+    # excludeResources:
+    #   labelSelector:
+    #   - matchExpressions:
+    #     - key: tvk-skip-object
+    #       operator: In
+    #       values:
+    #       - "true"
     # backupHook: mysql
     # hookConfig:
     #   mode: Sequential
