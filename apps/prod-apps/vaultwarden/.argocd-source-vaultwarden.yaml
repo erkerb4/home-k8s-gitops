@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/dani-garcia/vaultwarden
     forcestring: true
   - name: vw.controllers.main.containers.main.image.tag
-    value: 1.35.4
+    value: 1.35.5
     forcestring: true
