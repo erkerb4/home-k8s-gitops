@@ -263,11 +263,13 @@ backupPlan:
           version: v1
         objects:
         - pvc-60082df2-ac85-4864-ac81-d43833b64685
+        - pvc-2e8c35e9-da35-4c76-8e5b-096567b37d33
       - groupVersionKind:
           kind: PersistentVolumeClaim
           version: v1
         objects:
         - plex-transcode
+        - plex-config
       - groupVersionKind:
           group: secrets.infisical.com
           kind: InfisicalSecret
