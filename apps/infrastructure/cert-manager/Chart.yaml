@@ -10,9 +10,9 @@ keywords:
   - tls
 sources:
   - https://github.com/jetstack/cert-manager
-version: v1.16.5
+version: v1.17.4
 dependencies:
 - name: cert-manager
-  version: "v1.16.5"
+  version: "v1.17.4"
   condition: cert-manager.platform.deploy
   repository: "@jetstack"
