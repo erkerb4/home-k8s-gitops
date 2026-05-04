@@ -32,10 +32,11 @@ ollama:
             # HCC_AMDGPU_TARGET: "gfx900"
             # HSA_ENABLE_SDMA: "0"
             # HSA_OVERRIDE_GFX_VERSION: "9.0.0"
-            HIP_VISIBLE_DEVICES: "0"
+            # HIP_VISIBLE_DEVICES: "0"
             OLLAMA_KEEP_ALIVE: "4h"
             OLLAMA_NEW_ENGINE: true
             OLLAMA_KV_CACHE_TYPE: "q8_0"
+            OLLAMA_DEBUG: "1"
           probes:
             startup:
               enabled: true
