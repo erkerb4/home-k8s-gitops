@@ -26,7 +26,10 @@ openwebui:
             WEBUI_AUTH: "false"
             WEBUI_URL: "https://chatgpt.xtr.pub"
             OLLAMA_BASE_URL: "https://ollama.xtr.pub"
-            OPENAI_API_BASE_URL: "http://192.168.11.40:8080/v1"
+            ENABLE_WEB_SEARCH: "true"
+            WEB_SEARCH_DOMAIN_FILTER_LIST: "search.xtr.pub"
+            WEB_SEARCH_ENGINE: "searxng"
+            SEARXNG_QUERY_URL: "http://search.xtr.pub/search?q=<query>"
           probes:
             liveness:
               enabled: true
