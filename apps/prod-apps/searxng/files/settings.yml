@@ -1,12 +1,34 @@
 # see https://docs.searxng.org/admin/settings/settings.html#settings-use-default-settings
-use_default_settings: true
+use_default_settings:
+  engines:
+    keep_only:
+      - google
+      - duckduckgo
 
 general:
   debug: true
+  instance_name: "BAYLABS"
 
 search:
   safe_search: 0
   autocomplete: google
+  formats:
+    - json
+    - html
+  languages:
+    - all
+    - en
+  suspended_times: 
+    # Engine suspension time after error (in seconds; set to 0 to disable) 
+    # For error "Access denied" and "HTTP error [402, 403]" 
+    SearxEngineAccessDenied: 15
+    # For error "CAPTCHA" 
+    SearxEngineCaptcha: 1800
+    # For error "Too many request" and "HTTP error 429" 
+    SearxEngineTooManyRequests: 1800
+    # Cloudflare CAPTCHA 
+    cf_SearxEngineCaptcha: 1296000
+    cf_SearxEngineAccessDenied: 86400
 
 server:
   limiter: false
@@ -18,32 +40,34 @@ ui:
   query_in_title: true
   center_alignment: false
 
-enabled_plugins:
-  - 'Hash plugin'
-  - 'Self Information'
-  - 'Tracker URL remover'
-  - 'Ahmia blacklist'
-  - 'Basic Calculator'
-  - 'Open Access DOI rewrite'
+plugins:
+  searx.plugins.calculator.SXNGPlugin:
+    active: true
+  searx.plugins.infinite_scroll.SXNGPlugin:
+    active: true
+  searx.plugins.hash_plugin.SXNGPlugin:
+    active: true
+  searx.plugins.self_info.SXNGPlugin:
+    active: true
+  searx.plugins.tracker_url_remover.SXNGPlugin:
+    active: true
+  searx.plugins.unit_converter.SXNGPlugin:
+    active: true
+  searx.plugins.ahmia_filter.SXNGPlugin:
+    active: true
+  searx.plugins.hostnames.SXNGPlugin:
+    active: true
+  searx.plugins.oa_doi_rewrite.SXNGPlugin:
+    active: false
+  searx.plugins.tor_check.SXNGPlugin:
+    active: false
 
 engines:
-  - name: hoogle
-    disabled: true
-  - name: gentoo
-    disabled: true
-  - name: chefkoch
-    disabled: true
-  - name: soundcloud
-    inactive: true
+  - name : google english
+    engine : google
+    language : en
 
-suspended_times: 
-  # Engine suspension time after error (in seconds; set to 0 to disable) 
-  # For error "Access denied" and "HTTP error [402, 403]" 
-  SearxEngineAccessDenied: 120
-  # For error "CAPTCHA" 
-  SearxEngineCaptcha: 1800
-  # For error "Too many request" and "HTTP error 429" 
-  SearxEngineTooManyRequests: 1800
-  # Cloudflare CAPTCHA 
-  cf_SearxEngineCaptcha: 1296000
-  cf_SearxEngineAccessDenied: 86400
+categories_as_tabs:
+  general:
+  images:
+  videos:
