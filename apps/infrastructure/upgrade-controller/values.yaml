@@ -1,10 +1,10 @@
 deployment:
   controller:
-    image: rancher/system-upgrade-controller:v0.19.0
+    image: rancher/system-upgrade-controller:v0.19.2
 
 configMap:
   controllerEnv:
-    SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE: "rancher/kubectl:v1.32.12"
+    SYSTEM_UPGRADE_JOB_KUBECTL_IMAGE: "rancher/kubectl:v1.33.12"
     SYSTEM_UPGRADE_CONTROLLER_DEBUG: "false"
     SYSTEM_UPGRADE_CONTROLLER_THREADS: "2"
     SYSTEM_UPGRADE_CONTROLLER_LEADER_ELECT: "true"
@@ -20,7 +20,7 @@ upgradePlans:
     image: rancher/rke2-upgrade
     ## If channel is configured, version is ignored.
     ## if channel is not set, version must be configured
-    channel: https://update.rke2.io/v1-release/channels/v1.32
+    channel: https://update.rke2.io/v1-release/channels/v1.33
     # version: v1.29.11-rke2r1
   specs:
     control-plane:
