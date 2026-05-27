@@ -23,6 +23,8 @@ gpu:
       driver:
         enable: false
       devicePlugin:
+        devicePluginImage: "rocm/k8s-device-plugin:1.31.0.10"
+        nodeLabellerImage: "rocm/k8s-device-plugin:labeller-1.31.0.10"
         devicePluginTolerations:
         - effect: NoSchedule
           key: workload
