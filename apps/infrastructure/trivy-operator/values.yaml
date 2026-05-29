@@ -12,13 +12,20 @@ trivy-operator:
     sbomGenerationEnabled: false
   trivyOperator:
     useGCRServiceAccount: false
-    scanJobAffinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                vulnerabilityReport.scanner: Trivy
-            topologyKey: kubernetes.io/hostname
+    # scanJobAffinity:
+    #   podAntiAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       - labelSelector:
+    #           matchLabels:
+    #             vulnerabilityReport.scanner: Trivy
+    #         topologyKey: kubernetes.io/hostname
+    scanJobNodeSelector:
+      kubernetes.io/hostname: thor
+    scanJobTolerations:
+      - key: "workload"
+        value: "thor"
+        operator: "Equal"
+        effect: "NoSchedule"
   trivy:
     severity: UNKNOWN,MEDIUM,HIGH,CRITICAL
     slow: true
