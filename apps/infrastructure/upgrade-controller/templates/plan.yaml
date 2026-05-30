@@ -42,4 +42,8 @@ spec:
   window:
     {{- toYaml . | nindent 4}}
   {{- end}}
+  {{- with $plan.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4}}
+  {{- end}}
 {{- end }}

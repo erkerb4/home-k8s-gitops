@@ -58,6 +58,11 @@ upgradePlans:
         - key: rke2-upgrade
           operator: NotIn
           values: ["disabled", "false"]
+      tolerations:
+        - key: "workload"
+          value: "thor"
+          operator: "Equal"
+          effect: "NoSchedule"
       prepare:
         args:
         - prepare
