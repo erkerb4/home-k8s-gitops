@@ -33,6 +33,10 @@ upgradePlans:
           operator: "Equal"
           value: "true"
           effect: "NoSchedule"
+        - key: "workload"
+          value: "thor"
+          operator: "Equal"
+          effect: "NoSchedule"
       # drain:
       #   force: true
       window:
