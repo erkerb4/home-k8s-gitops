@@ -61,6 +61,7 @@ voice:
           #     memory: 256Mi
     piper:
       type: deployment
+      replicas: 0
       containers:
         main:
           nameOverride: piper
