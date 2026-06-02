@@ -38,6 +38,8 @@ spec:
             topologyKey: kubernetes.io/hostname
       containers:
       - env:
+        - name: TZ
+          value: "America/New_York"
         - name: SYSTEM_UPGRADE_CONTROLLER_NAME
           valueFrom:
             fieldRef:
