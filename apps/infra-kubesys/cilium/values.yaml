@@ -1,5 +1,5 @@
 cilium:
-  upgradeCompatibility: "1.16"
+  upgradeCompatibility: "1.17"
   tolerations:
   - operator: Exists
   - key: workload
