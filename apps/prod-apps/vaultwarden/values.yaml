@@ -110,7 +110,7 @@ vw:
       accessMode: ReadWriteOnce
       size: "96Mi"
       globalMounts:
-        - path: /data
+        - path: /data2
     vw-data2:
       enabled: true
       type: persistentVolumeClaim
@@ -120,7 +120,7 @@ vw:
       advancedMounts:
         main:
           main:
-            - path: /data2
+            - path: /data
 
   networkpolicies:
     main:
