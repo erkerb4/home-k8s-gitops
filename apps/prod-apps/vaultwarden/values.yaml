@@ -62,7 +62,7 @@ vw:
             readOnlyRootFilesystem: true
           resources:
             limits:
-              cpu: "1"
+              cpu: "2"
               memory: 256Mi
             requests:
               cpu: 250m
@@ -111,6 +111,16 @@ vw:
       size: "96Mi"
       globalMounts:
         - path: /data
+    vw-data2:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-gold
+      accessMode: ReadWriteOnce
+      size: "64Mi"
+      advancedMounts:
+        main:
+          main:
+            - path: /data2
 
   networkpolicies:
     main:
