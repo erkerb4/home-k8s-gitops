@@ -1,13 +1,13 @@
 apiVersion: v2
 description: File, Block, and Object Storage Services for your Cloud-Native Environment
 name: rook-ceph
-version: 1.18.11
+version: 1.19.6
 icon: https://rook.io/images/rook-logo.svg
 sources:
   - https://github.com/rook/rook
 dependencies:
 - name: rook-ceph
-  version: "v1.18.11"
+  version: "v1.19.6"
   repository: '@rook-release'
 - name: rook-ceph-cluster
   version: "v1.18.11"
