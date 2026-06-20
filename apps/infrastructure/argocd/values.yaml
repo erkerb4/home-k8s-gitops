@@ -39,6 +39,9 @@ argo-cd:
       exec.enabled: true
       timeout.reconciliation: 180s
       timeout.hard.reconciliation: 0s
+      # Enable API key authentication for the admin account
+      ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/argocd-cm-yaml/
+      accounts.admin: apiKey
     params:
       create: true
       annotations: {}

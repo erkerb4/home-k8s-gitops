@@ -25,7 +25,7 @@ openwebui:
             TZ: "America/New_York"
             WEBUI_AUTH: "false"
             WEBUI_URL: "https://chatgpt.xtr.pub"
-            OLLAMA_BASE_URL: "https://ollama.xtr.pub"
+            OPENAI_API_BASE_URLS: "https://lemon.xtr.pub/v1,https://lemonade.xtr.pub/v1"
             ENABLE_WEB_SEARCH: "true"
             WEB_SEARCH_ENGINE: "searxng"
             SEARXNG_QUERY_URL: "http://search.xtr.pub/search?q=<query>"
