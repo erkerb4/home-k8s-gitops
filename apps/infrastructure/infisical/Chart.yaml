@@ -7,3 +7,4 @@ dependencies:
 - name: secrets-operator
   version: "0.6.2"
   repository: "@infisical"
+  alias: infioperator
