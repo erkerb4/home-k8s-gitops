@@ -1,0 +1,6 @@
+infioperator:
+  controllerManager:
+    kubeRbacProxy:
+      image:
+        repository: ghcr.io/kube-rbac-proxy/kube-rbac-proxy
+        tag: v0.22.0
