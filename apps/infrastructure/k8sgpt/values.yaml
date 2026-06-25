@@ -1,0 +1,66 @@
+operator:
+  deploy: false
+  interplex:
+    enabled: true
+  controllerManager:
+    manager:
+      enableResultLogging: true
+k8sgpt:
+  enabled: false
+  spec:
+    ai:
+      enabled: true
+      model: qwen3.5:9b-q8_0
+      baseUrl: http://ollama.ollama:11434/v1
+      backend: localai
+      backOff:
+        enabled: true
+        maxRetries: 5
+      anonymized: false
+      language: english
+    noCache: false
+    remoteCache:
+      interplex:
+        endpoint: k8sgpt-interplex-service:8084
+    repository: ghcr.io/k8sgpt-ai/k8sgpt
+    version: v0.4.1
+    analysis:
+      interval: "60m"
+    resources:
+      limits:
+        cpu: 6
+        memory: 1024Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+    filters:
+      - Pod
+      - Deployment
+      - ReplicaSet
+      - PersistentVolumeClaim
+      - Service
+      - Ingress
+      - StatefulSet
+      - Job
+      - CronJob
+      - Node
+      - ValidatingWebhookConfiguration
+      - MutatingWebhookConfiguration
+      - ConfigMap
+      - Log
+      - NetworkPolicy
+    #integrations:
+    # trivy:
+    #  enabled: true
+    #  namespace: trivy-system
+    # filters:
+    #   - Ingress
+    # sink:
+    #   type: slack
+    #   webhook: <webhook-url> # use the sink secret if you want to keep your webhook url private
+    #   secret:
+    #     name: slack-webhook
+    #     key: url
+    #extraOptions:
+    #   backstage:
+    #     enabled: true

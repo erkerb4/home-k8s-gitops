@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: v0.4.23 #x-release-please-version
+description: A Helm chart for K8SGPT
+name: k8sgpt
+type: application
+version: 0.2.27
+dependencies:
+  - name: k8sgpt-operator
+    repository: "@k8sgpt"
+    version: "0.2.27"
+    alias: operator
+    condition: "operator.deploy"

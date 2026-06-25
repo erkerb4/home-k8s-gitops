@@ -1,0 +1,13 @@
+{{- if $.Values.k8sgpt.enabled }}
+---
+apiVersion: core.k8sgpt.ai/v1alpha1
+kind: K8sGPT
+metadata:
+  name: k8sgpt
+  namespace: {{ $.Release.Namespace }}
+spec:
+{{- with $.Values.k8sgpt.spec }}
+{{- toYaml . | nindent 2 }}
+{{- end }}
+
+{{- end }}
