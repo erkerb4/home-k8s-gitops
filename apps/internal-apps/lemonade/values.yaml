@@ -1,0 +1,173 @@
+lemonade:
+  deploy: true
+  defaultPodOptions:
+    automountServiceAccountToken: false
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "3"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+              - "thor"
+    tolerations:
+      - key: "workload"
+        value: "thor"
+        operator: "Equal"
+        effect: "NoSchedule"
+  controllers:
+    lemonade:
+      type: deployment
+      replicas: 1
+      containers:
+        main:
+          image:
+            repository: ghcr.io/lemonade-sdk/lemonade-server
+            tag: "v10.8.0"
+            pullPolicy: IfNotPresent
+          env:
+            TZ: "America/New_York"
+          resources:
+            limits:
+              memory: 32Gi
+              amd.com/gpu: 1
+            requests:
+              memory: 4Gi
+              amd.com/gpu: 1
+
+          ports:
+            - containerPort: 13305
+              name: http
+              protocol: TCP
+          probes:
+            startup:
+              enabled: true
+              type: HTTP
+              path: /health
+              spec:
+                initialDelaySeconds: 30
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+            readiness:
+              enabled: true
+              type: HTTP
+              path: /health
+              spec:
+                periodSeconds: 10
+                timeoutSeconds: 3
+                failureThreshold: 3
+            liveness:
+              enabled: true
+              type: HTTP
+              path: /health
+              spec:
+                periodSeconds: 30
+                timeoutSeconds: 3
+                failureThreshold: 3
+          # securityContext:
+          #   allowPrivilegeEscalation: false
+          #   capabilities:
+          #     drop:
+          #     - ALL
+  service:
+    lemonade:
+      controller: lemonade
+      annotations:
+        traefik.ingress.kubernetes.io/service.serversscheme: http
+      ports:
+        http:
+          enabled: true
+          primary: true
+          port: 13305
+          protocol: HTTP
+
+  ingress:
+    main:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: le-prod
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.pathmatcher: PathPrefix
+      hosts:
+        - host: lemon.xtr.pub
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+              service:
+                identifier: lemonade
+                port: http
+      tls:
+      - hosts:
+        - lemon.xtr.pub
+        secretName: tls-secret
+
+  persistence:
+    data:
+      enabled: true
+      type: hostPath
+      hostPath: "/mnt/data/lemonade"
+      hostPathType: DirectoryOrCreate
+      advancedMounts:
+        lemonade:
+          main:
+            - path: /root/.cache/huggingface
+            - path: /opt/lemonade/llama
+            - path: /root/.cache/lemonade
+    lemonade-app-configs:
+      enabled: true
+      type: configMap
+      name: lemonade-config
+      advancedMounts:
+        lemonade:
+          main:
+            - path: /opt/lemonade/llama/config.json
+              subPath: config.json
+
+
+  networkpolicies:
+    main:
+      enabled: true
+      controller: lemonade
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    name: traefik
+                podSelector:
+                  matchLabels:
+                     app.kubernetes.io/name: traefik
+          - from:
+              - podSelector: {}
+        egress:
+          - to:
+              - namespaceSelector: {}
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - port: 53
+                protocol: UDP
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+
+imageUpdater:
+  images:
+  - alias: "lemonade"
+    imageName: "ghcr.io/lemonade-sdk/lemonade-server:v0.x"
+    commonUpdateSettings:
+      updateStrategy: "newest-build"
+    manifestTargets:
+      helm:
+        name: "lemonade.controllers.lemonade.containers.main.image.repository"
+        tag: "lemonade.controllers.lemonade.containers.main.image.tag"
