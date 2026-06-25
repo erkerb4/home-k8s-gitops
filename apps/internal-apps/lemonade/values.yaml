@@ -32,9 +32,19 @@ lemonade:
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
+            LEMONADE_ADMIN_API_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: admin_api_key
+            LEMONADE_API_KEY:
+              valueFrom:
+                secretKeyRef:
+                  name: config-vars
+                  key: api_key
           resources:
             limits:
-              memory: 32Gi
+              memory: 16Gi
               amd.com/gpu: 1
             requests:
               memory: 4Gi
@@ -160,6 +170,10 @@ lemonade:
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
+
+infisicalSecret:
+  config-vars:
+    syncInterval: 900
 
 imageUpdater:
   images:
