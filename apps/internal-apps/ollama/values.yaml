@@ -165,15 +165,15 @@ ollama:
               - ipBlock:
                   cidr: 0.0.0.0/0
 
-imageUpdater:
-  images:
-  - alias: "ollama"
-    imageName: "ollama/ollama:0.x"
-    commonUpdateSettings:
-      updateStrategy: "newest-build"
-      allowTags: regexp:^\d+\.\d+\.\d+-rocm$
-      ignoreTags: ["latest", "*-rc", "*-rc*", "*-rc-*" ]
-    manifestTargets:
-      helm:
-        name: "ollama.controllers.ollama.containers.main.image.repository"
-        tag: "ollama.controllers.ollama.containers.main.image.tag"
+# imageUpdater:
+#   images:
+#   - alias: "ollama"
+#     imageName: "ollama/ollama:0.x"
+#     commonUpdateSettings:
+#       updateStrategy: "newest-build"
+#       allowTags: regexp:^\d+\.\d+\.\d+-rocm$
+#       ignoreTags: ["latest", "*-rc", "*-rc*", "*-rc-*" ]
+#     manifestTargets:
+#       helm:
+#         name: "ollama.controllers.ollama.containers.main.image.repository"
+#         tag: "ollama.controllers.ollama.containers.main.image.tag"
