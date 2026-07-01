@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/open-webui/open-webui
     forcestring: true
   - name: openwebui.controllers.openwebui.containers.main.image.tag
-    value: v0.10.1
+    value: v0.10.2
     forcestring: true
