@@ -41,6 +41,24 @@ vikunja:
             VIKUNJA_LOG_LEVEL: "INFO"
             VIKUNJA_MAILER_ENABLED: "true"
             VIKUNJA_MAILER_FROMEMAIL: "noreply-todo@baylabs.dev"
+            VIKUNJA_AUTH_OPENID_ENABLED: "true"
+            VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_AUTHURL:
+              valueFrom:
+                secretKeyRef:
+                  name: vikunja-oidc-credentials
+                  key: vikunja-oidc-credentials
+            VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_CLIENTID:
+              valueFrom:
+                secretKeyRef:
+                  name: vikunja-oidc-credentials
+                  key: client_id
+            VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_CLIENTSECRET:
+            valueFrom:
+                secretKeyRef:
+                  name: vikunja-oidc-credentials
+                  key: client_secret
+            VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_NAME: "BayLabs Login"
+            VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_SCOPE: "openid profile email"
           envFrom:
           - secretRef:
               name: app-env-config
@@ -108,7 +126,7 @@ vikunja:
             - path: /app/vikunja/files
             - path: /db
     app-config:
-      enabled: true
+      enabled: false
       type: custom
       volumeSpec:
         secret:

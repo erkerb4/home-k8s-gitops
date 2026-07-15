@@ -141,6 +141,10 @@ argo-cd:
         name: k8sgpt
         type: helm
         url: https://charts.k8sgpt.ai/
+      emberstack:
+        name: emberstack
+        type: helm
+        url: https://emberstack.github.io/helm-charts
   dex:
     enabled: false
 
@@ -536,7 +540,7 @@ argocd-apps:
       - 'https://aquasecurity.github.io/helm-charts/'
       - 'https://charts.goauthentik.io'
       - 'https://rocm.github.io/gpu-operator'
-      - 'https://charts.k8sgpt.ai/'
+      - 'https://emberstack.github.io/helm-charts'
       destinations:
       - namespace: argocd
         server: https://kubernetes.default.svc
@@ -545,8 +549,6 @@ argocd-apps:
       - namespace: rook-ceph
         server: https://kubernetes.default.svc
       - namespace: tvk
-        server: https://kubernetes.default.svc
-      - namespace: k8sgpt
         server: https://kubernetes.default.svc
       - namespace: cert-manager
         server: https://kubernetes.default.svc
@@ -563,6 +565,8 @@ argocd-apps:
       - namespace: upgrade-controller
         server: https://kubernetes.default.svc
       - namespace: amd-gpu
+        server: https://kubernetes.default.svc
+      - namespace: reflector
         server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
