@@ -30,7 +30,7 @@ linkwarden:
             NEXT_PUBLIC_EMAIL_PROVIDER: "true"
             EMAIL_FROM: "no-reply@baylabs.dev"
             CUSTOM_OPENAI_BASE_URL=: "https://lemonade.xtr.pub"
-            OPENAI_MODEL=: "GLM-4.7-Flash-GGUF"
+            OPENAI_MODEL=: "glm-4.7-flash-gguf"
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
             NEXT_PUBLIC_KEYCLOAK_ENABLED: "true"
