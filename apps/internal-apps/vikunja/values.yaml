@@ -46,7 +46,7 @@ vikunja:
               valueFrom:
                 secretKeyRef:
                   name: vikunja-oidc-credentials
-                  key: vikunja-oidc-credentials
+                  key: issuer_url
             VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_CLIENTID:
               valueFrom:
                 secretKeyRef:
