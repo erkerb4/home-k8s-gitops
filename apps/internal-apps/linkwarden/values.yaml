@@ -36,18 +36,18 @@ linkwarden:
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
             NEXT_PUBLIC_OIDC_ENABLED: "true"
-            OIDC_CUSTOM_NAME: "BayLabs"
-            OIDC_WELLKNOWN_URL:
+            KEYCLOAK_CUSTOM_NAME: "BayLabs Login"
+            KEYCLOAK_ISSUER:
               valueFrom:
                 secretKeyRef:
                   name: linkwarden-oidc-credentials
-                  key: discovery_url
-            OIDC_CLIENT_ID:
+                  key: issuer_url
+            KEYCLOK_CLIENT_ID:
               valueFrom:
                 secretKeyRef:
                   name: linkwarden-oidc-credentials
                   key: client_id
-            OIDC_CLIENT_SECRET:
+            KEYCLOAK_CLIENT_SECRET:
               valueFrom:
                 secretKeyRef:
                   name: linkwarden-oidc-credentials
