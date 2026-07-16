@@ -33,23 +33,23 @@ linkwarden:
             OPENAI_MODEL: "GLM-4.7-Flash-GGUF"
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
-            NEXT_PUBLIC_KEYCLOAK_ENABLED: "true"
-            KEYCLOAK_CLIENT_ID:
+            NEXT_PUBLIC_OIDC_ENABLED: "true"
+            OIDC_CLIENT_ID:
               valueFrom:
                 secretKeyRef:
                   name: linkwarden-oidc-credentials
                   key: client_id
-            KEYCLOAK_CLIENT_SECRET:
+            OIDC_CLIENT_SECRET:
               valueFrom:
                 secretKeyRef:
                   name: linkwarden-oidc-credentials
                   key: client_secret
-            KEYCLOAK_CUSTOM_NAME: BayLabs Login
-            KEYCLOAK_ISSUER:
+            OIDC_CUSTOM_NAME: BayLabs Login
+            OIDC_WELLKNOWN_URL:
               valueFrom:
                 secretKeyRef:
                   name: linkwarden-oidc-credentials
-                  key: issuer_url
+                  key: discovery_url
           probes:
             liveness:
               enabled: true
