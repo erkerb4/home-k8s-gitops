@@ -26,6 +26,8 @@ linkwarden:
               name: config-vars
           env:
             NEXTAUTH_URL: "https://pocket.xtr.pub/api/v1/auth"
+            NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
+            STORAGE_FOLDER: "/data/data"
             BASE_URL: "https://pocket.xtr.pub"
             NEXT_PUBLIC_EMAIL_PROVIDER: "true"
             EMAIL_FROM: "no-reply@baylabs.dev"
@@ -34,6 +36,12 @@ linkwarden:
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
             NEXT_PUBLIC_OIDC_ENABLED: "true"
+            OIDC_CUSTOM_NAME: "BayLabs"
+            OIDC_WELLKNOWN_URL:
+              valueFrom:
+                secretKeyRef:
+                  name: linkwarden-oidc-credentials
+                  key: discovery_url
             OIDC_CLIENT_ID:
               valueFrom:
                 secretKeyRef:
@@ -44,12 +52,6 @@ linkwarden:
                 secretKeyRef:
                   name: linkwarden-oidc-credentials
                   key: client_secret
-            OIDC_CUSTOM_NAME: BayLabs Login
-            OIDC_WELLKNOWN_URL:
-              valueFrom:
-                secretKeyRef:
-                  name: linkwarden-oidc-credentials
-                  key: discovery_url
           probes:
             liveness:
               enabled: true
