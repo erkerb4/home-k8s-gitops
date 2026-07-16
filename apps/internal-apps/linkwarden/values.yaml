@@ -34,6 +34,22 @@ linkwarden:
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
             NEXT_PUBLIC_KEYCLOAK_ENABLED: "true"
+            KEYCLOAK_CLIENT_ID:
+              valueFrom:
+                secretKeyRef:
+                  name: linkwarden-oidc-credentials
+                  key: client_id
+            KEYCLOAK_CLIENT_SECRET:
+              valueFrom:
+                secretKeyRef:
+                  name: linkwarden-oidc-credentials
+                  key: client_secret
+            KEYCLOAK_CUSTOM_NAME: BayLabs Login
+            KEYCLOAK_ISSUER:
+              valueFrom:
+                secretKeyRef:
+                  name: linkwarden-oidc-credentials
+                  key: issuer_url
           probes:
             liveness:
               enabled: true
