@@ -10,5 +10,5 @@ helm:
     value: vikunja/vikunja
     forcestring: true
   - name: vikunja.controllers.vikunja.containers.main.image.tag
-    value: 2.3.0
+    value: 2.4.0
     forcestring: true
