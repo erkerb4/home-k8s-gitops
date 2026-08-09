@@ -127,9 +127,9 @@ lemonade:
       advancedMounts:
         lemonade:
           main:
-            - path: /root/.cache/huggingface
+            - path: /opt/lemonade/.cache/huggingface
             - path: /opt/lemonade/llama
-            - path: /root/.cache/lemonade
+            - path: /opt/lemonade/.cache/lemonade
     lemonade-app-configs:
       enabled: true
       type: configMap
