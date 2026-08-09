@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: lemonade.controllers.lemonade.containers.main.image.repository
+    value: ghcr.io/lemonade-sdk/lemonade-server
+    forcestring: true
+  - name: lemonade.controllers.lemonade.containers.main.image.tag
+    value: sha-a2781104
+    forcestring: true
