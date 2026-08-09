@@ -37,11 +37,11 @@ lemonade:
                 secretKeyRef:
                   name: config-vars
                   key: admin_api_key
-            LEMONADE_API_KEY:
-              valueFrom:
-                secretKeyRef:
-                  name: config-vars
-                  key: api_key
+            # LEMONADE_API_KEY:
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: config-vars
+            #       key: api_key
           resources:
             limits:
               memory: 16Gi
