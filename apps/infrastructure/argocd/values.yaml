@@ -702,6 +702,8 @@ argocd-apps:
         server: https://kubernetes.default.svc
       - namespace: linkwarden
         server: https://kubernetes.default.svc
+      - namespace: lemonade
+        server: https://kubernetes.default.svc
       clusterResourceWhitelist:
       - group: '*'
         kind: '*'
