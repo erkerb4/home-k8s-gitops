@@ -179,8 +179,8 @@ imageUpdater:
   images:
   - alias: "lemonade"
     imageName: "ghcr.io/lemonade-sdk/lemonade-server:v0.x"
-    commonUpdateSettings:
-      updateStrategy: "newest-build"
+    # commonUpdateSettings:
+    #   updateStrategy: "newest-build"
     manifestTargets:
       helm:
         name: "lemonade.controllers.lemonade.containers.main.image.repository"
