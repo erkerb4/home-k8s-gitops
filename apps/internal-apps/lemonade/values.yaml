@@ -32,11 +32,11 @@ lemonade:
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
-            LEMONADE_ADMIN_API_KEY:
-              valueFrom:
-                secretKeyRef:
-                  name: config-vars
-                  key: admin_api_key
+            # LEMONADE_ADMIN_API_KEY:
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: config-vars
+            #       key: admin_api_key
             # LEMONADE_API_KEY:
             #   valueFrom:
             #     secretKeyRef:
