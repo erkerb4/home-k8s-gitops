@@ -48,6 +48,7 @@ mealie:
             OIDC_AUTO_REDIRECT: "true"
             OIDC_REMEMBER_ME: "true"
             OIDC_PROVIDER_NAME: "BayLabs"
+            OIDC_REQUIRES_EMAIL_VERIFICATION: "false"
             OIDC_CONFIGURATION_URL:
               valueFrom:
                 secretKeyRef:
