@@ -18,7 +18,7 @@ vikunja:
     vikunja:
       type: deployment
       annotations:
-        secrets.infisical.com/auto-reload: "true"
+        reloader.stakater.com/auto: "true"
       containers:
         main:
           image:
