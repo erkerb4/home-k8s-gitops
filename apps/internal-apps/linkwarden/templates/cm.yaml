@@ -1,3 +1,5 @@
+{{- if $.Values.linkwarden.deploy }}
+---
 apiVersion: v1
 data:
   entrypoint: |-
@@ -24,3 +26,5 @@ kind: ConfigMap
 metadata:
   name: entrypoint
   namespace: {{ .Release.Namespace }}
+
+{{- end }}

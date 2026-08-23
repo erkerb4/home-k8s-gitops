@@ -1,4 +1,5 @@
 linkwarden:
+  deploy: false
   defaultPodOptions:
     automountServiceAccountToken: false
     dnsConfig:
@@ -35,7 +36,7 @@ linkwarden:
             OPENAI_MODEL: "GLM-4.7-Flash-GGUF"
             DATABASE_URL: "file:/sqlite/db.sqlite"
             MEILI_HOST: "http://linkwarden-meilisearch:7700"
-            NEXT_PUBLIC_OIDC_ENABLED: "true"
+            NEXT_PUBLIC_KEYCLOAK_ENABLED: "true"
             KEYCLOAK_CUSTOM_NAME: "BayLabs Login"
             KEYCLOAK_ISSUER:
               valueFrom:

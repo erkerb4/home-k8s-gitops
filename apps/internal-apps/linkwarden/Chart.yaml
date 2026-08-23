@@ -14,3 +14,4 @@ dependencies:
     repository: "@bjws"
     version: "4.1.2"
     alias: linkwarden
+    condition: linkwarden.deploy
