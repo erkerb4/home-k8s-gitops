@@ -737,7 +737,7 @@ imageUpdater:
     imageName: "ghcr.io/linuxserver/sonarr:4.x"
     commonUpdateSettings:
       updateStrategy: "newest-build"
-      ignoreTags: ["dev", "latest", "nightly", "nightly-*", "*-nightly", "unstable", "unstable-*", "*-unstable", "amd64-*", "version-*, "develop-*" ]
+      ignoreTags: ["dev", "latest", "nightly", "nightly-*", "*-nightly", "unstable", "unstable-*", "*-unstable", "amd64-*", "version-*, "develop*" ]
     manifestTargets:
       helm:
         name: "sonarr.controllers.sonarr.containers.main.image.repository"
