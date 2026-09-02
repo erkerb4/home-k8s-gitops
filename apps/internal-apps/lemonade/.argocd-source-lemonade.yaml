@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/lemonade-sdk/lemonade-server
     forcestring: true
   - name: lemonade.controllers.lemonade.containers.main.image.tag
-    value: v11.8.1
+    value: v11.9.0
     forcestring: true
