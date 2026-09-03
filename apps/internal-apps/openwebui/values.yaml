@@ -29,6 +29,13 @@ openwebui:
             ENABLE_WEB_SEARCH: "true"
             WEB_SEARCH_ENGINE: "searxng"
             SEARXNG_QUERY_URL: "http://search.xtr.pub/search?q=<query>"
+            ENABLE_BASE_MODELS_CACHE: "true"
+            MODELS_CACHE_TTL: "300"
+            ENABLE_QUERIES_CACHE: "true"
+            DATABASE_USER_ACTIVE_STATUS_UPDATE_INTERVAL: "120"
+            CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE: "10"
+            THREAD_POOL_SIZE: "1000"
+            AIOHTTP_CLIENT_ASYNC_DNS_RESOLVER: "true"
           probes:
             liveness:
               enabled: true
@@ -43,11 +50,11 @@ openwebui:
               - ALL
           resources:
             limits:
-              cpu: "1"
-              memory: 1500Mi
+              cpu: "4"
+              memory: 4000Mi
             requests:
               cpu: "250m"
-              memory: 512Mi
+              memory: 768Mi
 
   service:
     openwebui:
