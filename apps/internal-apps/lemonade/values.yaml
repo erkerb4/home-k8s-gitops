@@ -178,10 +178,10 @@ infisicalSecret:
 imageUpdater:
   images:
   - alias: "lemonade"
-    imageName: "ghcr.io/lemonade-sdk/lemonade-server:v0.x"
+    imageName: "ghcr.io/lemonade-sdk/lemonade-server:v11.*"
     commonUpdateSettings:
       updateStrategy: "newest-build"
-      ignoreTags: [ "edge", "latest", "sha*" ]
+      ignoreTags: [ "edge", "latest", "sha*", "candidate*" ]
     manifestTargets:
       helm:
         name: "lemonade.controllers.lemonade.containers.main.image.repository"
