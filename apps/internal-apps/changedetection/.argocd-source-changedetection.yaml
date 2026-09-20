@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: changedetection.controllers.changedetection.containers.main.image.repository
+    value: ghcr.io/linuxserver/changedetection.io
+    forcestring: true
+  - name: changedetection.controllers.changedetection.containers.main.image.tag
+    value: version-0.60.6
+    forcestring: true
