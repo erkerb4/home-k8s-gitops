@@ -130,7 +130,7 @@ lemonade:
             - path: /opt/lemonade/.cache
             - path: /opt/lemonade/.config
     lemonade-app-configs:
-      enabled: true
+      enabled: false
       type: configMap
       name: lemonade-config
       advancedMounts:

@@ -7,7 +7,7 @@ data:
       "config_version": 2,
       "ctx_size": -1,
       "disable_model_filtering": false,
-      "enable_dgpu_gtt": false,
+      "enable_dgpu_gtt": true,
       "extra_models_dir": "",
       "flm": {
         "args": ""
