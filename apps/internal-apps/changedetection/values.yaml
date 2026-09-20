@@ -17,7 +17,7 @@ changedetection:
         main:
           image:
             repository: ghcr.io/linuxserver/changedetection.io
-            tag: "0.45.22"
+            tag: "0.60.06"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -101,3 +101,15 @@ changedetection:
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
+
+imageUpdater:
+  images:
+  - alias: "changed"
+    imageName: "ghcr.io/linuxserver/changedetection.io:0.x"
+    commonUpdateSettings:
+      updateStrategy: "newest-build"
+      ignoreTags: [ "latest", "arm*", "amd*" ]
+    manifestTargets:
+      helm:
+        name: "changedetection.controllers.changedetection.containers.main.image.repository"
+        tag: "changedetection.controllers.changedetection.containers.main.image.tag"
