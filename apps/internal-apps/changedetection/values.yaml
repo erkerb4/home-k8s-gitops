@@ -17,7 +17,7 @@ changedetection:
         main:
           image:
             repository: ghcr.io/linuxserver/changedetection.io
-            tag: "0.60.06"
+            tag: "0.60.6"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
@@ -105,7 +105,7 @@ changedetection:
 imageUpdater:
   images:
   - alias: "changed"
-    imageName: "ghcr.io/linuxserver/changedetection.io:0.x"
+    imageName: "ghcr.io/linuxserver/changedetection.io::0.x"
     commonUpdateSettings:
       updateStrategy: "newest-build"
       ignoreTags: [ "latest", "arm*", "amd*" ]
