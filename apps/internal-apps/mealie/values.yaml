@@ -43,7 +43,7 @@ mealie:
             ALLOW_PASSWORD_LOGIN: "false"
             SECURITY_MAX_LOGIN_ATTEMPTS: "3"
             BASE_URL: "https://meals.baylabs.dev"
-            OIDC_GROUPS_CLAIM: mealie-user
+            OIDC_GROUPS_CLAIM: mealie
             OIDC_AUTH_ENABLED: "true"
             OIDC_AUTO_REDIRECT: "true"
             OIDC_REMEMBER_ME: "true"
@@ -52,18 +52,18 @@ mealie:
             OIDC_CONFIGURATION_URL:
               valueFrom:
                 secretKeyRef:
-                  name: config-vars
-                  key: oidc_url
+                  name: mealie-oidc-credentials
+                  key: discovery_url
             OIDC_CLIENT_ID:
               valueFrom:
                 secretKeyRef:
-                  name: config-vars
-                  key: oidc_client_id
+                  name: mealie-oidc-credentials
+                  key: client_id
             OIDC_CLIENT_SECRET:
               valueFrom:
                 secretKeyRef:
-                  name: config-vars
-                  key: oidc_client_secret
+                  name: mealie-oidc-credentials
+                  key: client_secret
             SMTP_HOST:
               valueFrom:
                 secretKeyRef:
