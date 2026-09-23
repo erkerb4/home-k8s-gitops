@@ -4,5 +4,5 @@ helm:
     value: searxng/searxng
     forcestring: true
   - name: searxng.controllers.searxng.containers.main.image.tag
-    value: 2026.9.23-d63bbef7a
+    value: 2026.9.23-dcf1d477a
     forcestring: true
