@@ -16,7 +16,7 @@ helm:
     value: ghcr.io/linuxserver/sonarr
     forcestring: true
   - name: sonarr.controllers.sonarr.containers.main.image.tag
-    value: 5.0.0-develop
+    value: 4.0.20.3014-ls328
     forcestring: true
   - name: image.name
     value: ghcr.io/linuxserver/radarr
