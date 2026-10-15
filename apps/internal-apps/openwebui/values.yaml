@@ -26,7 +26,6 @@ openwebui:
           env:
             TZ: "America/New_York"
             #WEBUI_AUTH: "false"
-            ENABLE_LOGIN_FORM: "false"
             WEBUI_URL: "https://chatgpt.xtr.pub"
             OPENAI_API_BASE_URLS: "https://lemon.xtr.pub/v1;https://lemonade.xtr.pub/v1"
             ENABLE_WEB_SEARCH: "true"
@@ -39,6 +38,8 @@ openwebui:
             CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE: "10"
             THREAD_POOL_SIZE: "1000"
             AIOHTTP_CLIENT_ASYNC_DNS_RESOLVER: "true"
+            ENABLE_LOGIN_FORM: "false"
+            ENABLE_OAUTH_SIGNUP: "true"
             OAUTH_AUTO_REDIRECT: "true"
             OAUTH_MERGE_ACCOUNTS_BY_EMAIL: "true"
             OAUTH_PROVIDER_NAME: "BayLabs Login"
