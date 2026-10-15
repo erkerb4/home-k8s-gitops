@@ -15,6 +15,8 @@ openwebui:
   controllers:
     openwebui:
       type: deployment
+      annotations:
+        reloader.stakater.com/auto: "true"
       containers:
         main:
           image:
@@ -23,7 +25,7 @@ openwebui:
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
-            WEBUI_AUTH: "false"
+            #WEBUI_AUTH: "false"
             WEBUI_URL: "https://chatgpt.xtr.pub"
             OPENAI_API_BASE_URLS: "https://lemon.xtr.pub/v1;https://lemonade.xtr.pub/v1"
             ENABLE_WEB_SEARCH: "true"
@@ -36,6 +38,29 @@ openwebui:
             CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE: "10"
             THREAD_POOL_SIZE: "1000"
             AIOHTTP_CLIENT_ASYNC_DNS_RESOLVER: "true"
+            OAUTH_AUTO_REDIRECT: "true"
+            OAUTH_MERGE_ACCOUNTS_BY_EMAIL: "true"
+            OAUTH_PROVIDER_NAME: "BayLabs Login"
+            OAUTH_CLIENT_ID:
+              valueFrom:
+                secretKeyRef:
+                  name: openwebui-oidc-credentials
+                  key: client_id
+            OAUTH_CLIENT_SECRET:
+              valueFrom:
+                secretKeyRef:
+                  name: openwebui-oidc-credentials
+                  key: client_secret
+            OPENID_PROVIDER_URL:
+              valueFrom:
+                secretKeyRef:
+                  name: openwebui-oidc-credentials
+                  key: discovery_url
+            OPENID_REDIRECT_URI:
+              valueFrom:
+                secretKeyRef:
+                  name: openwebui-oidc-credentials
+                  key: callback_urls
           probes:
             liveness:
               enabled: true
