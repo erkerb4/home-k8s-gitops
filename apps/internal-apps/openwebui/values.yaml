@@ -27,10 +27,13 @@ openwebui:
             TZ: "America/New_York"
             #WEBUI_AUTH: "false"
             WEBUI_URL: "https://chatgpt.xtr.pub"
+            CORS_ALLOW_ORIGIN: "https://chatgpt.xtr.pub"
+            WEBUI_SESSION_COOKIE_SECURE: "true"
             OPENAI_API_BASE_URLS: "https://lemon.xtr.pub/v1;https://lemonade.xtr.pub/v1"
             ENABLE_WEB_SEARCH: "true"
             WEB_SEARCH_ENGINE: "searxng"
             SEARXNG_QUERY_URL: "http://search.xtr.pub/search?q=<query>"
+            ## Performance Options Start
             ENABLE_BASE_MODELS_CACHE: "true"
             MODELS_CACHE_TTL: "300"
             ENABLE_QUERIES_CACHE: "true"
@@ -38,6 +41,15 @@ openwebui:
             CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE: "10"
             THREAD_POOL_SIZE: "1000"
             AIOHTTP_CLIENT_ASYNC_DNS_RESOLVER: "true"
+            ENABLE_CONTEXT_COMPACTION: "false"
+            CONTEXT_COMPACTION_MODEL: "thor.Llama-3.2-3B-Instruct-GGUF"
+            CONTEXT_COMPACTION_TOKEN_THRESHOLD: "81920"
+            CONTEXT_COMPACTION_TOKEN_CAP: "98304"
+            CONTEXT_COMPACTION_RETENTION_PERCENTAGE: "40"
+            RAG_EMBEDDING_ENGINE: "ollama"
+            RAG_EMBEDDING_MODEL: "Qwen3-Embedding-4B-GGUF"
+            ## Performance Options End
+            ### OIDC START
             ENABLE_LOGIN_FORM: "false"
             ENABLE_OAUTH_SIGNUP: "true"
             OAUTH_AUTO_REDIRECT: "true"
@@ -63,6 +75,7 @@ openwebui:
                 secretKeyRef:
                   name: openwebui-oidc-credentials
                   key: discovery_url
+          ### OIDC End
           probes:
             liveness:
               enabled: true
