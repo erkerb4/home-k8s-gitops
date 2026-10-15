@@ -56,11 +56,6 @@ openwebui:
                 secretKeyRef:
                   name: openwebui-oidc-credentials
                   key: discovery_url
-            OPENID_REDIRECT_URI:
-              valueFrom:
-                secretKeyRef:
-                  name: openwebui-oidc-credentials
-                  key: callback_urls
           probes:
             liveness:
               enabled: true
