@@ -43,10 +43,10 @@ openwebui:
             OAUTH_MERGE_ACCOUNTS_BY_EMAIL: "true"
             OAUTH_PROVIDER_NAME: "BayLabs Login"
             OAUTH_SCOPES: "openid email profile groups"
-            OAUTH_ROLES_CLAIM: "groups"
             ENABLE_OAUTH_ROLE_MANAGEMENT: "true"
+            OAUTH_ROLES_CLAIM: "groups"
             OAUTH_ADMIN_ROLES: "openwebui-mgr"
-            OAUTH_ALLOWED_ROLES: "openwebui"
+            OAUTH_ALLOWED_ROLES: "openwebui-mgr,openwebui"
             OAUTH_CLIENT_ID:
               valueFrom:
                 secretKeyRef:
