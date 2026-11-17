@@ -1,0 +1,30 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers-int
+  namespace: {{ .Release.Namespace }}
+spec:
+  headers:
+    browserXssFilter: true
+    customFrameOptionsValue: SAMEORIGIN
+    frameDeny: true
+    forceSTSHeader: true
+    hostsProxyHeaders:
+      - X-Forwarded-Host
+    permissionsPolicy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+    referrerPolicy: same-origin
+    sslRedirect: true
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 31536000
+    contentSecurityPolicy: |
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval';
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: blob:;
+      connect-src 'self' https: wss:;
+      base-uri 'self';
+      form-action 'self'
+    customResponseHeaders:
+      X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
+      server: ""

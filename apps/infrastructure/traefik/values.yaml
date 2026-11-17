@@ -78,7 +78,7 @@ traefik:
           - 172.30.16.0/23
           - 192.168.30.0/26
       middlewares:
-        - traefik-security-headers@kubernetescrd
+        - traefik-security-headers-int@kubernetescrd
     webext:
       port: 8843
       protocol: TCP
