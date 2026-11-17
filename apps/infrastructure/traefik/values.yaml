@@ -27,10 +27,10 @@ traefik:
     enabled: true
     isDefaultClass: true
 
-  updateStrategy:
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 3
+  # updateStrategy:
+  #   rollingUpdate:
+  #     maxUnavailable: 1
+  #     maxSurge: 3
 
   providers:
     kubernetesIngress:
