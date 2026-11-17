@@ -10,8 +10,8 @@ overseerr:
     labels:
       application: overseer
     securityContext:
-      runAsUser: 911
-      fsGroup: 911
+      runAsUser: 1000
+      fsGroup: 1000
       fsGroupChangePolicy: "Always"
       seccompProfile:
         type: RuntimeDefault
@@ -80,6 +80,16 @@ overseerr:
       storageClass: ec-silver
       accessMode: ReadWriteOnce
       size: "1Gi"
+    config2:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ec-silver
+      accessMode: ReadWriteOnce
+      size: "1Gi"
+      advancedMounts:
+        overseer:
+          main:
+            - path: /app/config
 
   networkpolicies:
     main:
