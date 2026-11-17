@@ -30,6 +30,7 @@ traefik:
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 1
+      maxSurge: 0
 
   providers:
     kubernetesIngress:
