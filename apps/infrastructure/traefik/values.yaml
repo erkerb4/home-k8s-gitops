@@ -93,6 +93,7 @@ traefik:
         advertisedPort: 8443
       middlewares:
         - traefik-security-headers@kubernetescrd
+        - traefik-rate-limit@kubernetescrd
 
     metrics:
       port: 9100

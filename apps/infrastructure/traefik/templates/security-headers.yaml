@@ -5,26 +5,34 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   headers:
-    accessControlAllowMethods:
-    - GET
-    - OPTIONS
-    - PUT
-    accessControlMaxAge: 100
-    addVaryHeader: true
     browserXssFilter: true
     customFrameOptionsValue: SAMEORIGIN
-    forceSTSHeader: true
     frameDeny: true
-    referrerPolicy: same-origin
-    sslRedirect: true
+    forceSTSHeader: true
+    stsSeconds: 31536000
     stsIncludeSubdomains: true
     stsPreload: true
-    stsSeconds: 31536000
-    contentSecurityPolicy: |
-      default-src 'none'; form-action 'none'; frame-ancestors 'none'; base-uri 'none'
-    hostsProxyHeaders:
-      - "X-Forwarded-Host"
+    referrerPolicy: strict-origin-when-cross-origin
     permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    contentSecurityPolicy: |
+      default-src 'self';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'none';
+      object-src 'none';
+      script-src 'self';
+      style-src 'self';
+      img-src 'self' data:;
+      connect-src 'self';
+      font-src 'self';
+      media-src 'self';
     customResponseHeaders:
-      X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex," # disable search engines from indexing home server
-      server: "" # hide server info from visitors
+      X-Content-Type-Options: "nosniff"
+      X-Download-Options: "noopen"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
+      server: ""
+      X-Real-IP: ""
+      X-Forwarded-For: ""
+      X-Forwarded-Host: ""
+      X-Forwarded-Proto: ""

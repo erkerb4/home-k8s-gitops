@@ -9,22 +9,24 @@ spec:
     customFrameOptionsValue: SAMEORIGIN
     frameDeny: true
     forceSTSHeader: true
-    hostsProxyHeaders:
-      - X-Forwarded-Host
-    permissionsPolicy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
-    referrerPolicy: same-origin
-    sslRedirect: true
-    stsIncludeSubdomains: true
-    stsPreload: true
     stsSeconds: 31536000
+    stsIncludeSubdomains: true
+    referrerPolicy: strict-origin-when-cross-origin
+    permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
     contentSecurityPolicy: |
-      default-src 'self';
+      default-src 'self' 'unsafe-inline' data: blob:;
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'self';
+      object-src 'none';
       script-src 'self' 'unsafe-inline' 'unsafe-eval';
       style-src 'self' 'unsafe-inline';
       img-src 'self' data: blob:;
       connect-src 'self' https: wss:;
-      base-uri 'self';
-      form-action 'self'
+      font-src 'self' data:;
+      media-src 'self' data: blob:;
     customResponseHeaders:
-      X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
+      X-Content-Type-Options: "nosniff"
+      X-Download-Options: "noopen"
+      X-Permitted-Cross-Domain-Policies: "none"
       server: ""
