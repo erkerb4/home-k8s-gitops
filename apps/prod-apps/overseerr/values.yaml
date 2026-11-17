@@ -132,3 +132,12 @@ overseerr:
           - to:
               - ipBlock:
                   cidr: 0.0.0.0/0
+
+imageUpdater:
+  images:
+  - alias: "overseer"
+    imageName: "ghcr.io/seerr-team/seerr:v3.x"
+    manifestTargets:
+      helm:
+        name: "overseer.controllers.overseer.containers.main.image.repository"
+        tag: "overseer.controllers.overseer.containers.main.image.tag"
