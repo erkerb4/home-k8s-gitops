@@ -10,6 +10,9 @@ overseerr:
     labels:
       application: overseer
     securityContext:
+      runAsUser: 911
+      fsGroup: 911
+      fsGroupChangePolicy: "Always"
       seccompProfile:
         type: RuntimeDefault
   controllers:
@@ -20,8 +23,8 @@ overseerr:
       containers:
         main:
           image:
-            repository: "ghcr.io/linuxserver/overseerr"
-            tag: "latest"
+            repository: "ghcr.io/seerr-team/seerr"
+            tag: "v3.5.2"
             pullPolicy: IfNotPresent
           env:
             TZ: "America/New_York"
