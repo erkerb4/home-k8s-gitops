@@ -1,0 +1,8 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: body-limit
+  namespace: {{ .Release.Namespace }}
+spec:
+  maxRequestBodyBytes:
+    expression: "Size < 10485760"

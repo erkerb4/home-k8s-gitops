@@ -94,6 +94,8 @@ traefik:
       middlewares:
         - traefik-security-headers@kubernetescrd
         - traefik-rate-limit@kubernetescrd
+        - traefik-conn-limit@kubernetescrd
+        - traefik-body-limit@kubernetescrd
 
     metrics:
       port: 9100

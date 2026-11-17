@@ -10,6 +10,3 @@ spec:
     sourceCriterion:
       ipStrategy:
         depth: 1
-  inFlightConnLimit:
-    amount: 20
-  maxRequestBodyBytes: 10485760
