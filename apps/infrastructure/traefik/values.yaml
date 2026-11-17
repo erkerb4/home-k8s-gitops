@@ -169,14 +169,14 @@ traefik:
       cpu: "750m"
       memory: "512Mi"
 
-  affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: '{{ template "traefik.name" . }}'
-              app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
-          topologyKey: kubernetes.io/hostname
+  # affinity:
+  #   podAntiAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #       - labelSelector:
+  #           matchLabels:
+  #             app.kubernetes.io/name: '{{ template "traefik.name" . }}'
+  #             app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+  #         topologyKey: kubernetes.io/hostname
 
   ingressRoute:
     dashboard:
