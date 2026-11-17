@@ -4,5 +4,5 @@ metadata:
   name: conn-limit
   namespace: {{ .Release.Namespace }}
 spec:
-  inFlightConnLimit:
+  inFlightReq:
     amount: 20

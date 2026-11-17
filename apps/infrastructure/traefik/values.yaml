@@ -101,7 +101,6 @@ traefik:
         - traefik-security-headers@kubernetescrd
         - traefik-rate-limit@kubernetescrd
         - traefik-conn-limit@kubernetescrd
-        - traefik-body-limit@kubernetescrd
       forwardedHeaders:
         trustedIPs:
           - 127.0.0.1/32
