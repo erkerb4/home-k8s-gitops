@@ -160,7 +160,11 @@ traefik:
     #     - type: Pods
     #       value: 1
     #       periodSeconds: 60
-
+  tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/control-plane
+  - operator: Exists
+    key: CriticalAddonsOnly
   resources:
     requests:
       cpu: "125m"
